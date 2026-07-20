@@ -107,7 +107,7 @@ export function executeSearchPlan(
           let confidence: 'high' | 'medium' | 'low' = 'medium';
           
           // High confidence if it's an exact match or in a component definition
-          if (matchedTerm && line.includes(matchedTerm)) {
+          if (matchedTerm && line.toLowerCase().includes(matchedTerm.toLowerCase())) {
             confidence = 'high';
           } else if (line.includes('function') || line.includes('export') || line.includes('return')) {
             confidence = 'high';
