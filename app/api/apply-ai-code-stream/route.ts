@@ -67,7 +67,7 @@ function parseAIResponse(response: string): ParsedResponse {
   const fileMap = new Map<string, { content: string; isComplete: boolean }>();
 
   // First pass: Find all file declarations
-  const fileRegex = /<file path="([^"]+)">([\s\S]*?)(?:<\/file>|$)/g;
+  const fileRegex = /<file path="([^"]+)">([\s\S]*?)(?:<\/file>|(?=<file path=")|$)/g;
   let match;
   while ((match = fileRegex.exec(response)) !== null) {
     const filePath = match[1];
