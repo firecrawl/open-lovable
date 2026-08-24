@@ -55,9 +55,10 @@ export function getEnvPrompts(provider) {
 
   // Always include Firecrawl API key
   prompts.push({
-    type: 'input',
+    type: 'password',
     name: 'firecrawlApiKey',
     message: 'Firecrawl API key (for web scraping):',
+    mask: '*',
     validate: (input) => {
       if (!input || input.trim() === '') {
         return 'Firecrawl API key is required for web scraping functionality';
@@ -68,9 +69,10 @@ export function getEnvPrompts(provider) {
 
   if (provider === 'e2b') {
     prompts.push({
-      type: 'input',
+      type: 'password',
       name: 'e2bApiKey',
       message: 'E2B API key:',
+      mask: '*',
       validate: (input) => {
         if (!input || input.trim() === '') {
           return 'E2B API key is required';
@@ -124,9 +126,10 @@ export function getEnvPrompts(provider) {
     });
 
     prompts.push({
-      type: 'input',
+      type: 'password',
       name: 'vercelToken',
       message: 'Vercel Access Token:',
+      mask: '*',
       when: (answers) => answers.vercelAuthMethod === 'pat',
       validate: (input) => {
         if (!input || input.trim() === '') {
@@ -159,30 +162,34 @@ export function getEnvPrompts(provider) {
   });
 
   prompts.push({
-    type: 'input',
+    type: 'password',
     name: 'anthropicApiKey',
     message: 'Anthropic API key:',
+    mask: '*',
     when: (answers) => answers.aiProviders && answers.aiProviders.includes('anthropic')
   });
 
   prompts.push({
-    type: 'input',
+    type: 'password',
     name: 'openaiApiKey',
     message: 'OpenAI API key:',
+    mask: '*',
     when: (answers) => answers.aiProviders && answers.aiProviders.includes('openai')
   });
 
   prompts.push({
-    type: 'input',
+    type: 'password',
     name: 'geminiApiKey',
     message: 'Gemini API key:',
+    mask: '*',
     when: (answers) => answers.aiProviders && answers.aiProviders.includes('gemini')
   });
 
   prompts.push({
-    type: 'input',
+    type: 'password',
     name: 'groqApiKey',
     message: 'Groq API key:',
+    mask: '*',
     when: (answers) => answers.aiProviders && answers.aiProviders.includes('groq')
   });
 
