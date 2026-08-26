@@ -62,6 +62,10 @@ pnpm dev  # or npm run dev / yarn dev
 
 Open [http://localhost:3000](http://localhost:3000)
 
+### OpenAI-compatible providers (Ollama / OpenRouter)
+
+Set `CUSTOM_AI_BASE_URL` and `CUSTOM_AI_MODEL_NAME` to use Ollama locally, OpenRouter, or another OpenAI-compatible endpoint. Set `CUSTOM_AI_API_KEY` to a hosted provider key, or use a placeholder such as `ollama` for Ollama. Ollama uses `http://localhost:11434/v1`; OpenRouter uses `https://openrouter.ai/api/v1`.
+
 ## License
 
 MIT

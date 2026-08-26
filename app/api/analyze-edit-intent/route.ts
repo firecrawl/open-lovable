@@ -31,6 +31,11 @@ const googleGenerativeAI = createGoogleGenerativeAI({
   baseURL: isUsingAIGateway ? aiGatewayBaseURL : undefined,
 });
 
+const customAI = process.env.CUSTOM_AI_BASE_URL ? createOpenAI({
+  apiKey: process.env.CUSTOM_AI_API_KEY || 'ollama',
+  baseURL: process.env.CUSTOM_AI_BASE_URL,
+}) : null;
+
 // Schema for the AI's search plan - not file selection!
 const searchPlanSchema = z.object({
   editType: z.enum([
@@ -115,6 +120,11 @@ export async function POST(request: NextRequest) {
       }
     } else if (model.startsWith('google/')) {
       aiModel = googleGenerativeAI(model.replace('google/', ''));
+    } else if (model.startsWith('custom/')) {
+      if (!customAI) {
+        throw new Error('CUSTOM_AI_BASE_URL is required to use the custom OpenAI-compatible provider');
+      }
+      aiModel = customAI(process.env.CUSTOM_AI_MODEL_NAME || model.replace('custom/', ''));
     } else {
       // Default to groq if model format is unclear
       aiModel = groq(model);
