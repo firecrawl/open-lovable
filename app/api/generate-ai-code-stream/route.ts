@@ -44,6 +44,11 @@ const openai = createOpenAI({
   baseURL: isUsingAIGateway ? aiGatewayBaseURL : process.env.OPENAI_BASE_URL,
 });
 
+const customAI = process.env.CUSTOM_AI_BASE_URL ? createOpenAI({
+  apiKey: process.env.CUSTOM_AI_API_KEY || 'ollama',
+  baseURL: process.env.CUSTOM_AI_BASE_URL,
+}) : null;
+
 // Helper function to analyze user preferences from conversation history
 function analyzeUserPreferences(messages: ConversationMessage[]): {
   commonPatterns: string[];
@@ -1216,11 +1221,13 @@ MORPH FAST APPLY MODE (EDIT-ONLY):
         const isAnthropic = model.startsWith('anthropic/');
         const isGoogle = model.startsWith('google/');
         const isOpenAI = model.startsWith('openai/');
+        const isCustom = model.startsWith('custom/');
         const isKimiGroq = model === 'moonshotai/kimi-k2-instruct-0905';
-        const modelProvider = isAnthropic ? anthropic : 
-                              (isOpenAI ? openai : 
-                              (isGoogle ? googleGenerativeAI : 
-                              (isKimiGroq ? groq : groq)));
+        const modelProvider = isAnthropic ? anthropic :
+          (isOpenAI ? openai :
+          (isCustom && customAI ? customAI :
+          (isGoogle ? googleGenerativeAI :
+          (isKimiGroq ? groq : groq))));
         
         // Fix model name transformation for different providers
         let actualModel: string;
@@ -1228,6 +1235,8 @@ MORPH FAST APPLY MODE (EDIT-ONLY):
           actualModel = model.replace('anthropic/', '');
         } else if (isOpenAI) {
           actualModel = model.replace('openai/', '');
+        } else if (isCustom) {
+          actualModel = process.env.CUSTOM_AI_MODEL_NAME || model.replace('custom/', '');
         } else if (isKimiGroq) {
           // Kimi on Groq - use full model string
           actualModel = 'moonshotai/kimi-k2-instruct-0905';
@@ -1238,7 +1247,11 @@ MORPH FAST APPLY MODE (EDIT-ONLY):
           actualModel = model;
         }
 
-        console.log(`[generate-ai-code-stream] Using provider: ${isAnthropic ? 'Anthropic' : isGoogle ? 'Google' : isOpenAI ? 'OpenAI' : 'Groq'}, model: ${actualModel}`);
+        if (isCustom && !customAI) {
+          throw new Error('CUSTOM_AI_BASE_URL is required to use the custom OpenAI-compatible provider');
+        }
+
+        console.log(`[generate-ai-code-stream] Using provider: ${isAnthropic ? 'Anthropic' : isGoogle ? 'Google' : isOpenAI ? 'OpenAI' : isCustom ? 'Custom OpenAI-compatible' : 'Groq'}, model: ${actualModel}`);
         console.log(`[generate-ai-code-stream] AI Gateway enabled: ${isUsingAIGateway}`);
         console.log(`[generate-ai-code-stream] Model string: ${model}`);
 
@@ -1727,7 +1740,12 @@ Provide the complete file content without any truncation. Include all necessary 
                 // Make a focused API call to complete this specific file
                 // Create a new client for the completion based on the provider
                 let completionClient;
-                if (model.includes('gpt') || model.includes('openai')) {
+                if (model.startsWith('custom/')) {
+                  if (!customAI) {
+                    throw new Error('CUSTOM_AI_BASE_URL is required to use the custom OpenAI-compatible provider');
+                  }
+                  completionClient = customAI;
+                } else if (model.includes('gpt') || model.includes('openai')) {
                   completionClient = openai;
                 } else if (model.includes('claude')) {
                   completionClient = anthropic;
@@ -1747,6 +1765,8 @@ Provide the complete file content without any truncation. Include all necessary 
                   completionModelName = model.replace('anthropic/', '');
                 } else if (model.includes('google')) {
                   completionModelName = model.replace('google/', '');
+                } else if (model.startsWith('custom/')) {
+                  completionModelName = process.env.CUSTOM_AI_MODEL_NAME || model.replace('custom/', '');
                 } else {
                   completionModelName = model;
                 }
