@@ -1,0 +1,2 @@
+export interface LineChange {kind:'add'|'remove'|'same';line:number;text:string;}
+export function lineDiff(before:string,after:string):LineChange[]{const a=before.split('\n'),b=after.split('\n'),out:LineChange[]=[];const max=Math.max(a.length,b.length);for(let i=0;i<max;i++){if(a[i]===b[i])out.push({kind:'same',line:i+1,text:a[i]??''});else{if(a[i]!==undefined)out.push({kind:'remove',line:i+1,text:a[i]});if(b[i]!==undefined)out.push({kind:'add',line:i+1,text:b[i]});}}return out;}

@@ -1,13 +1,19 @@
+import { readJsonObject, ClientInputError } from '@/lib/security/input-validation';
+import { safeLogger as logger } from '@/lib/security/secret-content';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(req);
+  if (accessDenied) return accessDenied;
   try {
-    const { query } = await req.json();
+    const { query } = await readJsonObject(req);
     
-    if (!query) {
+    if (typeof query !== 'string' || !query.trim() || query.length > 4096) {
       return NextResponse.json({ error: 'Query is required' }, { status: 400 });
     }
 
+    if(!process.env.FIRECRAWL_API_KEY) return NextResponse.json({error:'Firecrawl API key not configured'},{status:503});
     // Use Firecrawl search to get top 10 results with screenshots
     const searchResponse = await fetch('https://api.firecrawl.dev/v1/search', {
       method: 'POST',
@@ -42,7 +48,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ results });
   } catch (error) {
-    console.error('Search error:', error);
+    if (error instanceof ClientInputError) return NextResponse.json({error:error.message},{status:400});
+    logger.error('Search error:', error);
     return NextResponse.json(
       { error: 'Failed to perform search' },
       { status: 500 }

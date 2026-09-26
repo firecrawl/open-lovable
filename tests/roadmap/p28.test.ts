@@ -1,0 +1,7 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {generatedAppManifest,readRecord,updateRecord,type AppRecord,type AppSession} from '../../lib/backend/policy-tests';
+const a:AppSession={userId:'user-a',tenantId:'tenant-a',role:'user',source:'generated-app'},b:AppSession={userId:'user-b',tenantId:'tenant-b',role:'user',source:'generated-app'};const record:AppRecord={id:'r1',tenantId:'tenant-a',ownerId:'user-a',version:1,data:{title:'old'}};
+test('P28 generated manifest declares auth flows and separates Studio session',()=>{assert.deepEqual(generatedAppManifest.authFlows,['signup','login','logout','password-recovery']);assert.equal(generatedAppManifest.studioSessionIsolated,true);});
+test('P28 users read/write only records permitted by tenant and ownership',()=>{assert.equal(readRecord(a,record).data.title,'old');assert.throws(()=>readRecord(b,record),/not found/i);const updated=updateRecord(a,record,1,{title:'new'});assert.equal(updated.version,2);assert.equal(updated.data.title,'new');assert.throws(()=>updateRecord(b,record,1,{title:'bad'}),/not found/i);assert.throws(()=>updateRecord({...a,userId:'other'},record,1,{title:'bad'}),/denied/i);});
+test('P28 direct tenant mutation and stale concurrent writes are rejected',()=>{assert.throws(()=>updateRecord(a,record,1,{tenantId:'tenant-b'}),/server-controlled/i);assert.throws(()=>updateRecord(a,record,2,{title:'stale'}),/concurrent/i);});

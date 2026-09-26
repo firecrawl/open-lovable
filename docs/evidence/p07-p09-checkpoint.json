@@ -1,0 +1,321 @@
+{
+  "base": "13f89dbefa4b92924aff3669cf337e69fadf9c7a",
+  "releaseReady": false,
+  "mergeAllowed": false,
+  "fullPlanComplete": false,
+  "status": "WIP_WITH_FAILING_GATES",
+  "testEditOperations": "Two operations refused before execution; not rerouted",
+  "records": [
+    {
+      "tag": "p08-queue-green",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/run-queue.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:14:38.211729+00:00",
+      "finishedAt": "2026-09-24T00:14:41.992875+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p08-queue-green.stdout.log",
+          "bytes": 745,
+          "sha256": "30ea18c41ee2b198ee0d30b6aca4573405e97890c43714d4c588f32af65cf261"
+        },
+        {
+          "path": ".audit\\f00\\p08-queue-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "observedCounts": [
+        "tests 6",
+        "pass 6",
+        "fail 0",
+        "skipped 0"
+      ]
+    },
+    {
+      "tag": "p08-worker-green",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/durable-worker.test.ts",
+        "tests/project-workflow.test.ts",
+        "tests/visual-api.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:19:29.024808+00:00",
+      "finishedAt": "2026-09-24T00:19:35.857384+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p08-worker-green.stdout.log",
+          "bytes": 2314,
+          "sha256": "f938dd2a3baa1130bcaea4e0b194914427cfb975394443245a0ea1c98db003ea"
+        },
+        {
+          "path": ".audit\\f00\\p08-worker-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "observedCounts": [
+        "tests 14",
+        "pass 14",
+        "fail 0",
+        "skipped 0"
+      ]
+    },
+    {
+      "tag": "p08-api-green",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/run-api.test.ts",
+        "tests/run-queue.test.ts",
+        "tests/account-middleware.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:22:30.075088+00:00",
+      "finishedAt": "2026-09-24T00:22:35.467811+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p08-api-green.stdout.log",
+          "bytes": 1178,
+          "sha256": "36e6ea83a92baea673335f6e665e18e75dc00c43beff9b3d212b2a9c45ea2750"
+        },
+        {
+          "path": ".audit\\f00\\p08-api-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "observedCounts": [
+        "tests 10",
+        "pass 10",
+        "fail 0",
+        "skipped 0"
+      ]
+    },
+    {
+      "tag": "p08-migration-green-2",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/run-migrations.test.ts",
+        "tests/identity-schema-compat.test.ts",
+        "tests/identity-recovery.test.ts",
+        "tests/backup-roundtrip.test.ts",
+        "tests/import-columns.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:27:18.390180+00:00",
+      "finishedAt": "2026-09-24T00:27:23.897641+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p08-migration-green-2.stdout.log",
+          "bytes": 2329,
+          "sha256": "ee60486e9ef6fed5004c2d1f077b10b954a08854c9f8334485d90991c0b1303a"
+        },
+        {
+          "path": ".audit\\f00\\p08-migration-green-2.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "observedCounts": [
+        "tests 22",
+        "pass 22",
+        "fail 0",
+        "skipped 0"
+      ]
+    },
+    {
+      "tag": "p08-supervisor-green",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/studio-supervisor.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:29:38.865958+00:00",
+      "finishedAt": "2026-09-24T00:29:42.309029+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p08-supervisor-green.stdout.log",
+          "bytes": 518,
+          "sha256": "85e27809e739b16edc3302da68c015b49c5cc89b8ec33fde684f17180db6d735"
+        },
+        {
+          "path": ".audit\\f00\\p08-supervisor-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "observedCounts": [
+        "tests 4",
+        "pass 4",
+        "fail 0",
+        "skipped 0"
+      ]
+    },
+    {
+      "tag": "p08-pre-ui-build",
+      "command": [
+        "npm.cmd",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:31:24.199113+00:00",
+      "finishedAt": "2026-09-24T00:32:47.319460+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p08-pre-ui-build.stdout.log",
+          "bytes": 4483,
+          "sha256": "92820d0106aee05e7a8da2aff7d2be172be5a26a7664f28de3d5c83e7b445c43"
+        },
+        {
+          "path": ".audit\\f00\\p08-pre-ui-build.stderr.log",
+          "bytes": 63,
+          "sha256": "fcd452b5459f2c6463164f05288baf9584ffaa9b34ace7503e8995650289086e"
+        }
+      ],
+      "observedCounts": []
+    },
+    {
+      "tag": "p08-lint-retest",
+      "command": [
+        "npm.cmd",
+        "run",
+        "lint"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:37:25.740471+00:00",
+      "finishedAt": "2026-09-24T00:37:38.827949+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p08-lint-retest.stdout.log",
+          "bytes": 56,
+          "sha256": "d434e7417b992bb45a395d0720d807813978e783c0bd736760e678f04abf2072"
+        },
+        {
+          "path": ".audit\\f00\\p08-lint-retest.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "observedCounts": []
+    },
+    {
+      "tag": "p08-final-types",
+      "command": [
+        "npm.cmd",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:39:33.805061+00:00",
+      "finishedAt": "2026-09-24T00:39:42.231299+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p08-final-types.stdout.log",
+          "bytes": 48,
+          "sha256": "695dcff955872e10c7c82040b0a318f8286d5d02af18de4be90c1af2d594c549"
+        },
+        {
+          "path": ".audit\\f00\\p08-final-types.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "observedCounts": []
+    },
+    {
+      "tag": "p08-final-tests",
+      "command": [
+        "npm.cmd",
+        "test"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:39:42.491129+00:00",
+      "finishedAt": "2026-09-24T00:40:08.865726+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p08-final-tests.stdout.log",
+          "bytes": 24037,
+          "sha256": "dfae08af53fce1d2ee7451581c6e3c57dc0895c5e4c8eb802402e4e014db6643"
+        },
+        {
+          "path": ".audit\\f00\\p08-final-tests.stderr.log",
+          "bytes": 63,
+          "sha256": "9692434e1b131df33baaa7b9ce7bc19932a98d88e7248c2e4b42fb065b1dcd7e"
+        }
+      ],
+      "observedCounts": [
+        "01 failed",
+        "tests 185",
+        "pass 184",
+        "fail 1",
+        "skipped 0"
+      ]
+    },
+    {
+      "tag": "p08-final-browser",
+      "command": [
+        "npm.cmd",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:40:09.151848+00:00",
+      "finishedAt": "2026-09-24T00:42:25.782425+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p08-final-browser.stdout.log",
+          "bytes": 8082,
+          "sha256": "c9610604a1bf7fd16aac68c969b9baf6e6fe69cb3eb0fd83d25df6f4441f8987"
+        },
+        {
+          "path": ".audit\\f00\\p08-final-browser.stderr.log",
+          "bytes": 1172,
+          "sha256": "7630a69a92e6d8647b11856a78163c0f5973199d02176576e2f89a38477ab4a9"
+        }
+      ],
+      "observedCounts": [
+        "2 failed",
+        "26 passed"
+      ]
+    }
+  ]
+}

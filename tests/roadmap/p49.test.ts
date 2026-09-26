@@ -1,0 +1,5 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createCapabilityLedger} from '../../lib/release/capability-ledger';
+test('P49 records every assessed capability with evidence or explicit blocker and keeps release honest',()=>{const ledger=createCapabilityLedger({version:'2.0.0',revision:'abc1234',records:[{id:'p44',packageId:'P44',status:'implemented',evidence:['tests/roadmap/p44.test.ts','abc1234'],notes:'local contract green'},{id:'p63',packageId:'P63',status:'blocked',evidence:[],blocker:'BLOCKED_BY_EXTERNAL_DEPENDENCY',notes:'PBX and consented call service not authorized'}]});assert.equal(ledger.releaseReady,false);assert.match(ledger.digest,/^[a-f0-9]{64}$/);});
+test('P49 rejects missing evidence, hidden gaps and blocked records without blocker code',()=>{assert.throws(()=>createCapabilityLedger({version:'2.0.0',revision:'abc1234',records:[{id:'p',packageId:'P',status:'implemented',evidence:[],notes:'green'}]}),/evidence/i);assert.throws(()=>createCapabilityLedger({version:'2.0.0',revision:'abc1234',records:[{id:'p',packageId:'P',status:'blocked',evidence:[],notes:'blocked'}]}),/blocker/i);});

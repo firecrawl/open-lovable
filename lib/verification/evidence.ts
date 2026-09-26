@@ -1,0 +1,7 @@
+import {createHash} from 'node:crypto';
+export interface VerificationCheck {id:string;kind:'render'|'flow'|'accessibility'|'network';passed:boolean;observed:string;}
+export interface VerificationReport {revisionDigest:string;environment:{browser:string;viewport:string};checks:VerificationCheck[];artifacts:Array<{kind:'screenshot'|'trace'|'console'|'network';sha256:string;bytes:number}>;observedErrors:string[];reportDigest:string;}
+const canonical=(value:unknown):string=>{if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value as Record<string,unknown>).sort().map(key=>JSON.stringify(key)+':'+canonical((value as Record<string,unknown>)[key])).join(',')+'}';return JSON.stringify(value);};
+export function digestEvidence(value:unknown):string{return createHash('sha256').update(canonical(value)).digest('hex');}
+export function buildReport(input:Omit<VerificationReport,'reportDigest'>):VerificationReport{return {...input,reportDigest:digestEvidence(input)};}
+export function assertReport(report:VerificationReport):void {const {reportDigest,...unsigned}=report;if(!/^[a-f0-9]{64}$/.test(report.revisionDigest)||!report.checks.length||reportDigest!==digestEvidence(unsigned)){throw new Error('Verification report integrity failed');}if(report.checks.some(check=>!check.id||!['render','flow','accessibility','network'].includes(check.kind)))throw new Error('Verification check is invalid');}

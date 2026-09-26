@@ -1,35 +1,13 @@
+import { appConfig } from '@/config/app.config';
+import { getProviderForModel } from '@/lib/ai/provider-manager';
+import { ProviderConfigError } from '@/lib/ai/provider-catalog';
+import { safeLogger as logger, redactSecretText } from '@/lib/security/secret-content';
+import { ClientInputError, readJsonObject } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
-import { createGroq } from '@ai-sdk/groq';
-import { createAnthropic } from '@ai-sdk/anthropic';
-import { createOpenAI } from '@ai-sdk/openai';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 // import type { FileManifest } from '@/types/file-manifest'; // Type is used implicitly through manifest parameter
-
-// Check if we're using Vercel AI Gateway
-const isUsingAIGateway = !!process.env.AI_GATEWAY_API_KEY;
-const aiGatewayBaseURL = 'https://ai-gateway.vercel.sh/v1';
-
-const groq = createGroq({
-  apiKey: process.env.AI_GATEWAY_API_KEY ?? process.env.GROQ_API_KEY,
-  baseURL: isUsingAIGateway ? aiGatewayBaseURL : undefined,
-});
-
-const anthropic = createAnthropic({
-  apiKey: process.env.AI_GATEWAY_API_KEY ?? process.env.ANTHROPIC_API_KEY,
-  baseURL: isUsingAIGateway ? aiGatewayBaseURL : (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com/v1'),
-});
-
-const openai = createOpenAI({
-  apiKey: process.env.AI_GATEWAY_API_KEY ?? process.env.OPENAI_API_KEY,
-  baseURL: isUsingAIGateway ? aiGatewayBaseURL : process.env.OPENAI_BASE_URL,
-});
-
-const googleGenerativeAI = createGoogleGenerativeAI({
-  apiKey: process.env.AI_GATEWAY_API_KEY ?? process.env.GEMINI_API_KEY,
-  baseURL: isUsingAIGateway ? aiGatewayBaseURL : undefined,
-});
 
 // Schema for the AI's search plan - not file selection!
 const searchPlanSchema = z.object({
@@ -60,13 +38,15 @@ const searchPlanSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
-    const { prompt, manifest, model = 'openai/gpt-oss-20b' } = await request.json();
+    const { prompt, manifest, model = appConfig.ai.defaultModel } = await readJsonObject(request);
     
-    console.log('[analyze-edit-intent] Request received');
-    console.log('[analyze-edit-intent] Prompt:', prompt);
-    console.log('[analyze-edit-intent] Model:', model);
-    console.log('[analyze-edit-intent] Manifest files count:', manifest?.files ? Object.keys(manifest.files).length : 0);
+    logger.log('[analyze-edit-intent] Request received');
+    logger.log('[analyze-edit-intent] Prompt characters:', typeof prompt==='string'?prompt.length:0);
+    logger.log('[analyze-edit-intent] Model:', model);
+    logger.log('[analyze-edit-intent] Manifest files count:', manifest?.files ? Object.keys(manifest.files).length : 0);
     
     if (!prompt || !manifest) {
       return NextResponse.json({
@@ -90,46 +70,29 @@ export async function POST(request: NextRequest) {
       })
       .join('\n');
     
-    console.log('[analyze-edit-intent] Valid files found:', validFiles.length);
+    logger.log('[analyze-edit-intent] Valid files found:', validFiles.length);
     
     if (validFiles.length === 0) {
-      console.error('[analyze-edit-intent] No valid files found in manifest');
+      logger.error('[analyze-edit-intent] No valid files found in manifest');
       return NextResponse.json({
         success: false,
         error: 'No valid files found in manifest'
       }, { status: 400 });
     }
     
-    console.log('[analyze-edit-intent] Analyzing prompt:', prompt);
-    console.log('[analyze-edit-intent] File summary preview:', fileSummary.split('\n').slice(0, 5).join('\n'));
+    logger.log('[analyze-edit-intent] Analyzing bounded prompt');
+    logger.log('[analyze-edit-intent] File summary characters:', fileSummary.length);
     
-    // Select the appropriate AI model based on the request
-    let aiModel;
-    if (model.startsWith('anthropic/')) {
-      aiModel = anthropic(model.replace('anthropic/', ''));
-    } else if (model.startsWith('openai/')) {
-      if (model.includes('gpt-oss')) {
-        aiModel = groq(model);
-      } else {
-        aiModel = openai(model.replace('openai/', ''));
-      }
-    } else if (model.startsWith('google/')) {
-      aiModel = googleGenerativeAI(model.replace('google/', ''));
-    } else {
-      // Default to groq if model format is unclear
-      aiModel = groq(model);
-    }
-    
-    console.log('[analyze-edit-intent] Using AI model:', model);
+    const resolvedModel = await getProviderForModel(model, request.signal);
+    logger.log('[analyze-edit-intent] Using AI model:', model);
     
     // Use AI to create a search plan
     const result = await generateObject({
-      model: aiModel,
+      model: resolvedModel.model,
+      abortSignal: request.signal,
+      maxOutputTokens: 2048,
       schema: searchPlanSchema,
-      messages: [
-        {
-          role: 'system',
-          content: `You are an expert at planning code searches. Your job is to create a search strategy to find the exact code that needs to be edited.
+      system: `You are an expert at planning code searches. Your job is to create a search strategy to find the exact code that needs to be edited.
 
 DO NOT GUESS which files to edit. Instead, provide specific search terms that will locate the code.
 
@@ -156,8 +119,8 @@ SEARCH STRATEGY RULES:
    - Add regex patterns for structural searches
 
 Current project structure for context:
-${fileSummary}`
-        },
+${fileSummary}`,
+      messages: [
         {
           role: 'user',
           content: `User request: "${prompt}"
@@ -167,7 +130,7 @@ Create a search plan to find the exact code that needs to be modified. Include s
       ]
     });
     
-    console.log('[analyze-edit-intent] Search plan created:', {
+    logger.log('[analyze-edit-intent] Search plan created:', {
       editType: result.object.editType,
       searchTerms: result.object.searchTerms,
       patterns: result.object.regexPatterns?.length || 0,
@@ -181,10 +144,10 @@ Create a search plan to find the exact code that needs to be modified. Include s
     });
     
   } catch (error) {
-    console.error('[analyze-edit-intent] Error:', error);
+    logger.error('[analyze-edit-intent] Error:', error);
     return NextResponse.json({
       success: false,
-      error: (error as Error).message
-    }, { status: 500 });
+      error: redactSecretText((error as Error).message)
+    }, { status: error instanceof ProviderConfigError ? error.status : error instanceof ClientInputError ? 400 : 500 });
   }
 }

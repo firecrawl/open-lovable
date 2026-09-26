@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {buildVisualEvidence,assertComparableVisualEvidence} from '../../lib/visual/comparison';
+const digest='a'.repeat(64);
+test('P22 compares evidence at the same viewport and preserves human review',()=>{const evidence=buildVisualEvidence({targetDigest:digest,renderDigest:'b'.repeat(64),viewport:{width:1440,height:900},metric:.92,review:'Typography is improved; form flow was checked separately.',functionalErrors:[],referenceOnly:false});assert.equal(evidence.viewport.width,1440);assert.equal(evidence.evidenceDigest.length,64);assert.doesNotThrow(()=>assertComparableVisualEvidence(evidence));});
+test('P22 rejects reference-only evidence and functional errors',()=>{assert.throws(()=>buildVisualEvidence({targetDigest:digest,renderDigest:digest,viewport:{width:1440,height:900},review:'looks close',functionalErrors:[],referenceOnly:true}),/reference/i);const evidence=buildVisualEvidence({targetDigest:digest,renderDigest:digest,viewport:{width:390,height:844},review:'form has a server error',functionalErrors:['POST /submit 500'],referenceOnly:false});assert.throws(()=>assertComparableVisualEvidence(evidence),/functional/i);});

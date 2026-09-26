@@ -1,0 +1,2 @@
+export interface GeneratedFileContent {path:string;content:string;}
+export function resolveSelectedFileContent(selectedFile:string,generatedFiles:GeneratedFileContent[],sandboxFiles:Record<string,string>):string{const generated=generatedFiles.find(file=>file.path===selectedFile);const normalized=selectedFile.replace(/^\//,'');return generated?.content??sandboxFiles[selectedFile]??sandboxFiles[normalized]??'// File content is unavailable';}

@@ -1,3 +1,5 @@
+import { ClientInputError, readJsonObject, validatePackages, publicErrorMessage } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
 
 declare global {
@@ -7,8 +9,11 @@ declare global {
 }
 
 export async function POST(request: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
-    const { packages } = await request.json();
+    const { packages: rawPackages } = await readJsonObject(request);
+    const packages = validatePackages(rawPackages);
     // sandboxId not used - using global sandbox
     
     if (!packages || !Array.isArray(packages) || packages.length === 0) {
@@ -109,9 +114,11 @@ export async function POST(request: NextRequest) {
             
             for (const pkg of validPackages) {
               // Handle scoped packages
-              const pkgName = pkg.startsWith('@') ? pkg : pkg.split('@')[0];
+              const versionStart = pkg.indexOf('@', 1);
+              const pkgName = versionStart < 0 ? pkg : pkg.slice(0, versionStart);
               
-              if (allDeps[pkgName]) {
+              // Explicit versions/tags must be resolved by npm, even if another version is present.
+              if (allDeps[pkgName] && versionStart < 0) {
                 alreadyInstalled.push(pkgName);
               } else {
                 needInstall.push(pkg);
@@ -185,7 +192,7 @@ export async function POST(request: NextRequest) {
             if (line.includes('ERESOLVE')) {
               await sendProgress({ 
                 type: 'warning', 
-                message: `Dependency conflict resolved with --legacy-peer-deps: ${line}` 
+                message: `Dependency conflict: ${line}`
               });
             } else if (line.trim()) {
               await sendProgress({ type: 'error', message: line });
@@ -217,8 +224,10 @@ export async function POST(request: NextRequest) {
           
           await sendProgress({ 
             type: 'complete', 
-            message: 'Package installation complete and dev server restarted!',
-            installedPackages: packagesToInstall
+            success: installResult.exitCode === 0,
+            message: installResult.exitCode === 0 ? 'Packages installed and dev server restarted' : 'Package installation failed; dev server restart attempted',
+            failedPackages: installResult.exitCode === 0 ? [] : packagesToInstall,
+            installedPackages: installResult.exitCode === 0 ? packagesToInstall : []
           });
         } catch (error) {
           await sendProgress({ 
@@ -253,7 +262,7 @@ export async function POST(request: NextRequest) {
     console.error('[install-packages] Error:', error);
     return NextResponse.json({ 
       success: false, 
-      error: (error as Error).message 
-    }, { status: 500 });
+      error: publicErrorMessage(error)
+    }, { status: error instanceof ClientInputError ? 400 : 500 });
   }
 }

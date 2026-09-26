@@ -1,6 +1,8 @@
 import { SandboxProvider, SandboxProviderConfig } from './types';
 import { E2BProvider } from './providers/e2b-provider';
 import { VercelProvider } from './providers/vercel-provider';
+import { providerRuntimeAdapter } from '../runtime/contracts';
+import type { RuntimeFactory } from '../runtime/contracts';
 
 export class SandboxFactory {
   static create(provider?: string, config?: SandboxProviderConfig): SandboxProvider {
@@ -37,5 +39,11 @@ export class SandboxFactory {
       default:
         return false;
     }
+  }
+
+  /** The runtime contract is an adapter over the existing provider, never a second sandbox mechanism. */
+  static createRuntimeFactory(provider?: string, config?: SandboxProviderConfig): RuntimeFactory {
+    const selectedProvider = (provider || process.env.SANDBOX_PROVIDER || 'e2b').toLowerCase();
+    return {createAdapter: () => providerRuntimeAdapter(() => this.create(selectedProvider, config), selectedProvider)};
   }
 }

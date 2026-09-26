@@ -1,0 +1,4 @@
+import {createHash,randomUUID} from 'node:crypto';
+import {ProjectError} from '../projects/store';
+import type {AssetRecord} from './catalog';
+export function createCrop(original:AssetRecord,box:{x:number;y:number;width:number;height:number},bytes:Uint8Array):AssetRecord{if(original.kind==='crop'&&!original.originalAssetId)throw new ProjectError('Crop provenance is incomplete.',409);if(box.x<0||box.y<0||box.width<=0||box.height<=0||box.x+box.width>1||box.y+box.height>1)throw new ProjectError('Crop bounds are invalid.',422);return {id:randomUUID(),workspaceId:original.workspaceId,projectId:original.projectId,kind:'crop',mime:original.mime,byteSize:bytes.byteLength,contentDigest:createHash('sha256').update(bytes).digest('hex'),source:original.source,license:original.license,consent:original.consent,originalAssetId:original.id,createdAt:new Date().toISOString()};}

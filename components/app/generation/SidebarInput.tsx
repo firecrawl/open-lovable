@@ -1,4 +1,5 @@
 "use client";
+import AIModelSelect from '@/components/AIModelSelect';
 
 import { useState } from "react";
 import Link from "next/link";
@@ -7,12 +8,16 @@ import { appConfig } from "@/config/app.config";
 interface SidebarInputProps {
   onSubmit: (url: string, style: string, model: string, instructions?: string) => void;
   disabled?: boolean;
+  model?: string;
+  onModelChange?: (model:string) => void;
 }
 
-export default function SidebarInput({ onSubmit, disabled = false }: SidebarInputProps) {
+export default function SidebarInput({ onSubmit, disabled = false, model, onModelChange }: SidebarInputProps) {
   const [url, setUrl] = useState<string>("");
   const [selectedStyle, setSelectedStyle] = useState<string>("1");
-  const [selectedModel, setSelectedModel] = useState<string>(appConfig.ai.defaultModel);
+  const [internalModel, setInternalModel] = useState<string>(appConfig.ai.defaultModel);
+  const selectedModel = model ?? internalModel;
+  const setSelectedModel = onModelChange ?? setInternalModel;
   const [additionalInstructions, setAdditionalInstructions] = useState<string>("");
   const [isValidUrl, setIsValidUrl] = useState<boolean>(false);
 
@@ -34,10 +39,6 @@ export default function SidebarInput({ onSubmit, disabled = false }: SidebarInpu
     { id: "8", name: "Retro Wave", description: "80s inspired" },
   ];
 
-  const models = appConfig.ai.availableModels.map(model => ({
-    id: model,
-    name: appConfig.ai.modelDisplayNames[model] || model,
-  }));
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -93,18 +94,8 @@ export default function SidebarInput({ onSubmit, disabled = false }: SidebarInpu
             {/* Model Selector */}
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-2">AI Model</label>
-              <select
-                value={selectedModel}
-                onChange={(e) => setSelectedModel(e.target.value)}
-                disabled={disabled}
-                className="w-full px-3 py-2 text-xs font-medium text-gray-700 bg-white rounded border border-gray-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-              >
-                {models.map((model) => (
-                  <option key={model.id} value={model.id}>
-                    {model.name}
-                  </option>
-                ))}
-              </select>
+              <AIModelSelect disabled={disabled} value={selectedModel} onValueChange={setSelectedModel}
+                            className="min-w-0 w-full lg:w-auto max-w-full px-[12px] py-[10px] text-[12px] text-gray-700 bg-white rounded border border-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-500" />
             </div>
 
             {/* Additional Instructions */}

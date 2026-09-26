@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 1,
+  "package": "P00",
+  "kind": "unaltered-baseline",
+  "sourceHead": "5066bdd77aee4dd56d07be03bc5bc57b2a1c3977",
+  "originalBranch": "fix/security-foundation-20260922",
+  "main": "69bd93bae7a9c97ef989eb70aabe6797fb3dac89",
+  "startedAt": "2026-09-23T18:01:19.983602+00:00",
+  "os": "Windows-11-10.0.26200-SP0",
+  "python": "3.14.5",
+  "node": "v24.16.0",
+  "environment": "allowlist; isolated data; no live provider secrets copied",
+  "gates": [
+    {
+      "id": "install",
+      "command": "npm.cmd ci --ignore-scripts",
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T18:01:20.359152+00:00",
+      "finishedAt": "2026-09-23T18:03:15.086803+00:00",
+      "artifacts": [
+        {
+          "path": ".audit/p00-original/install.stdout.log",
+          "bytes": 144,
+          "sha256": "b4a5d40e9a0c4a39a664f6164241c3da75102f7505dd86a2563ddebbeb20f07b"
+        },
+        {
+          "path": ".audit/p00-original/install.stderr.log",
+          "bytes": 370,
+          "sha256": "445ad5b8eaaf5223273aa868ee452d79b872d4bf195b1ed2480eae427951d990"
+        }
+      ]
+    },
+    {
+      "id": "lint",
+      "command": "npm.cmd run lint",
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T18:03:15.107629+00:00",
+      "finishedAt": "2026-09-23T18:04:35.429192+00:00",
+      "artifacts": [
+        {
+          "path": ".audit/p00-original/lint.stdout.log",
+          "bytes": 56,
+          "sha256": "d434e7417b992bb45a395d0720d807813978e783c0bd736760e678f04abf2072"
+        },
+        {
+          "path": ".audit/p00-original/lint.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "id": "typecheck",
+      "command": "npm.cmd run typecheck",
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T18:04:35.439069+00:00",
+      "finishedAt": "2026-09-23T18:04:57.997865+00:00",
+      "artifacts": [
+        {
+          "path": ".audit/p00-original/typecheck.stdout.log",
+          "bytes": 48,
+          "sha256": "695dcff955872e10c7c82040b0a318f8286d5d02af18de4be90c1af2d594c549"
+        },
+        {
+          "path": ".audit/p00-original/typecheck.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "id": "tests",
+      "command": "npm.cmd test",
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T18:04:58.016223+00:00",
+      "finishedAt": "2026-09-23T18:05:23.101997+00:00",
+      "artifacts": [
+        {
+          "path": ".audit/p00-original/tests.stdout.log",
+          "bytes": 61649,
+          "sha256": "dcee3ce236dbc234f5d13513182116119894438f105197e4a315b86bdce81f31"
+        },
+        {
+          "path": ".audit/p00-original/tests.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "command": "npm.cmd run build",
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T18:05:23.140599+00:00",
+      "finishedAt": "2026-09-23T18:09:02.822145+00:00",
+      "artifacts": [
+        {
+          "path": ".audit/p00-original/build.stdout.log",
+          "bytes": 3712,
+          "sha256": "4425b44d9a682dffd6cfb158887f068c6fc12130855f17d50a8a1de280b00b9c"
+        },
+        {
+          "path": ".audit/p00-original/build.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "id": "browser",
+      "command": "npm.cmd run test:e2e",
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T18:09:02.839414+00:00",
+      "finishedAt": "2026-09-23T18:10:40.814330+00:00",
+      "artifacts": [
+        {
+          "path": ".audit/p00-original/browser.stdout.log",
+          "bytes": 2452,
+          "sha256": "83c1b578e0a5785e405378b916d8913bc43be7365da9cb1a5e5381caf23c7df2"
+        },
+        {
+          "path": ".audit/p00-original/browser.stderr.log",
+          "bytes": 785,
+          "sha256": "70154d53557d05b9324ea787d3cf42b1b488bb2ada096c1bafccd85cdae0fa46"
+        }
+      ]
+    },
+    {
+      "id": "audit",
+      "command": "npm.cmd run security:audit",
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T18:10:40.831718+00:00",
+      "finishedAt": "2026-09-23T18:10:44.433298+00:00",
+      "artifacts": [
+        {
+          "path": ".audit/p00-original/audit.stdout.log",
+          "bytes": 92,
+          "sha256": "21628eb917c20fadd3ebe3cca58a7b7bd29fdebe0db23a52c11221447ec0943d"
+        },
+        {
+          "path": ".audit/p00-original/audit.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "id": "diff",
+      "command": "git diff --check",
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T18:10:44.443114+00:00",
+      "finishedAt": "2026-09-23T18:10:44.798163+00:00",
+      "artifacts": [
+        {
+          "path": ".audit/p00-original/diff.stdout.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": ".audit/p00-original/diff.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "npmLockSha256": "ab4030a60bad017a9cc9f9fff51857915ee4860199cbeb1c75902dab184bcc03",
+  "finishedAt": "2026-09-23T18:10:44.799691+00:00",
+  "allPassed": true,
+  "finalTrackedDiff": [],
+  "finalStatus": [
+    "?? %SystemDrive%/"
+  ],
+  "packageManager": {
+    "name": "npm",
+    "version": "11.13.0",
+    "lockfile": "package-lock.json",
+    "lockfileVersion": 3,
+    "installScripts": "disabled"
+  },
+  "lockedDependencies": {
+    "next": "15.5.26",
+    "react": "19.1.9",
+    "react-dom": "19.1.9",
+    "ai": "5.0.263",
+    "esbuild": "0.28.2",
+    "sharp": "0.35.4",
+    "@playwright/test": "1.63.0",
+    "typescript": "5.8.3",
+    "undici": "6.28.1"
+  },
+  "referenceBasis": "internal-baseline-and-regression",
+  "historicalCI": {
+    "runId": 35881841199,
+    "head": "5066bdd77aee4dd56d07be03bc5bc57b2a1c3977",
+    "conclusion": "success",
+    "reexecuted": false,
+    "queriedAt": "2026-09-23T18:15:04.572645+00:00"
+  },
+  "counts": {
+    "existingUnitAPIIntegrationPassed": 80,
+    "existingUnitAPIIntegrationFailed": 0,
+    "existingUnitAPIIntegrationSkipped": 0,
+    "browserPassed": 20,
+    "knownVulnerabilitiesReported": 0
+  },
+  "p50": {
+    "status": "NOT_STARTED",
+    "newDependenciesIntroduced": [],
+    "candidatesAdmitted": [],
+    "maintenanceReview": "No new candidates installed. Locked baseline versions recorded; operational maintenance/admission of new candidates remains P50."
+  },
+  "liveIntegrations": {
+    "models": "NOT_TESTED",
+    "firecrawl": "NOT_TESTED",
+    "e2b": "NOT_TESTED",
+    "vercelSandbox": "NOT_TESTED",
+    "production": "NOT_CHANGED"
+  },
+  "minimumEnvironment": {
+    "development": "No live provider key needed for import/edit/history/preview/export tests. Isolated data directory used.",
+    "productionRequiredNames": [
+      "OPEN_LOVABLE_APP_ORIGIN",
+      "OPEN_LOVABLE_PASSWORD"
+    ],
+    "productionOptionalNames": [
+      "OPEN_LOVABLE_USERNAME",
+      "OPEN_LOVABLE_DATA_DIR",
+      "OPEN_LOVABLE_MASTER_KEY"
+    ],
+    "noCredentialValuesRecorded": true
+  }
+}

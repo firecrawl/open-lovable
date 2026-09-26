@@ -1,0 +1,187 @@
+{
+  "base": "466fc5fc9b54cfb213c401832dc3ac8a146cae3f",
+  "realPostgresInitialRun": {
+    "runId": 35921348220,
+    "jobId": 107385783407,
+    "passed": 7,
+    "failed": 1,
+    "failure": "The source-column validator rejected sha256. Existing real PostgreSQL test remains enabled for the next CI run."
+  },
+  "localRecords": [
+    {
+      "tag": "p04-review-red",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/context-contention.test.ts",
+        "tests/admission-evidence.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T21:17:57.218821+00:00",
+      "finishedAt": "2026-09-23T21:18:01.719694+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-review-red.stdout.log",
+          "bytes": 2061,
+          "sha256": "0cd0e2043f4492b01eaa548005805d14e27d7602485a208e78f4197413af1686"
+        },
+        {
+          "path": ".audit\\f00\\p04-review-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-import-columns-red",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/import-columns.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T21:19:48.147149+00:00",
+      "finishedAt": "2026-09-23T21:19:52.706837+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-import-columns-red.stdout.log",
+          "bytes": 1024,
+          "sha256": "b92f1a8b095d55e49c95d7455372b803fadb17ce12dae59a5c9843c4ba82a4ba"
+        },
+        {
+          "path": ".audit\\f00\\p04-import-columns-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-final-review-red",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/p04-review-boundaries.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T21:29:34.412202+00:00",
+      "finishedAt": "2026-09-23T21:29:39.333118+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-final-review-red.stdout.log",
+          "bytes": 1826,
+          "sha256": "2fab929b25a000443b5d95fb33c786c53308a95cba187bc8d76a3a0f3e093d0a"
+        },
+        {
+          "path": ".audit\\f00\\p04-final-review-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-final-review-green",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/p04-review-boundaries.test.ts",
+        "tests/admission-npm.test.ts",
+        "tests/admission-evidence.test.ts",
+        "tests/admission.test.ts",
+        "tests/import-columns.test.ts",
+        "tests/repository.test.ts",
+        "tests/context-contention.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T21:30:22.570751+00:00",
+      "finishedAt": "2026-09-23T21:30:28.438263+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-final-review-green.stdout.log",
+          "bytes": 1806,
+          "sha256": "117793f7b52a68f54576a180dc18d8e50f449a013014653e8108211cab7e9c82"
+        },
+        {
+          "path": ".audit\\f00\\p04-final-review-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-final-review-check",
+      "command": [
+        "npm.cmd",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T21:30:28.878979+00:00",
+      "finishedAt": "2026-09-23T21:32:57.891322+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-final-review-check.stdout.log",
+          "bytes": 23052,
+          "sha256": "6df49b9695528e86001146e6287d832048774e0f905cc2dccac4d61a623d03a1"
+        },
+        {
+          "path": ".audit\\f00\\p04-final-review-check.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-final-review-e2e",
+      "command": [
+        "npm.cmd",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T21:32:58.191565+00:00",
+      "finishedAt": "2026-09-23T21:34:03.111700+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-final-review-e2e.stdout.log",
+          "bytes": 2733,
+          "sha256": "d082a3610844909fc6506ca36361e2a0c0dab5f8ec60de399642b6b1b150e4f1"
+        },
+        {
+          "path": ".audit\\f00\\p04-final-review-e2e.stderr.log",
+          "bytes": 785,
+          "sha256": "396e1ccacf91b18550adff10c08651cf17c4aef30bbe52740a2cf22a870fb04a"
+        }
+      ]
+    }
+  ],
+  "reviewCorrections": [
+    "Actual schema column identifiers accept trailing digits, retaining a known-table allowlist.",
+    "Existing personal context reads do not acquire a SQLite write lock.",
+    "Admission verifies actual canonical JSON review evidence and exact registry package/version identity.",
+    "CLI explains sanitized domain failures.",
+    "Test runtime roles are uniquely created and cleaned by the owning test run; repeatability is a CI gate."
+  ],
+  "postgresRetest": "Pending CI of this follow-up commit; no local daemon or production provider claimed."
+}

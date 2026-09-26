@@ -1,0 +1,25 @@
+{
+  "baseline": {
+    "sha": "0153fe9cafd639e84f9532a08590e1850452fdc9",
+    "branch": "fix/p09-reviewed-recovery-scope-20260924",
+    "wipReviewedOnly": "7cddb143378fb11083ed7ecf1f2a61275c85fb16"
+  },
+  "environment": {"node": "22.18.0", "npm": "10.9.3", "data": "temporary test roots only"},
+  "commands": {
+    "npm ci --ignore-scripts": 0,
+    "npm run check:admission": 0,
+    "npm run lint": 0,
+    "npm run typecheck": 0,
+    "npm test": 0,
+    "npm run build": 0,
+    "npm run security:audit": 0,
+    "npm run test:e2e": 0,
+    "focused-p06-p10-p11": 0
+  },
+  "counts": {"historicalAndRegressionTests": 205, "focusedP06P10P11": 9, "e2e": 27},
+  "knownLimitations": [
+    "Next.js 15.5.26 logs ECONNRESET/aborted for abandoned requests; reproduced and not suppressed.",
+    "S3 private adapter and real hosted PostgreSQL approval schema are not claimed by this checkpoint.",
+    "No real provider, paid inference, production data, merge or deployment was used."
+  ]
+}

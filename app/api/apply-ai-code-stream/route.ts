@@ -1,3 +1,7 @@
+import { recordMajorChange } from '@/lib/conversation/history';
+import { fetchApplication } from '@/lib/security/internal-fetch';
+import { ClientInputError, readJsonObject, assertCompleteFileBlocks, validateGeneratedFiles, validatePackages, normalizeProjectPath, quoteShellArgument } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
 import { parseMorphEdits, applyMorphEditToFile } from '@/lib/morph-fast-apply';
 // Sandbox import not needed - using global sandbox from sandbox-manager
@@ -262,8 +266,11 @@ function parseAIResponse(response: string): ParsedResponse {
 }
 
 export async function POST(request: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
-    const { response, isEdit = false, packages = [], sandboxId } = await request.json();
+    const { response, isEdit = false, packages = [], sandboxId } = await readJsonObject(request);
+    assertCompleteFileBlocks(response);
 
     if (!response) {
       return NextResponse.json({
@@ -274,14 +281,19 @@ export async function POST(request: NextRequest) {
     // Debug log the response
     console.log('[apply-ai-code-stream] Received response to parse:');
     console.log('[apply-ai-code-stream] Response length:', response.length);
-    console.log('[apply-ai-code-stream] Response preview:', response.substring(0, 500));
+
     console.log('[apply-ai-code-stream] isEdit:', isEdit);
     console.log('[apply-ai-code-stream] packages:', packages);
 
     // Parse the AI response
     const parsed = parseAIResponse(response);
+    validateGeneratedFiles(parsed.files);
+    validatePackages(packages);
+    validatePackages(parsed.packages);
+    parsed.commands.forEach(command => { if (typeof command !== "string" || command.length > 16384) throw new ClientInputError("Invalid generated command"); });
     const morphEnabled = Boolean(isEdit && process.env.MORPH_API_KEY);
     const morphEdits = morphEnabled ? parseMorphEdits(response) : [];
+    for (const edit of morphEdits) edit.targetFile = normalizeProjectPath(edit.targetFile);
     console.log('[apply-ai-code-stream] Morph Fast Apply mode:', morphEnabled);
     if (morphEnabled) {
       console.log('[apply-ai-code-stream] Morph edits found:', morphEdits.length);
@@ -322,7 +334,7 @@ export async function POST(request: NextRequest) {
           console.log(`[apply-ai-code-stream] Creating new sandbox since reconnection failed for ${sandboxId}`);
           await provider.createSandbox();
           await provider.setupViteApp();
-          sandboxManager.registerSandbox(sandboxId, provider);
+          await sandboxManager.registerSandbox(sandboxId, provider);
         }
 
         // Update legacy global state
@@ -357,7 +369,7 @@ export async function POST(request: NextRequest) {
         await provider.setupViteApp();
 
         // Register with sandbox manager
-        sandboxManager.registerSandbox(sandboxInfo.sandboxId, provider);
+        await sandboxManager.registerSandbox(sandboxInfo.sandboxId, provider);
 
         // Store in legacy global state
         global.activeSandboxProvider = provider;
@@ -454,11 +466,9 @@ export async function POST(request: NextRequest) {
           // Use streaming package installation
           try {
             // Construct the API URL properly for both dev and production
-            const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
-            const host = req.headers.get('host') || 'localhost:3000';
-            const apiUrl = `${protocol}://${host}/api/install-packages`;
+            // Host validation and credential forwarding are centralized in fetchApplication.
 
-            const installResponse = await fetch(apiUrl, {
+            const installResponse = await fetchApplication(req, '/api/install-packages', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -631,7 +641,7 @@ export async function POST(request: NextRequest) {
             // Create directory if needed
             const dirPath = normalizedPath.includes('/') ? normalizedPath.substring(0, normalizedPath.lastIndexOf('/')) : '';
             if (dirPath) {
-              await providerInstance.runCommand(`mkdir -p ${dirPath}`);
+              await providerInstance.runCommand(`mkdir -p -- ${quoteShellArgument(dirPath)}`);
             }
 
             // Write the file using provider
@@ -760,7 +770,7 @@ export async function POST(request: NextRequest) {
 
           // Track applied code in project evolution
           if (global.conversationState.context.projectEvolution) {
-            global.conversationState.context.projectEvolution.majorChanges.push({
+            recordMajorChange(global.conversationState.context.projectEvolution, {
               timestamp: Date.now(),
               description: parsed.explanation || 'Code applied',
               filesAffected: results.filesCreated || []
@@ -793,7 +803,7 @@ export async function POST(request: NextRequest) {
     console.error('Apply AI code stream error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to parse AI code' },
-      { status: 500 }
+      { status: error instanceof ClientInputError ? 400 : 500 }
     );
   }
 }

@@ -57,3 +57,11 @@ e2b-template-*
 repomix-output.txt
 bun.lockb
 .env*.local
+
+# Local verification artifacts
+.audit/
+playwright-report/
+test-results/
+
+# Application worker build (source remains in workers/)
+.open-lovable-build/

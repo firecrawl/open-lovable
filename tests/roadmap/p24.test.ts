@@ -1,0 +1,9 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createHmac} from 'node:crypto';
+import {GitSyncService,type GitBinding} from '../../lib/git/provider';
+const secret='test-secret',binding:GitBinding={repositoryId:'42',installationRef:'app-1',branch:'main',lastLocalRevision:'a'.repeat(40),lastRemoteCommit:'a'.repeat(40)};
+function payload(extra:Record<string,unknown>={}){return new TextEncoder().encode(JSON.stringify({ref:'refs/heads/main',before:'a'.repeat(40),after:'b'.repeat(40),repository:{id:'42'},head_commit:{message:'external change',author:{name:'Ada'}},...extra}));}
+function signature(bytes:Uint8Array){return 'sha256='+createHmac('sha256',secret).update(bytes).digest('hex');}
+test('P24 accepts signed fast-forward webhook as a candidate without mutating local binding',()=>{const service=new GitSyncService(secret),bytes=payload(),candidate=service.acceptWebhook(bytes,signature(bytes),'delivery-1',binding,JSON.parse(new TextDecoder().decode(bytes)));assert.equal(candidate.commit,'b'.repeat(40));assert.equal(candidate.author,'Ada');assert.equal(binding.lastRemoteCommit,'a'.repeat(40));});
+test('P24 rejects invalid/replayed/forced webhooks and never accepts a candidate',()=>{const service=new GitSyncService(secret),bytes=payload(),body=JSON.parse(new TextDecoder().decode(bytes));assert.throws(()=>service.acceptWebhook(bytes,'sha256=bad','delivery-bad',binding,body),/signature/i);service.acceptWebhook(bytes,signature(bytes),'delivery-ok',binding,body);assert.throws(()=>service.acceptWebhook(bytes,signature(bytes),'delivery-ok',binding,body),/already/i);const forced=payload({after:'c'.repeat(40),forced:true}),forcedBody=JSON.parse(new TextDecoder().decode(forced));assert.throws(()=>service.acceptWebhook(forced,signature(forced),'delivery-force',binding,forcedBody),/fast-forward/i);});

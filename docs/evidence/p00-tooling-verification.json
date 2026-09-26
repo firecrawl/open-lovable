@@ -1,0 +1,87 @@
+{
+  "startedAt": "2026-09-23T18:12:57.941322+00:00",
+  "gates": [
+    {
+      "id": "check",
+      "command": "npm.cmd run check",
+      "exitCode": 0,
+      "artifacts": [
+        {
+          "path": ".audit/p00-final/check.stdout.log",
+          "sha256": "80b6bd1c2ca4bcb496052f1938eb1f725f66efd26cbf82bd197849cb02caa04f",
+          "bytes": 66181
+        },
+        {
+          "path": ".audit/p00-final/check.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      ]
+    },
+    {
+      "id": "e2e",
+      "command": "npm.cmd run test:e2e",
+      "exitCode": 0,
+      "artifacts": [
+        {
+          "path": ".audit/p00-final/e2e.stdout.log",
+          "sha256": "cda01996a6150c0cade02ff091dcae4db5eee8b43d3bd0b57cfca900cbd57a6c",
+          "bytes": 2452
+        },
+        {
+          "path": ".audit/p00-final/e2e.stderr.log",
+          "sha256": "70154d53557d05b9324ea787d3cf42b1b488bb2ada096c1bafccd85cdae0fa46",
+          "bytes": 785
+        }
+      ]
+    },
+    {
+      "id": "audit",
+      "command": "npm.cmd run security:audit",
+      "exitCode": 0,
+      "artifacts": [
+        {
+          "path": ".audit/p00-final/audit.stdout.log",
+          "sha256": "21628eb917c20fadd3ebe3cca58a7b7bd29fdebe0db23a52c11221447ec0943d",
+          "bytes": 92
+        },
+        {
+          "path": ".audit/p00-final/audit.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      ]
+    },
+    {
+      "id": "verify-baseline",
+      "command": "npm.cmd run verify:baseline -- .audit/p00-original/baseline.json . 5066bdd77aee4dd56d07be03bc5bc57b2a1c3977",
+      "exitCode": 0,
+      "artifacts": [
+        {
+          "path": ".audit/p00-final/verify-baseline.stdout.log",
+          "sha256": "e8ac4d88bf8b8811005ded9bae069bfd22e1ab8908c20b80031e0cabdf285cd7",
+          "bytes": 185
+        },
+        {
+          "path": ".audit/p00-final/verify-baseline.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      ]
+    }
+  ],
+  "newCodeDigests": {
+    "package.json": "d100d55fdba426231817b4c48453f5ec34735d048ebb8c5ebc9a4a2926ddbd14",
+    "scripts/verification/baseline.mjs": "12e4aa5488a387b7358b64551a35be185cc89b1715d211eebed91d40d410df56",
+    "tests/roadmap/p00.test.mjs": "31533eea16a8bbf13e98a96bbfb303c8c4ed2c5b8e229f42977f7df22804dd46"
+  },
+  "finishedAt": "2026-09-23T18:17:10.584293+00:00",
+  "allPassed": true,
+  "counts": {
+    "existingUnitAPIIntegrationPassed": 80,
+    "newBaselineVerifierPassed": 8,
+    "browserPassed": 20,
+    "failed": 0,
+    "skipped": 0
+  }
+}

@@ -1,0 +1,324 @@
+{
+  "base": "34e65eaec7d6f4f1dd2c2c39778b0e9ece2b5b71",
+  "scope": "P04 SQLite project integration and prepared PostgreSQL adapter/import",
+  "localValidation": {
+    "unitApi": 130,
+    "baselineVerifier": 8,
+    "browser": 22,
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "npmAudit": "no advisories returned"
+  },
+  "postgresValidation": "NOT_EXECUTED_YET; require the new real PostgreSQL CI service job",
+  "records": [
+    {
+      "tag": "p04-repository-red",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/repository.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T20:40:52.160457+00:00",
+      "finishedAt": "2026-09-23T20:40:57.631744+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-repository-red.stdout.log",
+          "bytes": 5695,
+          "sha256": "8a942ce0aaaf46bcec9d42238523f5dd7d2db3c249efa1b5453b11fa20f84a1f"
+        },
+        {
+          "path": ".audit\\f00\\p04-repository-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-sqlite-green",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/repository.test.ts",
+        "tests/project-store.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T20:43:01.231535+00:00",
+      "finishedAt": "2026-09-23T20:43:17.566832+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-sqlite-green.stdout.log",
+          "bytes": 1646,
+          "sha256": "8d7b888e76d4bb8acee9f9ac561a2428f2ee0916d45b55ca66bd84d601588d43"
+        },
+        {
+          "path": ".audit\\f00\\p04-sqlite-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-api-red",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/repository-api.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T20:44:40.626190+00:00",
+      "finishedAt": "2026-09-23T20:44:53.582659+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-api-red.stdout.log",
+          "bytes": 1674,
+          "sha256": "a9205d3ec0f5197f9c44958c39a581cf76cad8bc4656b8e1df4dfa9cd9910dce"
+        },
+        {
+          "path": ".audit\\f00\\p04-api-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-api-green",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/repository.test.ts",
+        "tests/repository-api.test.ts",
+        "tests/backup-roundtrip.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T20:46:15.697212+00:00",
+      "finishedAt": "2026-09-23T20:46:23.252497+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-api-green.stdout.log",
+          "bytes": 1914,
+          "sha256": "ca8f15e142b857b32e1a6942d0122d3424d2d734b49574799f4bc0c095a41b91"
+        },
+        {
+          "path": ".audit\\f00\\p04-api-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-image-guard-red",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/repository-api.test.ts",
+        "tests/import-preflight.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T21:05:20.322599+00:00",
+      "finishedAt": "2026-09-23T21:05:29.529818+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-image-guard-red.stdout.log",
+          "bytes": 2973,
+          "sha256": "38d3efb327c7c056327e33cd7aef78a2a3992edb10eb634383ef36858ff16d38"
+        },
+        {
+          "path": ".audit\\f00\\p04-image-guard-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-boundaries-green",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/repository-api.test.ts",
+        "tests/import-preflight.test.ts",
+        "tests/visual-input.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T21:06:36.766064+00:00",
+      "finishedAt": "2026-09-23T21:06:41.218953+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-boundaries-green.stdout.log",
+          "bytes": 507,
+          "sha256": "be61066a63e4254049979f8039a31af8e54e246ceccc7ad5eeb77ee2e0afdb3d"
+        },
+        {
+          "path": ".audit\\f00\\p04-boundaries-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p50-npm-red",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/admission-npm.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T20:45:10.113689+00:00",
+      "finishedAt": "2026-09-23T20:45:17.935193+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p50-npm-red.stdout.log",
+          "bytes": 1809,
+          "sha256": "592391c2a9105f91ca196e1f8b90ed0b1b4764e1c19fd9d8eb8d5d3b49510159"
+        },
+        {
+          "path": ".audit\\f00\\p50-npm-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p50-npm-green",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/admission.test.ts",
+        "tests/admission-npm.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T20:47:23.384240+00:00",
+      "finishedAt": "2026-09-23T20:47:30.662084+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p50-npm-green.stdout.log",
+          "bytes": 639,
+          "sha256": "0b26a0a56459f755d94d87ad4351a95bbeb69c514aa1498d71a88a3cb63c509e"
+        },
+        {
+          "path": ".audit\\f00\\p50-npm-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-full-check-2",
+      "command": [
+        "npm.cmd",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T21:10:05.611563+00:00",
+      "finishedAt": "2026-09-23T21:12:03.947325+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-full-check-2.stdout.log",
+          "bytes": 22428,
+          "sha256": "c5e0b0ba730592f03e877df8d631119a4b9063426f3693b9ece59c35a5f9a537"
+        },
+        {
+          "path": ".audit\\f00\\p04-full-check-2.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p04-full-e2e",
+      "command": [
+        "npm.cmd",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T21:12:04.217630+00:00",
+      "finishedAt": "2026-09-23T21:12:58.909959+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-full-e2e.stdout.log",
+          "bytes": 2735,
+          "sha256": "25618c41b3a00624abd1696bdc68536c1fe24a3938e34dc3fa048643512dbed7"
+        },
+        {
+          "path": ".audit\\f00\\p04-full-e2e.stderr.log",
+          "bytes": 785,
+          "sha256": "396e1ccacf91b18550adff10c08651cf17c4aef30bbe52740a2cf22a870fb04a"
+        }
+      ]
+    },
+    {
+      "tag": "p04-full-audit",
+      "command": [
+        "npm.cmd",
+        "run",
+        "security:audit"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T21:12:59.165173+00:00",
+      "finishedAt": "2026-09-23T21:13:02.961210+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p04-full-audit.stdout.log",
+          "bytes": 92,
+          "sha256": "21628eb917c20fadd3ebe3cca58a7b7bd29fdebe0db23a52c11221447ec0943d"
+        },
+        {
+          "path": ".audit\\f00\\p04-full-audit.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Individual HTTP authentication remains in use.",
+    "PostgreSQL adapter is not yet the complete Studio control plane.",
+    "No production cutover, source database mutation, provider call or merge was performed."
+  ]
+}

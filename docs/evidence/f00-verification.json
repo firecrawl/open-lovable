@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "baseCommit": "fc9b9152b2f82a33f3c24d5efc76207c869b55dc",
+  "verifiedCodeTree": "d2545025bf96a5865842aecd65da563fb846ad41",
+  "scope": "P01/P02 corrections and P50 tooling; P03 experimental recovery excluded and still failing locally",
+  "environment": "Windows 11, Node 24.16.0, npm 11.13.0; clean archive of the staged Git tree; private temporary data; no real provider secrets",
+  "lineEndingNote": "Git archive used Windows checkout CRLF conversion on some text files. Raw Git and tested-byte hashes are recorded separately; LF-normalized source content must match exactly. CI will test the committed tree independently.",
+  "gates": [
+    {
+      "command": [
+        "npm.cmd",
+        "ci",
+        "--ignore-scripts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T19:12:38.819803+00:00",
+      "finishedAt": "2026-09-23T19:14:00.375218+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\delivery-install.stdout.log",
+          "bytes": 144,
+          "sha256": "bdcb22d980a26f724c6f8eca12ac7149f9a9ca5639febabd0248291417c474ae"
+        },
+        {
+          "path": ".audit\\f00\\delivery-install.stderr.log",
+          "bytes": 370,
+          "sha256": "445ad5b8eaaf5223273aa868ee452d79b872d4bf195b1ed2480eae427951d990"
+        }
+      ]
+    },
+    {
+      "command": [
+        "npm.cmd",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T19:14:00.608793+00:00",
+      "finishedAt": "2026-09-23T19:17:24.720169+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\delivery-check.stdout.log",
+          "bytes": 18505,
+          "sha256": "a9082c30ede78bfdd6061ded0f2d87379c7884364e21c64fed18a22ec37a350e"
+        },
+        {
+          "path": ".audit\\f00\\delivery-check.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "command": [
+        "npm.cmd",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T19:17:25.030803+00:00",
+      "finishedAt": "2026-09-23T19:18:28.499809+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\delivery-e2e.stdout.log",
+          "bytes": 2590,
+          "sha256": "e53bcb77c6340a807c964c4f14ff6be7ebaef23ae142bf51b86c6cf18990f244"
+        },
+        {
+          "path": ".audit\\f00\\delivery-e2e.stderr.log",
+          "bytes": 840,
+          "sha256": "243ff8d82c0be2006663e8c45321c45000a609ef53e0f6b9b2f312473f632192"
+        }
+      ]
+    },
+    {
+      "command": [
+        "npm.cmd",
+        "run",
+        "security:audit"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T19:18:28.806117+00:00",
+      "finishedAt": "2026-09-23T19:18:33.211955+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\delivery-audit.stdout.log",
+          "bytes": 92,
+          "sha256": "21628eb917c20fadd3ebe3cca58a7b7bd29fdebe0db23a52c11221447ec0943d"
+        },
+        {
+          "path": ".audit\\f00\\delivery-audit.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "unit_api_integration": 100,
+    "baseline_verifier": 8,
+    "browser": 21
+  },
+  "ci": "pending for the new commit",
+  "partialSourceWorkspace": "Contains unfinished P03 files not included in verifiedCodeTree",
+  "codeDigests": {
+    ".github/workflows/ci.yml": {
+      "gitBlobSHA256": "2056f7886f88f06c84b8c60e490e1534bc6dbd2ec3f3f4190e074a9ad823fd70",
+      "testedBytesSHA256": "1faa6fb14d8e87852b1edb617c9716bbd75cbd2aa6418c7ad7c97e43e64623d0",
+      "lfNormalizedSHA256": "2056f7886f88f06c84b8c60e490e1534bc6dbd2ec3f3f4190e074a9ad823fd70"
+    },
+    "app/api/analyze-edit-intent/route.ts": {
+      "gitBlobSHA256": "bfc258c8b54586464f885b99e434f29f4c8658cdee22fc7c781b3ab0d38571c2",
+      "testedBytesSHA256": "19a63fbdf7cf0e52a658a3dbb525c0eba5e027617cc7877bc7eab95cc034f2eb",
+      "lfNormalizedSHA256": "bfc258c8b54586464f885b99e434f29f4c8658cdee22fc7c781b3ab0d38571c2"
+    },
+    "app/api/extract-brand-styles/route.ts": {
+      "gitBlobSHA256": "ac2b3fca68ea3b262ea3c4e8ab0a97812b051dbc5d3bf4c4955c7e7103cc40fc",
+      "testedBytesSHA256": "614fef685bb2f8c60f523e5a44d48fc390f0a1eee6f4475b48eddac3f9fbee66",
+      "lfNormalizedSHA256": "ac2b3fca68ea3b262ea3c4e8ab0a97812b051dbc5d3bf4c4955c7e7103cc40fc"
+    },
+    "app/api/generate-ai-code-stream/route.ts": {
+      "gitBlobSHA256": "cbe0fdbbaa7057e39207bfea0f735851bf69642fe4554762a5e67f4fb3b07826",
+      "testedBytesSHA256": "92506c6f214825475d662c8431d43aad2218a2fa3919c4b04e2db47f8792961d",
+      "lfNormalizedSHA256": "cbe0fdbbaa7057e39207bfea0f735851bf69642fe4554762a5e67f4fb3b07826"
+    },
+    "app/api/project-images/route.ts": {
+      "gitBlobSHA256": "ed9d3383c4406b01681d3d42b878b8a99e256bf0f105434f18b79a7cc4fe33be",
+      "testedBytesSHA256": "a4837983e24f28e35cc596800ad66fbd0b37c52114a92b21b0ed9842efc718cc",
+      "lfNormalizedSHA256": "ed9d3383c4406b01681d3d42b878b8a99e256bf0f105434f18b79a7cc4fe33be"
+    },
+    "components/ProviderSettingsForm.tsx": {
+      "gitBlobSHA256": "a1444f772f4a2a7d4649c0d23a3f5c534f31efcdbd82ff3b3bf1385e640a1328",
+      "testedBytesSHA256": "e8098233235853196ac4b2440e311c4e85886a299e9618fb10bba2cf223c29b2",
+      "lfNormalizedSHA256": "a1444f772f4a2a7d4649c0d23a3f5c534f31efcdbd82ff3b3bf1385e640a1328"
+    },
+    "lib/ai/provider-transport.ts": {
+      "gitBlobSHA256": "e3a4b616681873642d8f15195fde23a624babba94a0c36e7803b3597aedea38c",
+      "testedBytesSHA256": "a431203e3a1974916d1a092267009b8effef9e2d972bebdc3c87e1acb996f0bf",
+      "lfNormalizedSHA256": "e3a4b616681873642d8f15195fde23a624babba94a0c36e7803b3597aedea38c"
+    },
+    "lib/projects/images.ts": {
+      "gitBlobSHA256": "ae289a9a174ff381574837d2d016a05c0a88e34b7fe128cc6ff9d688bd8e67cd",
+      "testedBytesSHA256": "b7e16d1a332fb20f8a18a68d1022725e8a0d9e7ab4cf2cf13dbf19f43e675d4f",
+      "lfNormalizedSHA256": "ae289a9a174ff381574837d2d016a05c0a88e34b7fe128cc6ff9d688bd8e67cd"
+    },
+    "lib/projects/store.ts": {
+      "gitBlobSHA256": "6b1b1272671981830a78401c331068b23f94914556569f2c65e4f32e63348366",
+      "testedBytesSHA256": "a31e17f443339ff1924267b510f99248b3dc7f34026cefda8b45519290bb3760",
+      "lfNormalizedSHA256": "6b1b1272671981830a78401c331068b23f94914556569f2c65e4f32e63348366"
+    },
+    "lib/settings/store.ts": {
+      "gitBlobSHA256": "e27911e736c3134b529619c897fb694917ccb4c1a9bdc4d18a30af5601c0708c",
+      "testedBytesSHA256": "2a06c2b3982ad21a7264137674d0feaa0c28c78b2f8277be016ffbc0215a9c0a",
+      "lfNormalizedSHA256": "e27911e736c3134b529619c897fb694917ccb4c1a9bdc4d18a30af5601c0708c"
+    },
+    "lib/security/data-paths.ts": {
+      "gitBlobSHA256": "45fabefcaa3909cec18018fd7681eafbc12e2dfc82cc1843f41da839560b3602",
+      "testedBytesSHA256": "3895e31b4c2f9943db742d857eb8ae3df94073f4df30026b13b2710a53189a00",
+      "lfNormalizedSHA256": "45fabefcaa3909cec18018fd7681eafbc12e2dfc82cc1843f41da839560b3602"
+    },
+    "lib/security/provider-content.ts": {
+      "gitBlobSHA256": "def6d80877b13c58b557950c6a995a36352b2f3b8b1e1e29ed890aa0e272ac42",
+      "testedBytesSHA256": "4a46dd904106f63e7fc001daefcc1ce2ead9afaa4ec43f258f7b7432bee793f5",
+      "lfNormalizedSHA256": "def6d80877b13c58b557950c6a995a36352b2f3b8b1e1e29ed890aa0e272ac42"
+    },
+    "lib/security/raster-input.ts": {
+      "gitBlobSHA256": "96affcaf140193a3055e2ee3370fd982bdd28cd09e4765078aa24e27dca26c0a",
+      "testedBytesSHA256": "ec5a1caa603717b4cf7c58db6a3647c845b0ae3a46bdffa1ae0429a5d59f9197",
+      "lfNormalizedSHA256": "96affcaf140193a3055e2ee3370fd982bdd28cd09e4765078aa24e27dca26c0a"
+    },
+    "lib/admission/manifest.ts": {
+      "gitBlobSHA256": "cd8e0bcfbf46de8858dd87707f6a418a6b788ac1fd954160ce11ca4aab0b3efe",
+      "testedBytesSHA256": "71d8c443dfda82af133edf8eedc740e3656453cc1b11837d59a35d71d4c87cc9",
+      "lfNormalizedSHA256": "cd8e0bcfbf46de8858dd87707f6a418a6b788ac1fd954160ce11ca4aab0b3efe"
+    },
+    "lib/admission/policy.ts": {
+      "gitBlobSHA256": "4268db27da187d83d449acfa6260dc383f17b9eb03edf5c3bbb79734a73d4b3a",
+      "testedBytesSHA256": "7904f7af2b602337777a5bd826b514eeb90277cc05113fbed0a4167397452911",
+      "lfNormalizedSHA256": "4268db27da187d83d449acfa6260dc383f17b9eb03edf5c3bbb79734a73d4b3a"
+    },
+    "scripts/admission-check.ts": {
+      "gitBlobSHA256": "855e06a606d1fae97031940e276d5ad9a81ff3ce516742246f51969db8f96236",
+      "testedBytesSHA256": "dd2e60b65336e9e374433dae68db93f28eb2379998dd8a6a398ed0f2e46b9636",
+      "lfNormalizedSHA256": "855e06a606d1fae97031940e276d5ad9a81ff3ce516742246f51969db8f96236"
+    },
+    "package.json": {
+      "gitBlobSHA256": "f9277c674f2183bf4e53a062fb7d7d82c424eb676689417c6a342fa9c4b5ab5a",
+      "testedBytesSHA256": "4741c535b3e7b1669bdbe01483d1dc5ea2420c97ddc1114ae43c2fa9190dea9e",
+      "lfNormalizedSHA256": "f9277c674f2183bf4e53a062fb7d7d82c424eb676689417c6a342fa9c4b5ab5a"
+    },
+    "tests/ai-gateway.test.ts": {
+      "gitBlobSHA256": "ea098a035e0baf25542e81af9e3820236f095feccc0532f910570d005cc08f7e",
+      "testedBytesSHA256": "5032847b897fe8a4f82413a993e956b2bd7e328d594bdfa820af2fda4270f6f3",
+      "lfNormalizedSHA256": "ea098a035e0baf25542e81af9e3820236f095feccc0532f910570d005cc08f7e"
+    },
+    "tests/credentials.test.ts": {
+      "gitBlobSHA256": "7c4d00421c826d031c9ac2c60118c3d6bef9430a6197bf821f25a7e7354efa50",
+      "testedBytesSHA256": "70f9569449ab6f43dbe17aa87f96bc64b5e4761c85418b31e3160d0804b11268",
+      "lfNormalizedSHA256": "7c4d00421c826d031c9ac2c60118c3d6bef9430a6197bf821f25a7e7354efa50"
+    },
+    "tests/e2e/credential-settings.spec.ts": {
+      "gitBlobSHA256": "755f4c45579e46bfe8e6df777cb6300f01122d7a5e5d795cfad88c5ea9ab6e81",
+      "testedBytesSHA256": "3e9a7ddb6f6e909866f5e5faeef3d8e8dcd9f21674623c78a9e47a8b8f8ca489",
+      "lfNormalizedSHA256": "755f4c45579e46bfe8e6df777cb6300f01122d7a5e5d795cfad88c5ea9ab6e81"
+    },
+    "tests/admission.test.ts": {
+      "gitBlobSHA256": "4c3f49f704b1c19d4a095bc553577dcf939fd207121f70c3f95806380c1a0387",
+      "testedBytesSHA256": "8dce66622d52b0722ad4d8682956678a46956512bd5c48e7f490ed525d9f575c",
+      "lfNormalizedSHA256": "4c3f49f704b1c19d4a095bc553577dcf939fd207121f70c3f95806380c1a0387"
+    },
+    "tests/credential-audience.test.ts": {
+      "gitBlobSHA256": "b4ab83b9250f0be1a525517cdf98ed21a0505625c9101564af312de76d511a29",
+      "testedBytesSHA256": "aa906dcb05271d6f0668288adadbb4fd5e04af9fb37413f90009f292efecf373",
+      "lfNormalizedSHA256": "b4ab83b9250f0be1a525517cdf98ed21a0505625c9101564af312de76d511a29"
+    },
+    "tests/data-paths.test.ts": {
+      "gitBlobSHA256": "6fe9ab5e0795aaeef98ae5322e007146bcc1fbbcc002449aa870a93046e24a1c",
+      "testedBytesSHA256": "20f5d23ab1446dd82f0af59e7e021919ddcedbfcc20d31578f810eec2bd69064",
+      "lfNormalizedSHA256": "6fe9ab5e0795aaeef98ae5322e007146bcc1fbbcc002449aa870a93046e24a1c"
+    },
+    "tests/helpers/raster-fixture.ts": {
+      "gitBlobSHA256": "23e65cc106c478eed6da1cc3d18a55c4c0dae5cd8e2fa142b9dfd1ce2da4e092",
+      "testedBytesSHA256": "4f6eed89577738ba68cf18c9ede0f8e3277dcfdf4e3b873637107500af0421a3",
+      "lfNormalizedSHA256": "23e65cc106c478eed6da1cc3d18a55c4c0dae5cd8e2fa142b9dfd1ce2da4e092"
+    },
+    "tests/helpers/logging-child.ts": {
+      "gitBlobSHA256": "1d04f03121b93f6c8fb93bdcc75e6c233ea168548ceaee1d2ee1c0c4bc9007b5",
+      "testedBytesSHA256": "814b974177019f6ad322689390c399f1827e7a51d161924535d3111627563a0f",
+      "lfNormalizedSHA256": "1d04f03121b93f6c8fb93bdcc75e6c233ea168548ceaee1d2ee1c0c4bc9007b5"
+    },
+    "tests/logging-boundary.test.ts": {
+      "gitBlobSHA256": "4aa7881660668aefc6e83b7d461e143085d5bdeb52f33fc3b94ee17a0571fd7c",
+      "testedBytesSHA256": "b2875b432bdbfd79d2cf515a1996bd679e31d6f3770f1ddf0ffc7df6fa67a68b",
+      "lfNormalizedSHA256": "4aa7881660668aefc6e83b7d461e143085d5bdeb52f33fc3b94ee17a0571fd7c"
+    },
+    "tests/media-boundaries.test.ts": {
+      "gitBlobSHA256": "c35e243a1e35829cb2dd74f8f3c68b0fd257105ca57754317a3a1099bfdb69f0",
+      "testedBytesSHA256": "32832ff53460e68bc7d65c600f1e4afa57bdfd87f96aa9b6e4066f2412d09bcf",
+      "lfNormalizedSHA256": "c35e243a1e35829cb2dd74f8f3c68b0fd257105ca57754317a3a1099bfdb69f0"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "sourcePackage": "pg-int8",
+  "version": "1.0.1",
+  "archiveSha256": "f010d48974a96814e841edbb6fc6096385574610714d2a50e99811170c365e92",
+  "integrity": "sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==",
+  "fullLicensePath": "LICENSE",
+  "licenseDigest": "4e8e87ccdfc7e4b47fd89015f78468aa53b6bf43ab6e6e12d43e8f55294911de",
+  "reviewedAt": "2026-09-23",
+  "reviewer": "ChatGPT engineering implementation review",
+  "sourceRepository": {
+    "type": "git",
+    "url": "https://github.com/charmander/pg-int8"
+  },
+  "maintenanceEvidence": "Source repository resolved by the authorized GitHub connector and is not archived; this is not a support SLA or a guarantee of future maintenance.",
+  "lifecycleScripts": {},
+  "decision": "admitted for the scoped PostgreSQL adapter and contract tests, subject to independent PR review before production",
+  "limitations": [
+    "No external database was contacted during package inspection.",
+    "No native pg addon is enabled. Explicit passwords prevent implicit pgpass credential discovery.",
+    "Existing unrelated dependencies were not re-certified.",
+    "Raw archive SRI and all installed package files are pinned; license text retained."
+  ]
+}

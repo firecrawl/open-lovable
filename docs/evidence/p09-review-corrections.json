@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "base": "ad758af415bcf4a2740fde79963bd057df4b0ec8",
+  "branch": "fix/p09-reviewed-recovery-scope-20260924",
+  "generatedAt": "2026-09-24T02:42:38.064955+00:00",
+  "scope": "Three independently reproduced review corrections; not the complete project or P10/P11.",
+  "verification": [
+    {
+      "tag": "p09-review-install",
+      "command": [
+        "npm",
+        "ci",
+        "--ignore-scripts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T02:30:13.127141+00:00",
+      "finishedAt": "2026-09-24T02:32:52.011149+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p09-review-install.stdout.log",
+          "bytes": 144,
+          "sha256": "25f031d891570a28513b62abc1ce3469ce3a241b2d9df90506d998e9df23a750"
+        },
+        {
+          "path": ".audit\\f00\\p09-review-install.stderr.log",
+          "bytes": 370,
+          "sha256": "445ad5b8eaaf5223273aa868ee452d79b872d4bf195b1ed2480eae427951d990"
+        }
+      ],
+      "counters": [
+        "found 0 vulnerabilities"
+      ]
+    },
+    {
+      "tag": "p09-review-check",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T02:32:52.574873+00:00",
+      "finishedAt": "2026-09-24T02:38:14.354310+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p09-review-check.stdout.log",
+          "bytes": 31568,
+          "sha256": "75dbcd078eb5037a7610475244f10e71ba6330d9592737023a4e2f6ffe61ed78"
+        },
+        {
+          "path": ".audit\\f00\\p09-review-check.stderr.log",
+          "bytes": 126,
+          "sha256": "bd4e97086755bd5ac183a287fcaa2cf246b52cfb7627d8c8a7525bed97428b19"
+        }
+      ],
+      "counters": [
+        "tests 205",
+        "pass 205",
+        "fail 0",
+        "skipped 0",
+        "tests 8",
+        "pass 8",
+        "fail 0",
+        "skipped 0"
+      ]
+    },
+    {
+      "tag": "p09-review-e2e",
+      "command": [
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T02:38:14.643608+00:00",
+      "finishedAt": "2026-09-24T02:40:17.096462+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p09-review-e2e.stdout.log",
+          "bytes": 3856,
+          "sha256": "1ba02096ed1e174a7c0b13ebebece0511c251d94fbafc9e4b6a2c7b5a6743952"
+        },
+        {
+          "path": ".audit\\f00\\p09-review-e2e.stderr.log",
+          "bytes": 1301,
+          "sha256": "ccf0c605368b738d7ae619033a16b6e420033ec91740786faa83871ef52d7296"
+        }
+      ],
+      "counters": [
+        "31 passed"
+      ]
+    },
+    {
+      "tag": "p09-review-audit",
+      "command": [
+        "npm",
+        "run",
+        "security:audit"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T02:40:17.452858+00:00",
+      "finishedAt": "2026-09-24T02:40:21.986467+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p09-review-audit.stdout.log",
+          "bytes": 92,
+          "sha256": "21628eb917c20fadd3ebe3cca58a7b7bd29fdebe0db23a52c11221447ec0943d"
+        },
+        {
+          "path": ".audit\\f00\\p09-review-audit.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "counters": [
+        "found 0 vulnerabilities"
+      ]
+    },
+    {
+      "tag": "p09-scope-form-green",
+      "command": [
+        "npx",
+        "--no-install",
+        "playwright",
+        "test",
+        "tests/e2e/project-settings-scope.spec.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T02:41:07.078018+00:00",
+      "finishedAt": "2026-09-24T02:41:30.328954+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p09-scope-form-green.stdout.log",
+          "bytes": 197,
+          "sha256": "17fddfa767b12a3279c20ce56d8d6f699a2abf8c37504dfc46981b542d4ac57f"
+        },
+        {
+          "path": ".audit\\f00\\p09-scope-form-green.stderr.log",
+          "bytes": 129,
+          "sha256": "5bc44877847e20dc2279cffaec059051b08651c9098470483c23689360cb72c7"
+        }
+      ],
+      "counters": [
+        "1 passed"
+      ]
+    },
+    {
+      "tag": "p09-final-lint-types",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T02:41:30.619885+00:00",
+      "finishedAt": "2026-09-24T02:41:43.225889+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p09-final-lint-types.stdout.log",
+          "bytes": 56,
+          "sha256": "d434e7417b992bb45a395d0720d807813978e783c0bd736760e678f04abf2072"
+        },
+        {
+          "path": ".audit\\f00\\p09-final-lint-types.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "counters": []
+    }
+  ],
+  "sourceDigests": {
+    "components/projects/ProjectWorkspace.tsx": "c05b6f8c45d8a5e24e6fdda9ca0ca1d7f6a94589dbfefd48c863658f3a47eaee",
+    "lib/persistence/import-sqlite.ts": "aedb4487111c9bdb37d3e2c27434d25112b51f034c94622e452fea0d6408ebc4",
+    "lib/projects/recovery.ts": "c550e2da70ab68c030bd4890fa13720e59ca4b349895783d0d4f6a7de49ad19c",
+    "scripts/studio-supervisor.mjs": "b288f8f5927ebf73e8abdd8db0531008b73b5fd8c1325cf81993fa422986567a",
+    "tests/e2e/project-settings-scope.spec.ts": "1d0cd1630915231a03aa75eaf1143c5f56049b471b4617a4b5b5202462e2508b",
+    "tests/postgres/repository.test.ts": "10e28670152319e415821f7c872af0b25ef5c0b6ba0201b04fbf58a23aaa4a64",
+    "tests/run-migrations.test.ts": "dfe2deb2f61d88d693a023db29f251efb1399cd107ba7fd6a8a1df1a71a61b81",
+    "tests/worker-process.test.ts": "ec15ccffd282b376e60de820e3c58de6e358ff822161ffff28d5ea54d1535ec0",
+    "workers/agent-worker.ts": "f19e71c593a036d5f31168314f7097d12558e4c8485204012f2c4cff69ffa7ee"
+  },
+  "reviewRegressions": [
+    "project-scoped settings URL and real UI save; session-selected workspace unchanged",
+    "historically interrupted uncertain outcomes retained on restore/import",
+    "replacement worker waits for abandoned lease; no live-lease takeover"
+  ],
+  "externalGates": "Final-head PostgreSQL/Auth/portability CI and fresh independent review are pending publication.",
+  "prototype": {
+    "branch": "wip/p10-p11-approved-execution-20260924",
+    "commit": "7cddb143378fb11083ed7ecf1f2a61275c85fb16",
+    "state": "NOT_COMPLETE",
+    "blockedOperation": "Queue/grant/budget integration was refused before execution by the tool. No equivalent retry was performed."
+  },
+  "limits": [
+    "Synthetic test accounts/providers only; no real paid inference, SMTP or hosted deployment.",
+    "Next.js aborted-request diagnostic remains visible.",
+    "Unfinished approval prototype and its failed contracts are preserved separately, not represented as verified."
+  ],
+  "failedEvidenceRetained": [
+    "p10-scope-red",
+    "p10-review-red",
+    "p10-p11-contract-red",
+    "p09-scope-green (build-overlap startup failure)"
+  ]
+}

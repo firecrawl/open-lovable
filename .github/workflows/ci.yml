@@ -1,0 +1,145 @@
+name: Verify security foundation
+on:
+  pull_request:
+  push:
+    branches: [main, 'feat/**']
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run check:admission
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run security:audit
+      - run: npm run build
+      - run: npx --no-install playwright install --with-deps chromium
+      - run: npm run test:e2e
+
+  portability:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run build:worker
+      - run: npx --no-install tsx --import ./tests/setup.mjs --test tests/data-paths.test.ts tests/credential-audience.test.ts tests/media-boundaries.test.ts tests/backup-roundtrip.test.ts tests/recovery-cli.test.ts tests/repository.test.ts tests/migration-workspaces.test.ts tests/admission.test.ts tests/run-migrations.test.ts tests/run-queue.test.ts tests/worker-process.test.ts
+
+  postgres-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: disposable-ci-password-not-production
+          POSTGRES_DB: ol_test_p04
+        ports:
+          - 127.0.0.1:5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ol_test_p04"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      OPEN_LOVABLE_TEST_DATABASE_DISPOSABLE: '1'
+      OPEN_LOVABLE_TEST_POSTGRES_URL: postgres://postgres:disposable-ci-password-not-production@127.0.0.1:5432/ol_test_p04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run check:admission
+      - run: npm run test:postgres
+      - name: Verify repeatability on the same disposable database
+        run: npm run test:postgres
+
+  auth-server-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: disposable-auth-db-not-production
+          POSTGRES_DB: ol_test_auth
+        ports:
+          - 127.0.0.1:5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ol_test_auth"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      OPEN_LOVABLE_AUTH_TEST_DISPOSABLE: '1'
+      OPEN_LOVABLE_AUTH_TEST_URL: http://127.0.0.1:19999
+      AUTH_TEST_DATABASE_URL: postgres://postgres:disposable-auth-db-not-production@127.0.0.1:5432/ol_test_auth
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run check:admission
+      - name: Start pinned Auth software against the disposable database
+        shell: bash
+        run: |
+          set -euo pipefail
+          node -e "const {Pool}=require('pg');const p=new Pool({connectionString:process.env.AUTH_TEST_DATABASE_URL});p.query('CREATE SCHEMA auth; ALTER ROLE postgres IN DATABASE ol_test_auth SET search_path TO auth, pg_catalog').finally(()=>p.end()).catch(e=>{console.error(e.code);process.exitCode=1})"
+          TEST_SECRET="$(openssl rand -hex 32)"
+          echo "::add-mask::$TEST_SECRET"
+          echo "OPEN_LOVABLE_AUTH_TEST_JWT_SECRET=$TEST_SECRET" >> "$GITHUB_ENV"
+          AUTH_IMAGE="$(node -p 'require("./docs/admission/auth-ci-image.json").image')"
+          docker run -d --name "ol-auth-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"             --network host --read-only --tmpfs /tmp:size=64m --memory 384m --cpus 1 --pids-limit 100             --cap-drop ALL --security-opt no-new-privileges             -e GOTRUE_API_HOST=127.0.0.1 -e PORT=19999 -e API_EXTERNAL_URL=http://127.0.0.1:19999             -e GOTRUE_SITE_URL=http://127.0.0.1:3102 -e DB_NAMESPACE=auth -e GOTRUE_DB_DRIVER=postgres             -e "DATABASE_URL=$AUTH_TEST_DATABASE_URL" -e "GOTRUE_JWT_SECRET=$TEST_SECRET"             -e GOTRUE_JWT_EXP=3600 -e GOTRUE_JWT_AUD=authenticated -e GOTRUE_JWT_ADMIN_ROLES=service_role             -e GOTRUE_JWT_DEFAULT_GROUP_NAME=authenticated -e GOTRUE_EXTERNAL_EMAIL_ENABLED=true             -e GOTRUE_MAILER_AUTOCONFIRM=false -e GOTRUE_DISABLE_SIGNUP=false -e GOTRUE_LOG_LEVEL=error             "$AUTH_IMAGE"
+          for attempt in $(seq 1 60); do
+            if curl --silent --fail http://127.0.0.1:19999/health; then exit 0; fi
+            sleep 1
+          done
+          docker logs --tail 60 "ol-auth-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          exit 1
+      - run: npm run test:auth-server
+      - name: Dispose only this run's Auth container
+        if: always()
+        shell: bash
+        run: |
+          name="ol-auth-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          if docker inspect "$name" >/dev/null 2>&1; then docker rm --force "$name"; fi

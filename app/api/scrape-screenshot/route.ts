@@ -1,11 +1,16 @@
+import { readJsonObject, ClientInputError } from '@/lib/security/input-validation';
+import { safeLogger as logger } from '@/lib/security/secret-content';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
 import FirecrawlApp from '@mendable/firecrawl-js';
 
 export async function POST(req: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(req);
+  if (accessDenied) return accessDenied;
   try {
-    const { url } = await req.json();
+    const { url } = await readJsonObject(req);
     
-    if (!url) {
+    if (typeof url !== 'string' || !url.trim() || url.length > 8192) {
       return NextResponse.json({ error: 'URL is required' }, { status: 400 });
     }
 
@@ -13,7 +18,7 @@ export async function POST(req: NextRequest) {
     const apiKey = process.env.FIRECRAWL_API_KEY;
     
     if (!apiKey) {
-      console.error("FIRECRAWL_API_KEY not configured");
+      logger.error("FIRECRAWL_API_KEY not configured");
       return NextResponse.json({ 
         error: 'Firecrawl API key not configured' 
       }, { status: 500 });
@@ -21,8 +26,8 @@ export async function POST(req: NextRequest) {
     
     const app = new FirecrawlApp({ apiKey });
 
-    console.log('[scrape-screenshot] Attempting to capture screenshot for:', url);
-    console.log('[scrape-screenshot] Using Firecrawl API key:', apiKey ? 'Present' : 'Missing');
+    logger.log('[scrape-screenshot] Attempting to capture screenshot for:', url);
+    logger.log('[scrape-screenshot] Using Firecrawl API key:', apiKey ? 'Present' : 'Missing');
 
     // Use the new v4 scrape method (not scrapeUrl)
     const scrapeResult = await app.scrape(url, {
@@ -38,9 +43,9 @@ export async function POST(req: NextRequest) {
       ]
     });
 
-    console.log('[scrape-screenshot] Full scrape result:', JSON.stringify(scrapeResult, null, 2));
-    console.log('[scrape-screenshot] Scrape result type:', typeof scrapeResult);
-    console.log('[scrape-screenshot] Scrape result keys:', Object.keys(scrapeResult));
+    logger.log('[scrape-screenshot] Full scrape result:', JSON.stringify(scrapeResult, null, 2));
+    logger.log('[scrape-screenshot] Scrape result type:', typeof scrapeResult);
+    logger.log('[scrape-screenshot] Scrape result keys:', Object.keys(scrapeResult));
     
     // The Firecrawl v4 API might return data directly without a success flag
     // Check if we have data with screenshot
@@ -60,17 +65,18 @@ export async function POST(req: NextRequest) {
       });
     } else if ((scrapeResult as any)?.success === false) {
       // Explicit failure
-      console.error('[scrape-screenshot] Firecrawl API error:', (scrapeResult as any).error);
+      logger.error('[scrape-screenshot] Firecrawl API error:', (scrapeResult as any).error);
       throw new Error((scrapeResult as any).error || 'Failed to capture screenshot');
     } else {
       // No screenshot in response
-      console.error('[scrape-screenshot] No screenshot in response. Full response:', JSON.stringify(scrapeResult, null, 2));
+      logger.error('[scrape-screenshot] No screenshot in response. Full response:', JSON.stringify(scrapeResult, null, 2));
       throw new Error('Screenshot not available in response - check console for full response structure');
     }
 
   } catch (error: any) {
-    console.error('[scrape-screenshot] Screenshot capture error:', error);
-    console.error('[scrape-screenshot] Error stack:', error.stack);
+    if (error instanceof ClientInputError) return NextResponse.json({error:error.message},{status:400});
+    logger.error('[scrape-screenshot] Screenshot capture error:', error);
+    logger.error('[scrape-screenshot] Error stack:', error.stack);
     
     // Provide fallback response for development - removed NODE_ENV check as it doesn't work in Next.js production builds
     

@@ -1,3 +1,5 @@
+import { ClientInputError, readJsonObject } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
 
 declare global {
@@ -10,21 +12,23 @@ if (!global.viteErrors) {
 }
 
 export async function POST(request: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
-    const { error, file, type = 'runtime-error' } = await request.json();
+    const { error, file, type = 'runtime-error' } = await readJsonObject(request);
     
-    if (!error) {
+    if (typeof error !== 'string' || !error || error.length > 16_384) {
       return NextResponse.json({ 
         success: false, 
-        error: 'Error message is required' 
+        error: 'Error message must be a nonempty string of at most 16384 characters' 
       }, { status: 400 });
     }
     
     // Parse the error to extract useful information
     const errorObj: any = {
-      type,
+      type: typeof type === 'string' ? type.slice(0, 64) : 'runtime-error',
       message: error,
-      file: file || 'unknown',
+      file: typeof file === 'string' && file ? file.slice(0, 512) : 'unknown',
       timestamp: new Date().toISOString()
     };
     
@@ -56,7 +60,7 @@ export async function POST(request: NextRequest) {
     console.error('[report-vite-error] Error:', error);
     return NextResponse.json({ 
       success: false, 
-      error: (error as Error).message 
-    }, { status: 500 });
+      error: error instanceof ClientInputError ? error.message : 'Failed to record error'
+    }, { status: error instanceof ClientInputError ? 400 : 500 });
   }
 }

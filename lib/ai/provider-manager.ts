@@ -1,122 +1,56 @@
-import { appConfig } from '@/config/app.config';
+import { effectiveProvider, type ProviderScope } from '@/lib/settings/store';
 import { createGroq } from '@ai-sdk/groq';
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { applicationModels, getGatewayConfig, loadModelCatalog, ProviderConfigError, validModelID, type ModelOption } from './provider-catalog';
+import { createProviderFetch } from './provider-transport';
 
-type ProviderName = 'openai' | 'anthropic' | 'groq' | 'google';
-
-// Client function type returned by @ai-sdk providers
-export type ProviderClient =
-  | ReturnType<typeof createOpenAI>
-  | ReturnType<typeof createAnthropic>
-  | ReturnType<typeof createGroq>
-  | ReturnType<typeof createGoogleGenerativeAI>;
-
-export interface ProviderResolution {
-  client: ProviderClient;
-  actualModel: string;
+/** One server-side resolver for generation, search planning and recovery. Never guesses a provider. */
+export async function getProviderForModel(modelId: string, signal?: AbortSignal,scope?:ProviderScope) {
+  if (!validModelID(modelId)) throw new ProviderConfigError('Invalid model identifier',400);
+  let option: ModelOption | undefined;
+  if (modelId.startsWith('gateway/')) {
+    const catalog=await loadModelCatalog(signal,scope);
+    if(catalog.gateway.status==='unavailable')throw new ProviderConfigError(catalog.gateway.error||'Provider catalog unavailable',503);
+    option=catalog.models.find(model => model.id===modelId);
+  } else option=applicationModels(scope).find(model => model.id===modelId);
+  if (!option) throw new ProviderConfigError('Model is not in the configured provider catalog',400);
+  if (!option.configured) throw new ProviderConfigError('Model provider credentials are not configured');
+  const actualModel=option.upstreamId;
+  if (option.provider==='gateway') {
+    const config=getGatewayConfig(scope);
+    if (!config) throw new ProviderConfigError('Gateway provider is not configured');
+    const client=createOpenAI({baseURL:config.baseURL,apiKey:config.apiKey ?? 'ollama',
+      fetch:createProviderFetch(config.baseURL,{allowLoopback:scope?.allowLoopback??true})});
+    return {model:client.chat(actualModel),actualModel,option};
+  }
+  // Vercel gateway has an OpenAI-compatible chat protocol and requires the full provider/model namespace.
+  const gatewayKey=!scope&&process.env.AI_GATEWAY_API_KEY?.trim();
+  if (gatewayKey) {
+    const baseURL='https://ai-gateway.vercel.sh/v1';
+    const client=createOpenAI({apiKey:gatewayKey,baseURL,fetch:createProviderFetch(baseURL)});
+    const upstream=option.provider==='groq' ? option.upstreamId : option.id;
+    return {model:client.chat(upstream),actualModel:upstream,option};
+  }
+  const settings=effectiveProvider(option.provider,scope);
+  switch(option.provider) {
+    case 'openai': {
+      const baseURL=settings.baseURL || 'https://api.openai.com/v1';
+      return {model:createOpenAI({apiKey:settings.apiKey,baseURL,fetch:createProviderFetch(baseURL,{allowLoopback:scope?scope.allowLoopback:Boolean(settings.baseURL)})})(actualModel),actualModel,option};
+    }
+    case 'anthropic': {
+      const baseURL=settings.baseURL || 'https://api.anthropic.com/v1';
+      return {model:createAnthropic({apiKey:settings.apiKey,baseURL,fetch:createProviderFetch(baseURL,{allowLoopback:scope?scope.allowLoopback:Boolean(settings.baseURL)})})(actualModel),actualModel,option};
+    }
+    case 'google': {
+      const baseURL=settings.baseURL || 'https://generativelanguage.googleapis.com/v1beta';
+      return {model:createGoogleGenerativeAI({apiKey:settings.apiKey,baseURL,fetch:createProviderFetch(baseURL,{allowLoopback:scope?scope.allowLoopback:Boolean(settings.baseURL)})})(actualModel),actualModel,option};
+    }
+    case 'groq': {
+      const baseURL=settings.baseURL || 'https://api.groq.com/openai/v1';
+      return {model:createGroq({apiKey:settings.apiKey,baseURL,fetch:createProviderFetch(baseURL,{allowLoopback:scope?scope.allowLoopback:Boolean(settings.baseURL)})})(actualModel),actualModel,option};
+    }
+  }
 }
-
-const aiGatewayApiKey = process.env.AI_GATEWAY_API_KEY;
-const aiGatewayBaseURL = 'https://ai-gateway.vercel.sh/v1';
-const isUsingAIGateway = !!aiGatewayApiKey;
-
-// Cache provider clients by a stable key to avoid recreating
-const clientCache = new Map<string, ProviderClient>();
-
-function getEnvDefaults(provider: ProviderName): { apiKey?: string; baseURL?: string } {
-  if (isUsingAIGateway) {
-    return { apiKey: aiGatewayApiKey, baseURL: aiGatewayBaseURL };
-  }
-
-  switch (provider) {
-    case 'openai':
-      return { apiKey: process.env.OPENAI_API_KEY, baseURL: process.env.OPENAI_BASE_URL };
-    case 'anthropic':
-      // Default Anthropic base URL mirrors existing routes
-      return { apiKey: process.env.ANTHROPIC_API_KEY, baseURL: process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com/v1' };
-    case 'groq':
-      return { apiKey: process.env.GROQ_API_KEY, baseURL: process.env.GROQ_BASE_URL };
-    case 'google':
-      return { apiKey: process.env.GEMINI_API_KEY, baseURL: process.env.GEMINI_BASE_URL };
-    default:
-      return {};
-  }
-}
-
-function getOrCreateClient(provider: ProviderName, apiKey?: string, baseURL?: string): ProviderClient {
-  const effective = isUsingAIGateway
-    ? { apiKey: aiGatewayApiKey, baseURL: aiGatewayBaseURL }
-    : { apiKey, baseURL };
-
-  const cacheKey = `${provider}:${effective.apiKey || ''}:${effective.baseURL || ''}`;
-  const cached = clientCache.get(cacheKey);
-  if (cached) return cached;
-
-  let client: ProviderClient;
-  switch (provider) {
-    case 'openai':
-      client = createOpenAI({ apiKey: effective.apiKey || getEnvDefaults('openai').apiKey, baseURL: effective.baseURL ?? getEnvDefaults('openai').baseURL });
-      break;
-    case 'anthropic':
-      client = createAnthropic({ apiKey: effective.apiKey || getEnvDefaults('anthropic').apiKey, baseURL: effective.baseURL ?? getEnvDefaults('anthropic').baseURL });
-      break;
-    case 'groq':
-      client = createGroq({ apiKey: effective.apiKey || getEnvDefaults('groq').apiKey, baseURL: effective.baseURL ?? getEnvDefaults('groq').baseURL });
-      break;
-    case 'google':
-      client = createGoogleGenerativeAI({ apiKey: effective.apiKey || getEnvDefaults('google').apiKey, baseURL: effective.baseURL ?? getEnvDefaults('google').baseURL });
-      break;
-    default:
-      client = createGroq({ apiKey: effective.apiKey || getEnvDefaults('groq').apiKey, baseURL: effective.baseURL ?? getEnvDefaults('groq').baseURL });
-  }
-
-  clientCache.set(cacheKey, client);
-  return client;
-}
-
-export function getProviderForModel(modelId: string): ProviderResolution {
-  // 1) Check explicit model configuration in app config (custom models)
-  const configured = appConfig.ai.modelApiConfig?.[modelId as keyof typeof appConfig.ai.modelApiConfig];
-  if (configured) {
-    const { provider, apiKey, baseURL, model } = configured as { provider: ProviderName; apiKey?: string; baseURL?: string; model: string };
-    const client = getOrCreateClient(provider, apiKey, baseURL);
-    return { client, actualModel: model };
-  }
-
-  // 2) Fallback logic based on prefixes and special cases
-  const isAnthropic = modelId.startsWith('anthropic/');
-  const isOpenAI = modelId.startsWith('openai/');
-  const isGoogle = modelId.startsWith('google/');
-  const isKimiGroq = modelId === 'moonshotai/kimi-k2-instruct-0905';
-
-  if (isKimiGroq) {
-    const client = getOrCreateClient('groq');
-    return { client, actualModel: 'moonshotai/kimi-k2-instruct-0905' };
-  }
-
-  if (isAnthropic) {
-    const client = getOrCreateClient('anthropic');
-    return { client, actualModel: modelId.replace('anthropic/', '') };
-  }
-
-  if (isOpenAI) {
-    const client = getOrCreateClient('openai');
-    return { client, actualModel: modelId.replace('openai/', '') };
-  }
-
-  if (isGoogle) {
-    const client = getOrCreateClient('google');
-    return { client, actualModel: modelId.replace('google/', '') };
-  }
-
-  // Default: use Groq with modelId as-is
-  const client = getOrCreateClient('groq');
-  return { client, actualModel: modelId };
-}
-
 export default getProviderForModel;
-
-
-

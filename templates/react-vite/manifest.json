@@ -1,0 +1,10 @@
+{
+  "version":"1.0.0",
+  "name":"react-vite",
+  "entry":"src/main.tsx",
+  "files":["index.html","src/main.tsx","src/styles.css","vite.config.ts","tsconfig.json","package.json","package-lock.json","README.md","manifest.json","test/smoke.mjs"],
+  "lockfile":"package-lock.json",
+  "commands":{"install":"npm ci","build":"npm run build","test":"npm test"},
+  "capabilities":{"runtime":"vite","hmr":true,"browser":true,"mobile":false},
+  "approvedPackages":["react","react-dom","vite","typescript","@vitejs/plugin-react"]
+}

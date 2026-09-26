@@ -1,3 +1,5 @@
+import { ClientInputError, readJsonObject, validateCommand, publicErrorMessage } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Get active sandbox from global state (in production, use a proper state management solution)
@@ -6,8 +8,11 @@ declare global {
 }
 
 export async function POST(request: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
-    const { command } = await request.json();
+    const { command: rawCommand } = await readJsonObject(request);
+    const command = validateCommand(rawCommand);
     
     if (!command) {
       return NextResponse.json({ 
@@ -23,12 +28,11 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
     
-    console.log(`[run-command] Executing: ${command}`);
+    console.log('[run-command] Executing authorized sandbox command');
     
     // Parse command and arguments
-    const commandParts = command.trim().split(/\s+/);
-    const cmd = commandParts[0];
-    const args = commandParts.slice(1);
+    const cmd = 'sh';
+    const args = ['-c', command];
     
     // Execute command using Vercel Sandbox
     const result = await global.activeSandbox.runCommand({
@@ -47,7 +51,7 @@ export async function POST(request: NextRequest) {
     ].filter(Boolean).join('');
     
     return NextResponse.json({
-      success: true,
+      success: result.exitCode === 0,
       output,
       exitCode: result.exitCode,
       message: result.exitCode === 0 ? 'Command executed successfully' : 'Command completed with non-zero exit code'
@@ -57,7 +61,7 @@ export async function POST(request: NextRequest) {
     console.error('[run-command] Error:', error);
     return NextResponse.json({ 
       success: false, 
-      error: (error as Error).message 
-    }, { status: 500 });
+      error: publicErrorMessage(error)
+    }, { status: error instanceof ClientInputError ? 400 : 500 });
   }
 }

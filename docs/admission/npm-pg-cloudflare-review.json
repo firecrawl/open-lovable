@@ -1,0 +1,24 @@
+{
+  "sourcePackage": "pg-cloudflare",
+  "version": "1.4.0",
+  "archiveSha256": "bffbb359f525d8ef6a0ce72f185feb109018a6c763aafc4f7a1b20fde66b98da",
+  "integrity": "sha512-Vo7z/6rrQYxpNRylp4Tlob2elzbh+N/MOQbxFVWCxS7oEx6jF53GTJFxK2WWpKuBRkmiin4Mt+xofFDjx09R0A==",
+  "fullLicensePath": "LICENSE",
+  "licenseDigest": "192b8f5c96900f04a1271dec39688655d7416c1c6ea84a508e18b50d2b6751f3",
+  "reviewedAt": "2026-09-23",
+  "reviewer": "ChatGPT engineering implementation review",
+  "sourceRepository": {
+    "type": "git",
+    "url": "git://github.com/brianc/node-postgres.git",
+    "directory": "packages/pg-cloudflare"
+  },
+  "maintenanceEvidence": "Source repository resolved by the authorized GitHub connector and is not archived; this is not a support SLA or a guarantee of future maintenance.",
+  "lifecycleScripts": {},
+  "decision": "admitted for the scoped PostgreSQL adapter and contract tests, subject to independent PR review before production",
+  "limitations": [
+    "No external database was contacted during package inspection.",
+    "No native pg addon is enabled. Explicit passwords prevent implicit pgpass credential discovery.",
+    "Existing unrelated dependencies were not re-certified.",
+    "Raw archive SRI and all installed package files are pinned; license text retained."
+  ]
+}

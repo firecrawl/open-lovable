@@ -1,0 +1,7 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {MissionLedger} from '../../lib/missions/projection';
+const event=(sequence:number,type:'task.started'|'task.waiting_approval'|'task.completed',workspaceId='ws')=>({workspaceId,projectId:'p',roomId:'room',sequence,type,taskId:'task',actorId:'actor',costCents:type==='task.completed'?10:0,usageKnown:type!=='task.completed'||true,payloadDigest:createHash('sha256').update(JSON.stringify({type,taskId:'task'})).digest('hex')});
+test('P61 replays an ordered mission ledger with pending approval and cost state',()=>{const ledger=new MissionLedger();ledger.append(event(1,'task.started'));ledger.append(event(2,'task.waiting_approval'));ledger.append(event(3,'task.completed'));const view=ledger.view('ws','p');assert.equal(view.cursor,3);assert.equal(view.tasks.task.state,'completed');assert.equal(view.tasks.task.costCents,10);assert.match(view.eventDigest,/^[a-f0-9]{64}$/);});
+test('P61 rejects duplicate/out-of-order/foreign room events and does not fabricate progress',()=>{const ledger=new MissionLedger();ledger.append(event(1,'task.started'));assert.throws(()=>ledger.append(event(1,'task.completed')),/duplicated|order/i);assert.throws(()=>ledger.append(event(3,'task.completed')),/order/i);assert.throws(()=>ledger.append(event(2,'task.completed','other')),/foreign|order/i);assert.equal(ledger.view('other','p').cursor,0);});

@@ -1,0 +1,601 @@
+{
+  "schemaVersion": 1,
+  "source": "V2 research catalog supplied by the product owner; metadata only, not code admission",
+  "originalCount": 57,
+  "justifiedSuccessors": 2,
+  "duplicatesRemoved": [
+    "second occurrence of Dpro-at/Tel-Agent"
+  ],
+  "references": [
+    {
+      "id": "FON01",
+      "name": "Builder.io",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON02",
+      "name": "FlutterFlow",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON03",
+      "name": "GitHub Copilot Workspace",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON04",
+      "name": "OpenHands",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON05",
+      "name": "Devin",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON06",
+      "name": "Plandex",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON07",
+      "name": "Roo Code",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON08",
+      "name": "Cline",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON09",
+      "name": "Aider",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON10",
+      "name": "Claude Code",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON11",
+      "name": "Void",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON12",
+      "name": "Trae",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON13",
+      "name": "Zed",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON14",
+      "name": "Windsurf",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON15",
+      "name": "Cursor",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON16",
+      "name": "Databutton / Riff",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON17",
+      "name": "Marblism",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON18",
+      "name": "Create.xyz / Anything",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON19",
+      "name": "Replit Agent",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON20",
+      "name": "v0 (Vercel)",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON21",
+      "name": "Base44",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON22",
+      "name": "Bolt.diy",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON23",
+      "name": "Bolt.new",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON24",
+      "name": "Lovable.dev",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON25",
+      "name": "Perplexity",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON26",
+      "name": "Polsia",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON27",
+      "name": "Manus",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON28",
+      "name": "OmniRoute",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON29",
+      "name": "DeepSeek",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON30",
+      "name": "Codex",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON31",
+      "name": "ChatGPT",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON32",
+      "name": "Gemini",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON33",
+      "name": "Hermes Agent (NousResearch)",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON34",
+      "name": "Hercules.app",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON35",
+      "name": "Verdent.ai",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON36",
+      "name": "SWE-agent (Princeton)",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON37",
+      "name": "MetaGPT",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON38",
+      "name": "ChatDev",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON39",
+      "name": "AutoGen (Microsoft)",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON40",
+      "name": "CrewAI",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON41",
+      "name": "Continue.dev",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON42",
+      "name": "Ollama",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON43",
+      "name": "vLLM",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON44",
+      "name": "E2B",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON45",
+      "name": "Dpro-at/Tel-Agent",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON46",
+      "name": "wickedapp/openclaw-office",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON47",
+      "name": "block/buzz",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON48",
+      "name": "lemonade-sdk/lemonade",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON49",
+      "name": "agentconnect-md/agentconnect",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON50",
+      "name": "nexu-io/open-design",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON51",
+      "name": "renatoasse/opensquad",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON52",
+      "name": "vinzdg/codenotch",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON53",
+      "name": "MakazhanAlpamys/Soup",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON54",
+      "name": "dyad-sh/dyad",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON55",
+      "name": "BerriAI/litellm",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON56",
+      "name": "langgenius/dify",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON57",
+      "name": "HarnessRouter/harnessrouter",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON58",
+      "name": "mini-SWE-agent",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    },
+    {
+      "id": "FON59",
+      "name": "Microsoft Agent Framework",
+      "adoption_status": "not_selected",
+      "source_checked_at": null,
+      "integration_verified_at": null,
+      "freshness": "not_verified_in_this_execution",
+      "responsibility": "P50 technical reviewer",
+      "inspected_revision": null
+    }
+  ]
+}

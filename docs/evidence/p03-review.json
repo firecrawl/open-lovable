@@ -1,0 +1,117 @@
+{
+  "base": "355c4006476233e71e4d747ee7bdf299460bd3c6",
+  "scope": "review corrections only",
+  "records": [
+    {
+      "tag": "p03-deadline-behavior-red",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/recovery-budget.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T20:30:36.035070+00:00",
+      "finishedAt": "2026-09-23T20:30:41.608294+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p03-deadline-behavior-red.stdout.log",
+          "bytes": 935,
+          "sha256": "a9959975065506343254e8733b2c5cbe960dd15860fd1b8b8fec0099ac31a60b"
+        },
+        {
+          "path": ".audit\\f00\\p03-deadline-behavior-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p03-review-green",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/recovery-budget.test.ts",
+        "tests/backup-roundtrip.test.ts",
+        "tests/recovery-cli.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T20:31:28.528699+00:00",
+      "finishedAt": "2026-09-23T20:31:45.571564+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p03-review-green.stdout.log",
+          "bytes": 1557,
+          "sha256": "5d5c6971291afffb8de8826b3a690308c8dd57713ad08666069bccd2dc7baef9"
+        },
+        {
+          "path": ".audit\\f00\\p03-review-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p03-reviewed-check",
+      "command": [
+        "npm.cmd",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T20:32:51.578121+00:00",
+      "finishedAt": "2026-09-23T20:37:43.789843+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p03-reviewed-check.stdout.log",
+          "bytes": 19819,
+          "sha256": "68736296c75454b1a83cb05b2bc3dadae3ef41b28ad01a6ea8b205d8e1b8390e"
+        },
+        {
+          "path": ".audit\\f00\\p03-reviewed-check.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p03-reviewed-e2e",
+      "command": [
+        "npm.cmd",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T20:37:44.109987+00:00",
+      "finishedAt": "2026-09-23T20:39:09.071258+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p03-reviewed-e2e.stdout.log",
+          "bytes": 2734,
+          "sha256": "592138c93535db366fc5d7676a6e62a45918d57a1993edb5fcb5ca552087d367"
+        },
+        {
+          "path": ".audit\\f00\\p03-reviewed-e2e.stderr.log",
+          "bytes": 785,
+          "sha256": "396e1ccacf91b18550adff10c08651cf17c4aef30bbe52740a2cf22a870fb04a"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Synchronous deadlines use monotonic clock. Single SQLite calls remain non-preemptible.",
+    "Original logs remain private; data were synthetic.",
+    "Browser context creation now occurs within server cleanup protection."
+  ]
+}

@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {buildReleaseManifest,assertReleaseArtifact} from '../../lib/releases/manifest';
+const artifact=new TextEncoder().encode('validated-build');
+test('P33 release manifest binds the exact artifact, commit, checks and component licenses',()=>{const manifest=buildReleaseManifest({revision:'rev-1',commit:'commit-1',artifact,schemaRange:'5..5',checks:[{name:'smoke',passed:true,log:'ok'}],configRefs:['public-config'],components:['next','react'],licenses:['MIT']});assert.equal(manifest.artifactDigest.length,64);assert.equal(manifest.imageDigest,manifest.artifactDigest);assert.doesNotThrow(()=>assertReleaseArtifact(manifest,artifact));});
+test('P33 blocks failed builds and artifact/schema substitution after validation',()=>{assert.throws(()=>buildReleaseManifest({revision:'r',commit:'c',artifact,schemaRange:'5..5',checks:[{name:'test',passed:false,log:'failed'}],configRefs:[],components:[],licenses:[]}),/passing/i);const manifest=buildReleaseManifest({revision:'r',commit:'c',artifact,schemaRange:'5..5',checks:[{name:'test',passed:true,log:'ok'}],configRefs:[],components:[],licenses:[]});assert.throws(()=>assertReleaseArtifact(manifest,new TextEncoder().encode('tampered')),/digest/i);});

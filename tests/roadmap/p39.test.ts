@@ -1,0 +1,9 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {UsageLedger} from '../../lib/billing/ledger';
+import {assertEntitlement,entitlementFor} from '../../lib/billing/entitlements';
+import {BillingWebhookLedger} from '../../lib/billing/webhooks';
+import {createHmac} from 'node:crypto';
+const event={eventId:'e1',workspaceId:'ws-1',operation:'ai' as const,units:10,source:'platform' as const,occurredAt:'2026-09-24T13:00:00Z'};
+test('P39 usage ledger is immutable and webhook delivery is idempotent in test mode',()=>{const ledger=new UsageLedger();assert.equal(ledger.record(event).accepted,true);assert.equal(ledger.record(event).accepted,false);assert.equal(ledger.usage('ws-1','ai'),10);const raw=new TextEncoder().encode(JSON.stringify({id:'delivery'}));const signature=createHmac('sha256','test-secret').update(raw).digest('hex');const webhooks=new BillingWebhookLedger();const payload={deliveryId:'d1',workspaceId:'ws-1',plan:'pro' as const,mode:'test' as const};assert.deepEqual(webhooks.apply(raw,signature,payload,'test-secret'),{applied:true,mode:'test'});assert.deepEqual(webhooks.apply(raw,signature,payload,'test-secret'),{applied:false,mode:'test'});});
+test('P39 separates BYOK from platform usage and blocks forged plan or real billing activation',()=>{const ledger=new UsageLedger();const free=entitlementFor('ws-1','free');assert.doesNotThrow(()=>assertEntitlement(free,{...event,eventId:'byok',source:'byok',units:999999},ledger));assert.throws(()=>assertEntitlement(free,{...event,eventId:'too-much',units:101},ledger),/limit/i);const webhooks=new BillingWebhookLedger();const raw=new TextEncoder().encode('{}');const signature=createHmac('sha256','s').update(raw).digest('hex');assert.throws(()=>webhooks.apply(raw,signature,{deliveryId:'d',workspaceId:'ws-1',plan:'enterprise',mode:'live' as 'test'},'s'),/approval/i);});

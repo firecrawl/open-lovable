@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {admitExperiment} from '../../lib/evaluation/experiments';
+const experiment={id:'memory-lab',workspaceId:'ws',modelVersion:'local-model-v1',hardware:'cpu-test-host',datasetId:'synthetic-approved',datasetLicense:'internal-fixture',split:{train:80,validation:20},budgetCents:0,baseline:'direct-route-v1'};
+test('P67 admits a fully authorized isolated experiment with reproducible manifest digest',()=>{const result=admitExperiment(experiment,{approved:true,isolated:true,hardwareAvailable:true,datasetAuthorized:true,budgetApproved:true});assert.equal(result.status,'admitted');assert.match(result.digest,/^[a-f0-9]{64}$/);});
+test('P67 remains blocked without authorized hardware, dataset or budget and never claims optimization',()=>{const result=admitExperiment(experiment,{approved:false,isolated:true,hardwareAvailable:false,datasetAuthorized:false,budgetApproved:false});assert.equal(result.status,'blocked');assert.match(result.reason||'',/requires/i);assert.throws(()=>admitExperiment({...experiment,datasetLicense:''},{approved:true,isolated:true,hardwareAvailable:true,datasetAuthorized:true,budgetApproved:true}),/incomplete/i);});

@@ -1,0 +1,8 @@
+import {createHash} from 'node:crypto';
+import {buildReport,type VerificationCheck,type VerificationReport} from './evidence';
+export interface BrowserObservation {consoleErrors:string[];networkErrors:string[];screenshot?:Uint8Array;trace?:Uint8Array;}
+export interface VerificationScenario {revisionDigest:string;browser:string;viewport:string;steps:Array<{id:string;kind:'render'|'flow'|'accessibility'|'network';run:(observation:BrowserObservation)=>Promise<{passed:boolean;observed:string}>}>;}
+export class VerificationService {
+ async verify(scenario:VerificationScenario,observe:()=>Promise<BrowserObservation>):Promise<VerificationReport>{if(!/^[a-f0-9]{64}$/.test(scenario.revisionDigest))throw new Error('Revision digest is required');const observation=await observe();const checks:VerificationCheck[]=[];for(const step of scenario.steps){const result=await step.run(observation);checks.push({id:step.id,kind:step.kind,passed:result.passed,observed:result.observed.slice(0,4000)});}const artifacts=[];if(observation.screenshot)artifacts.push({kind:'screenshot' as const,sha256:hash(observation.screenshot),bytes:observation.screenshot.byteLength});if(observation.trace)artifacts.push({kind:'trace' as const,sha256:hash(observation.trace),bytes:observation.trace.byteLength});return buildReport({revisionDigest:scenario.revisionDigest,environment:{browser:scenario.browser,viewport:scenario.viewport},checks,artifacts,observedErrors:[...observation.consoleErrors,...observation.networkErrors].slice(0,100)});}
+}
+const hash=(value:Uint8Array)=>createHash('sha256').update(value).digest('hex');

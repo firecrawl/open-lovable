@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "approvals": [
+    {
+      "manifestDigest": "d3e0044f440d9b548a2d7e8798e08faa9a2303d32bf49c1b38b89da9c5c0d64f",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "b7776c72c28ba2062f3f44d5faf26c4d7b3e4a3e45e85b2f6d269b6d0197fa59",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-types-pg-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "5c26da7881298878ab81dcef0a4e2fae59f9cbca9f032baced611bda721be9ca",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "3cbd6b1e9ae5d95ebe94fb6d914e63077cd84567ff0a52c2d743aa3e495b7d62",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-pg-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "365d0f39ecfcf93d98320036b8a80aeafef48110ef113dd9f5c0873824f0a45e",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "fb55830d76eadf417897defefcdcaae631c09ba6800db514503a16b70073ab0a",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-pg-cloudflare-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "4f0692feefcb0a89b87fbb9eacf4a866ddc299176807b32a47afa35587d242a8",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "59bb65e3dc2c56150ee209e6ed44ef06982f649f8f7d416c2992e2a4c56ad243",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-pg-connection-string-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "a5164e409e635412e662e08611bf304aa46794335de98b861d6f09fe2b32cef1",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "91169f4124197bf6d19edac67c672c2d605e3c3be1da7d7dea47c501ac5a0bdb",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-pg-int8-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "cf1f837b654797e7cbc8bcc73ecd875c7a260d928ec7d671e675a4eb61d6de5c",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "6bdc886b95bf756aa59c46f6e04bc082130b5fd68912c96b8adf791f6daf51e2",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-pg-pool-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "04e0296786071f9bb88baea56d01d1eb19decfcba40353abb993e4e5b45e6d7e",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "6e27feeff19a5ecfa9e292c5c7812d7ccc5d069c7d7e3d601e7a95bc42053978",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-pg-protocol-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "6b98dbb93b5959df87f8385004fe252fe2afb713555f6cb16807d28f738c44cc",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "233820d3443ea1200b3ab725705631e7616df5cc7cf08931612da7bd73fa8bc8",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-pg-types-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "38f274658f1197e4dd4fff4a89c18e9625fbc6edd508368759558679e4f97b9c",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "80e7132d52156132bcbf5ac0659ccac5303c06f8a90a94f5301d98a56e400544",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-pgpass-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "90758324b85e89bf21526135d39b21df82dbc6ebe0351be954b1a4230ebbb252",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "b8572359de9112b09644a6395b0ef8b072396e52b7ddfeb98ba33f6a8548772f",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-postgres-array-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "cfb0be7706c7f60085c30e138746fc070fa19638606d0a5f29b1aceec9ded07f",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "9270a344c04cae7cbe629a5d770baaf3ce1cb8dddeed92998649bea1dcac985f",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-postgres-bytea-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "1441c9e59d1727f70c0ce7b3aed8b7b1d37f9caa3882d9cfdf2d1a034e251fee",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "a167657d877173a448b56c5118990fb10ef8ff6fc8b72f4c6492ffa418edf326",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-postgres-date-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "d85e3d79d9a1aacb89596f05ade05cbcf9a6b443af9d1b0ab0510fd01f77cca7",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "89f80fe7c674aa493997f96409a046a99e603f25c38728581e622da371390518",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-postgres-interval-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    },
+    {
+      "manifestDigest": "aa709158ad2e81332f30f3a2e18536f0ccb9c551304cefa965ea36e36466d3b5",
+      "reviewer": "ChatGPT engineering implementation review",
+      "decision": "allowed",
+      "expiresAt": "2026-12-22T00:00:00Z",
+      "evidenceDigest": "0a1f394eaa22d37a7b148f63adcc7da6f16045a635d558f534f3d055e8293d1a",
+      "restrictedPathsReviewed": [],
+      "evidencePath": "docs/admission/npm-split2-review.json",
+      "evidenceFormat": "canonical-json-v1"
+    }
+  ]
+}

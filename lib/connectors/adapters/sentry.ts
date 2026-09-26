@@ -1,0 +1,5 @@
+import {assertContext,redactError,type AdapterContext,type AdapterManifest,type AdapterResult} from './contracts';
+export const sentryManifest:AdapterManifest={id:'sentry',version:'1.0.0',capabilities:['read_issue'],requiredScopes:['sentry:read'],inputSchema:'SentryIssueRef',outputSchema:'ErrorIssue'};
+export interface SentryIssueRef{issueId:string;projectId:string;release:string;}
+export interface ErrorIssue{issueId:string;release:string;message:string;level:string;}
+export async function readSentryIssue(context:AdapterContext,ref:SentryIssueRef,fetcher:(ref:SentryIssueRef)=>Promise<ErrorIssue>):Promise<AdapterResult<ErrorIssue>>{assertContext(context,sentryManifest);if(ref.projectId!==context.projectId)throw new Error('Sentry issue belongs to another project.');const data=await fetcher(ref);return {data:{...data,message:redactError(data.message)},manifest:sentryManifest,provenance:{source:'sentry',location:`issue:${ref.issueId}`,observedAt:new Date().toISOString(),projectId:context.projectId,release:ref.release}};}

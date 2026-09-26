@@ -6,11 +6,30 @@ interface SandboxInfo {
   provider: SandboxProvider;
   createdAt: Date;
   lastAccessed: Date;
+  /** Monotonic access order; Date resolution is too coarse to rank recency. */
+  accessOrder: number;
 }
 
-class SandboxManager {
+export const MAX_TRACKED_SANDBOXES = 5;
+
+export class SandboxManager {
   private sandboxes: Map<string, SandboxInfo> = new Map();
   private activeSandboxId: string | null = null;
+  private accessCounter = 0;
+
+  constructor(private readonly maxSandboxes: number = MAX_TRACKED_SANDBOXES) {}
+
+  get size(): number {
+    return this.sandboxes.size;
+  }
+
+  /** Whether this provider instance is owned (and will be terminated) by the manager. */
+  tracks(provider: unknown): boolean {
+    for (const info of this.sandboxes.values()) {
+      if (info.provider === provider) return true;
+    }
+    return false;
+  }
 
   /**
    * Get or create a sandbox provider for the given sandbox ID
@@ -20,6 +39,7 @@ class SandboxManager {
     const existing = this.sandboxes.get(sandboxId);
     if (existing) {
       existing.lastAccessed = new Date();
+      existing.accessOrder = ++this.accessCounter;
       return existing.provider;
     }
 
@@ -37,7 +57,8 @@ class SandboxManager {
             sandboxId,
             provider,
             createdAt: new Date(),
-            lastAccessed: new Date()
+            lastAccessed: new Date(),
+            accessOrder: ++this.accessCounter
           });
           this.activeSandboxId = sandboxId;
           return provider;
@@ -56,14 +77,32 @@ class SandboxManager {
   /**
    * Register a new sandbox
    */
-  registerSandbox(sandboxId: string, provider: SandboxProvider): void {
+  registerSandbox(sandboxId: string, provider: SandboxProvider): Promise<void> {
     this.sandboxes.set(sandboxId, {
       sandboxId,
       provider,
       createdAt: new Date(),
-      lastAccessed: new Date()
+      lastAccessed: new Date(),
+      accessOrder: ++this.accessCounter
     });
     this.activeSandboxId = sandboxId;
+    return this.evictOverflow();
+  }
+
+  /**
+   * Keep the registry bounded: terminate the least recently used sandboxes
+   * (never the active one) once more than maxSandboxes are tracked.
+   */
+  private async evictOverflow(): Promise<void> {
+    const overflow = this.sandboxes.size - this.maxSandboxes;
+    if (overflow <= 0) return;
+    const victims = Array.from(this.sandboxes.values())
+      .filter(info => info.sandboxId !== this.activeSandboxId)
+      .sort((a, b) => a.accessOrder - b.accessOrder)
+      .slice(0, overflow);
+    for (const victim of victims) {
+      await this.terminateSandbox(victim.sandboxId);
+    }
   }
 
   /**
@@ -77,6 +116,7 @@ class SandboxManager {
     const sandbox = this.sandboxes.get(this.activeSandboxId);
     if (sandbox) {
       sandbox.lastAccessed = new Date();
+      sandbox.accessOrder = ++this.accessCounter;
       return sandbox.provider;
     }
     
@@ -90,6 +130,7 @@ class SandboxManager {
     const sandbox = this.sandboxes.get(sandboxId);
     if (sandbox) {
       sandbox.lastAccessed = new Date();
+      sandbox.accessOrder = ++this.accessCounter;
       return sandbox.provider;
     }
     return null;

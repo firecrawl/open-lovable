@@ -1,10 +1,14 @@
+import { publicErrorMessage } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextResponse } from 'next/server';
 
 declare global {
   var activeSandbox: any;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
     if (!global.activeSandbox) {
       return NextResponse.json({ 
@@ -83,7 +87,7 @@ export async function GET() {
     console.error('[sandbox-logs] Error:', error);
     return NextResponse.json({ 
       success: false, 
-      error: (error as Error).message 
+      error: publicErrorMessage(error)
     }, { status: 500 });
   }
 }

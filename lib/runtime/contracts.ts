@@ -1,0 +1,15 @@
+import type {CommandResult, SandboxFile, SandboxInfo, SandboxProvider} from '../sandbox/types';
+export interface RuntimeIdentity {workspaceId:string;projectId:string;draftId:string;revisionId:string;runId:string;actorId:string;}
+export interface RuntimeCapabilities {terminal:boolean;hmr:boolean;browser:boolean;temporaryPersistence:boolean;mobile:boolean;provider:string;version:string;}
+export interface RuntimeRef {id:string;identity:RuntimeIdentity;provider:string;sandboxId:string;leaseId:string;createdAt:number;expiresAt:number;capabilities:RuntimeCapabilities;}
+export interface ExecutionSpec {argv:string[];cwd?:string;timeoutMs?:number;env?:Record<string,string>;}
+export interface RuntimeAdapter {create(identity:RuntimeIdentity):Promise<{sandbox:SandboxInfo;capabilities:RuntimeCapabilities}>;apply(ref:RuntimeRef,files:SandboxFile[]):Promise<void>;execute(ref:RuntimeRef,spec:ExecutionSpec):Promise<CommandResult>;logs(ref:RuntimeRef):Promise<string>;health(ref:RuntimeRef):Promise<boolean>;export(ref:RuntimeRef):Promise<Uint8Array>;destroy(ref:RuntimeRef):Promise<void>;}
+export interface RuntimeFactory {createAdapter():RuntimeAdapter;}
+export class RuntimeContractError extends Error {constructor(message:string,readonly status=409){super(message);this.name='RuntimeContractError';}}
+export function assertRuntimeIdentity(identity:RuntimeIdentity):void {for(const [key,value] of Object.entries(identity)){if(!/^[a-zA-Z0-9_-]{1,128}$/.test(value))throw new RuntimeContractError(`Invalid runtime identity: ${key}`,400);}}
+/** Adapter instances own a provider per runtime. A provider object must never be reused for another sandbox. */
+export function providerRuntimeAdapter(providerFactory:()=>SandboxProvider,providerName:string,version='legacy-1'):RuntimeAdapter {
+ const providers=new Map<string,SandboxProvider>();
+ const providerFor=(ref:RuntimeRef):SandboxProvider=>{const provider=providers.get(ref.sandboxId);if(!provider)throw new RuntimeContractError('Runtime sandbox is not registered',404);return provider;};
+ return {async create(identity){const provider=providerFactory(),sandbox=await provider.createSandbox();providers.set(sandbox.sandboxId,provider);return {sandbox,capabilities:{terminal:true,hmr:true,browser:false,temporaryPersistence:true,mobile:false,provider:providerName,version}};},async apply(ref,files){const provider=providerFor(ref);for(const file of files)await provider.writeFile(file.path,file.content);},async execute(ref,spec){if(!spec.argv.length)throw new RuntimeContractError('Execution argv cannot be empty',400);return providerFor(ref).runCommand(spec.argv.map(value=>`'${value.replace(/'/g,"'\\''")}'`).join(' '));},async logs(ref){await providerFor(ref).listFiles('.');return 'Runtime logs are provider-specific and unavailable from this adapter.';},async health(ref){return providerFor(ref).isAlive();},async export(ref){const result=await providerFor(ref).runCommand('find . -maxdepth 3 -type f -print');return Buffer.from(result.stdout,'utf8');},async destroy(ref){const provider=providerFor(ref);try{await provider.terminate();}finally{providers.delete(ref.sandboxId);}}};
+}

@@ -1,0 +1,439 @@
+{
+  "scope": "P07-P09 single-node durable Studio; not the complete product",
+  "baseSha": "13f89dbefa4b92924aff3669cf337e69fadf9c7a",
+  "checkpointSha": "f6af97cb0e4bf502cf7169c5be7c561814f7dd80",
+  "recordedAt": "2026-09-24T01:37:19.136893+00:00",
+  "local": {
+    "rootTests": 203,
+    "baselineVerifierTests": 8,
+    "browserTests": 30,
+    "externalModel": "synthetic loopback HTTP only",
+    "independentOSProcessTests": 3
+  },
+  "gates": [
+    {
+      "tag": "p08-clean-install",
+      "purpose": "verification",
+      "record": {
+        "command": [
+          "npm",
+          "ci",
+          "--ignore-scripts"
+        ],
+        "exitCode": 0,
+        "termination": "exited",
+        "startedAt": "2026-09-24T01:26:50.830549+00:00",
+        "finishedAt": "2026-09-24T01:28:34.348678+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p08-clean-install.stdout.log",
+            "bytes": 144,
+            "sha256": "488b3dc9ca2e0d0786212c4bf40829648deb78245e8e2377ec1b029bb1b123ff"
+          },
+          {
+            "path": ".audit\\f00\\p08-clean-install.stderr.log",
+            "bytes": 370,
+            "sha256": "445ad5b8eaaf5223273aa868ee452d79b872d4bf195b1ed2480eae427951d990"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p08-clean-check",
+      "purpose": "verification",
+      "record": {
+        "command": [
+          "npm",
+          "run",
+          "check"
+        ],
+        "exitCode": 0,
+        "termination": "exited",
+        "startedAt": "2026-09-24T01:28:34.821809+00:00",
+        "finishedAt": "2026-09-24T01:32:35.418849+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p08-clean-check.stdout.log",
+            "bytes": 31356,
+            "sha256": "4bfca24596874dc3a43518b6423770c3d126c5398818484e3037e9fb28f721a2"
+          },
+          {
+            "path": ".audit\\f00\\p08-clean-check.stderr.log",
+            "bytes": 126,
+            "sha256": "2a5a445246fe6c7ecc611b92cdf70dfc098b33b6cb53ac8a123c86f032df6f8c"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p08-clean-e2e",
+      "purpose": "verification",
+      "record": {
+        "command": [
+          "npm",
+          "run",
+          "test:e2e"
+        ],
+        "exitCode": 0,
+        "termination": "exited",
+        "startedAt": "2026-09-24T01:32:35.658275+00:00",
+        "finishedAt": "2026-09-24T01:34:20.066703+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p08-clean-e2e.stdout.log",
+            "bytes": 3713,
+            "sha256": "b2e1dc69dbea7df96da66942d104d8872861fddc864a6dddb3da2ca5646a708f"
+          },
+          {
+            "path": ".audit\\f00\\p08-clean-e2e.stderr.log",
+            "bytes": 1172,
+            "sha256": "7630a69a92e6d8647b11856a78163c0f5973199d02176576e2f89a38477ab4a9"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p08-clean-audit",
+      "purpose": "verification",
+      "record": {
+        "command": [
+          "npm",
+          "run",
+          "security:audit"
+        ],
+        "exitCode": 0,
+        "termination": "exited",
+        "startedAt": "2026-09-24T01:34:20.327953+00:00",
+        "finishedAt": "2026-09-24T01:34:23.892077+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p08-clean-audit.stdout.log",
+            "bytes": 92,
+            "sha256": "21628eb917c20fadd3ebe3cca58a7b7bd29fdebe0db23a52c11221447ec0943d"
+          },
+          {
+            "path": ".audit\\f00\\p08-clean-audit.stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p08-process-proof",
+      "purpose": "verification",
+      "record": {
+        "command": [
+          "node",
+          "--import",
+          "tsx",
+          "--import",
+          "./tests/setup.mjs",
+          "--test",
+          "tests/worker-process.test.ts"
+        ],
+        "exitCode": 0,
+        "termination": "exited",
+        "startedAt": "2026-09-24T01:05:53.787725+00:00",
+        "finishedAt": "2026-09-24T01:06:40.608726+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p08-process-proof.stdout.log",
+            "bytes": 451,
+            "sha256": "0159663bfe7115327a484e5ce41b3cff9835e122f912a56bbb70017cbaf60764"
+          },
+          {
+            "path": ".audit\\f00\\p08-process-proof.stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p09-drain-green",
+      "purpose": "verification",
+      "record": {
+        "command": [
+          "node",
+          "--import",
+          "tsx",
+          "--import",
+          "./tests/setup.mjs",
+          "--test",
+          "tests/run-queue.test.ts",
+          "tests/durable-worker.test.ts"
+        ],
+        "exitCode": 0,
+        "termination": "exited",
+        "startedAt": "2026-09-24T01:25:47.256833+00:00",
+        "finishedAt": "2026-09-24T01:25:49.874637+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p09-drain-green.stdout.log",
+            "bytes": 1926,
+            "sha256": "a42d8f5d55b7ae0e588604695182e6ba17f2b56f363139b2999366d443eba2e3"
+          },
+          {
+            "path": ".audit\\f00\\p09-drain-green.stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p08-resume-browser-red",
+      "purpose": "observed-regression",
+      "record": {
+        "command": [
+          "npx",
+          "--no-install",
+          "playwright",
+          "test",
+          "tests/e2e/durable-runs.spec.ts"
+        ],
+        "exitCode": 1,
+        "termination": "exited",
+        "startedAt": "2026-09-24T00:52:35.763560+00:00",
+        "finishedAt": "2026-09-24T00:53:03.317567+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p08-resume-browser-red.stdout.log",
+            "bytes": 3263,
+            "sha256": "dd1d9cde8a07afe27bfd0b908d12a483b3674bbae48ebddfce6a47bdb7231c5f"
+          },
+          {
+            "path": ".audit\\f00\\p08-resume-browser-red.stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p08-observer-red",
+      "purpose": "observed-regression",
+      "record": {
+        "command": [
+          "node",
+          "--import",
+          "tsx",
+          "--import",
+          "./tests/setup.mjs",
+          "--test",
+          "tests/run-client.test.ts"
+        ],
+        "exitCode": 1,
+        "termination": "exited",
+        "startedAt": "2026-09-24T00:54:31.281969+00:00",
+        "finishedAt": "2026-09-24T00:54:32.133422+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p08-observer-red.stdout.log",
+            "bytes": 2863,
+            "sha256": "7989a5151c0d2c07b5414706745f04d0ab0d8bbdf568fff7be7f38e376ea8f00"
+          },
+          {
+            "path": ".audit\\f00\\p08-observer-red.stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p08-compat-red",
+      "purpose": "observed-regression",
+      "record": {
+        "command": [
+          "node",
+          "--import",
+          "tsx",
+          "--import",
+          "./tests/setup.mjs",
+          "--test",
+          "tests/run-api.test.ts"
+        ],
+        "exitCode": 1,
+        "termination": "exited",
+        "startedAt": "2026-09-24T00:56:05.404160+00:00",
+        "finishedAt": "2026-09-24T00:56:08.064541+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p08-compat-red.stdout.log",
+            "bytes": 1181,
+            "sha256": "dfaa8b92312b4567a232f14d594a48dbcaa5877bed219f77f7a605900eca5e11"
+          },
+          {
+            "path": ".audit\\f00\\p08-compat-red.stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p08-guard-red",
+      "purpose": "observed-regression",
+      "record": {
+        "command": [
+          "node",
+          "--import",
+          "tsx",
+          "--import",
+          "./tests/setup.mjs",
+          "--test",
+          "tests/run-api.test.ts",
+          "tests/run-queue.test.ts"
+        ],
+        "exitCode": 1,
+        "termination": "exited",
+        "startedAt": "2026-09-24T01:02:06.361531+00:00",
+        "finishedAt": "2026-09-24T01:02:08.650369+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p08-guard-red.stdout.log",
+            "bytes": 5243,
+            "sha256": "554f7f137739c3cb036014af9273303e24a0a7d4b7e489fc58aee5ffb98eb93f"
+          },
+          {
+            "path": ".audit\\f00\\p08-guard-red.stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p08-input-policy-red-2",
+      "purpose": "observed-regression",
+      "record": {
+        "command": [
+          "node",
+          "--import",
+          "tsx",
+          "--import",
+          "./tests/setup.mjs",
+          "--test",
+          "tests/snapshot-shape.test.ts",
+          "tests/durable-worker.test.ts"
+        ],
+        "exitCode": 1,
+        "termination": "exited",
+        "startedAt": "2026-09-24T01:09:49.910013+00:00",
+        "finishedAt": "2026-09-24T01:09:52.613008+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p08-input-policy-red-2.stdout.log",
+            "bytes": 2517,
+            "sha256": "6fdd3b8017340ede97938c0ff1be77859238f223aea4d541e4a3d76c5d7bd741"
+          },
+          {
+            "path": ".audit\\f00\\p08-input-policy-red-2.stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p07-export-red",
+      "purpose": "observed-regression",
+      "record": {
+        "command": [
+          "node",
+          "--import",
+          "tsx",
+          "--import",
+          "./tests/setup.mjs",
+          "--test",
+          "tests/run-api.test.ts"
+        ],
+        "exitCode": 1,
+        "termination": "exited",
+        "startedAt": "2026-09-24T01:14:41.296615+00:00",
+        "finishedAt": "2026-09-24T01:14:43.792221+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p07-export-red.stdout.log",
+            "bytes": 2253,
+            "sha256": "930a3c3d7793c54f36fed414de18670abd23d3702d9b61c7653ac915ef6ec392"
+          },
+          {
+            "path": ".audit\\f00\\p07-export-red.stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p08-journal-completion-red",
+      "purpose": "observed-regression",
+      "record": {
+        "command": [
+          "npx",
+          "--no-install",
+          "playwright",
+          "test",
+          "tests/e2e/durable-runs.spec.ts"
+        ],
+        "exitCode": 1,
+        "termination": "exited",
+        "startedAt": "2026-09-24T01:20:20.414370+00:00",
+        "finishedAt": "2026-09-24T01:21:16.926170+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p08-journal-completion-red.stdout.log",
+            "bytes": 6427,
+            "sha256": "6629ee71c00ce93783e46927b7afa75869172b2af189629a569b8d40a140d24d"
+          },
+          {
+            "path": ".audit\\f00\\p08-journal-completion-red.stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "p09-drain-red",
+      "purpose": "observed-regression",
+      "record": {
+        "command": [
+          "node",
+          "--import",
+          "tsx",
+          "--import",
+          "./tests/setup.mjs",
+          "--test",
+          "tests/run-queue.test.ts"
+        ],
+        "exitCode": 1,
+        "termination": "exited",
+        "startedAt": "2026-09-24T01:25:27.550090+00:00",
+        "finishedAt": "2026-09-24T01:25:28.856039+00:00",
+        "artifacts": [
+          {
+            "path": ".audit\\f00\\p09-drain-red.stdout.log",
+            "bytes": 1871,
+            "sha256": "02cec41d2cc2f7986496967900c468f1b89ca614d6081278edbd14a847db48bf"
+          },
+          {
+            "path": ".audit\\f00\\p09-drain-red.stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    }
+  ],
+  "limits": [
+    "PostgreSQL final migrations/import and cross-platform proof require final-head CI; not inferred from local pass",
+    "Supabase cloud/SMTP/paid models not used",
+    "distributed PostgreSQL queue, generic HITL, app backend and publication remain planned",
+    "Next aborted request diagnostics still present; no global suppression",
+    "CI and independent review must be read separately after publishing"
+  ]
+}

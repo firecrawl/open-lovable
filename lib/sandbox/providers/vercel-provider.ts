@@ -1,3 +1,5 @@
+import { readCommandResult } from '../command-result';
+import { validateCommand, validatePackages, quoteShellArgument, normalizeProjectPath } from '@/lib/security/input-validation';
 import { Sandbox } from '@vercel/sandbox';
 import { SandboxProvider, SandboxInfo, CommandResult } from '../types';
 // SandboxProviderConfig available through parent class
@@ -62,174 +64,26 @@ export class VercelProvider extends SandboxProvider {
   }
 
   async runCommand(command: string): Promise<CommandResult> {
-    if (!this.sandbox) {
-      throw new Error('No active sandbox');
-    }
-
-    
-    try {
-      // Parse command into cmd and args (matching PR syntax)
-      const parts = command.split(' ');
-      const cmd = parts[0];
-      const args = parts.slice(1);
-      
-      // Vercel uses runCommand with cmd and args object (based on PR)
-      const result = await this.sandbox.runCommand({
-        cmd: cmd,
-        args: args,
-        cwd: '/vercel/sandbox',
-        env: {}
-      });
-      
-      // Handle stdout and stderr - they might be functions in Vercel SDK
-      let stdout = '';
-      let stderr = '';
-      
-      try {
-        if (typeof result.stdout === 'function') {
-          stdout = await result.stdout();
-        } else {
-          stdout = result.stdout || '';
-        }
-      } catch (e) {
-        stdout = '';
-      }
-      
-      try {
-        if (typeof result.stderr === 'function') {
-          stderr = await result.stderr();
-        } else {
-          stderr = result.stderr || '';
-        }
-      } catch (e) {
-        stderr = '';
-      }
-      
-      return {
-        stdout: stdout,
-        stderr: stderr,
-        exitCode: result.exitCode || 0,
-        success: result.exitCode === 0
-      };
-    } catch (error: any) {
-      return {
-        stdout: '',
-        stderr: error.message || 'Command failed',
-        exitCode: 1,
-        success: false
-      };
-    }
+    const input = validateCommand(command);
+    if (!this.sandbox) throw new Error('No active sandbox');
+    const result = await this.sandbox.runCommand({
+      cmd: 'sh', args: ['-c', input], cwd: '/vercel/sandbox', env: {},
+    });
+    return readCommandResult(result);
   }
 
   async writeFile(path: string, content: string): Promise<void> {
-    if (!this.sandbox) {
-      throw new Error('No active sandbox');
-    }
-
-    // Vercel sandbox default working directory is /vercel/sandbox
-    const fullPath = path.startsWith('/') ? path : `/vercel/sandbox/${path}`;
-    
-    // Writing file to sandbox
-    
-    // Based on Vercel SDK docs, writeFiles expects path and Buffer content
-    try {
-      const buffer = Buffer.from(content, 'utf-8');
-      // Writing file with buffer
-      
-      await this.sandbox.writeFiles([{
-        path: fullPath,
-        content: buffer
-      }]);
-      
-      this.existingFiles.add(path);
-    } catch (writeError: any) {
-      // Log detailed error information
-      console.error(`[VercelProvider] writeFiles failed for ${fullPath}:`, {
-        error: writeError,
-        message: writeError?.message,
-        response: writeError?.response,
-        statusCode: writeError?.response?.status,
-        responseData: writeError?.response?.data
-      });
-      
-      // Fallback to command-based approach if writeFiles fails
-      // Falling back to command-based file write
-      
-      // Ensure directory exists
-      const dir = fullPath.substring(0, fullPath.lastIndexOf('/'));
-      if (dir) {
-        const mkdirResult = await this.sandbox.runCommand({
-          cmd: 'mkdir',
-          args: ['-p', dir]
-        });
-        // Directory created
-      }
-      
-      // Write file using echo and redirection
-      const escapedContent = content
-        .replace(/\\/g, '\\\\')
-        .replace(/"/g, '\\"')
-        .replace(/\$/g, '\\$')
-        .replace(/`/g, '\\`')
-        .replace(/\n/g, '\\n');
-      
-      const writeResult = await this.sandbox.runCommand({
-        cmd: 'sh',
-        args: ['-c', `echo "${escapedContent}" > "${fullPath}"`]
-      });
-      
-      // File written
-      
-      if (writeResult.exitCode === 0) {
-        this.existingFiles.add(path);
-      } else {
-        throw new Error(`Failed to write file via command: ${writeResult.stderr}`);
-      }
-    }
+    const relative = normalizeProjectPath(path);
+    if (!this.sandbox) throw new Error('No active sandbox');
+    await this.sandbox.writeFiles([{ path: `/vercel/sandbox/${relative}`, content: Buffer.from(content, 'utf8') }]);
+    this.existingFiles.add(relative);
   }
 
   async readFile(path: string): Promise<string> {
-    if (!this.sandbox) {
-      throw new Error('No active sandbox');
-    }
-
-    // Vercel sandbox default working directory is /vercel/sandbox
-    const fullPath = path.startsWith('/') ? path : `/vercel/sandbox/${path}`;
-    
-    const result = await this.sandbox.runCommand({
-      cmd: 'cat',
-      args: [fullPath]
-    });
-    
-    // Handle stdout and stderr - they might be functions in Vercel SDK
-    let stdout = '';
-    let stderr = '';
-    
-    try {
-      if (typeof result.stdout === 'function') {
-        stdout = await result.stdout();
-      } else {
-        stdout = result.stdout || '';
-      }
-    } catch (e) {
-      stdout = '';
-    }
-    
-    try {
-      if (typeof result.stderr === 'function') {
-        stderr = await result.stderr();
-      } else {
-        stderr = result.stderr || '';
-      }
-    } catch (e) {
-      stderr = '';
-    }
-    
-    if (result.exitCode !== 0) {
-      throw new Error(`Failed to read file: ${stderr}`);
-    }
-    
-    return stdout;
+    const relative = normalizeProjectPath(path);
+    const result = await this.runCommand(`cat -- ${quoteShellArgument(relative)}`);
+    if (!result.success) throw new Error(`Failed to read project file: ${result.stderr}`);
+    return result.stdout;
   }
 
   async listFiles(directory: string = '/vercel/sandbox'): Promise<string[]> {
@@ -264,62 +118,13 @@ export class VercelProvider extends SandboxProvider {
   }
 
   async installPackages(packages: string[]): Promise<CommandResult> {
-    if (!this.sandbox) {
-      throw new Error('No active sandbox');
-    }
-
-    const flags = process.env.NPM_FLAGS || '';
-    
-    // Installing packages
-    
-    // Build args array
-    const args = ['install'];
-    if (flags) {
-      args.push(...flags.split(' '));
-    }
-    args.push(...packages);
-    
-    const result = await this.sandbox.runCommand({
-      cmd: 'npm',
-      args: args,
-      cwd: '/vercel/sandbox'
-    });
-    
-    // Handle stdout and stderr - they might be functions in Vercel SDK
-    let stdout = '';
-    let stderr = '';
-    
-    try {
-      if (typeof result.stdout === 'function') {
-        stdout = await result.stdout();
-      } else {
-        stdout = result.stdout || '';
-      }
-    } catch (e) {
-      stdout = '';
-    }
-    
-    try {
-      if (typeof result.stderr === 'function') {
-        stderr = await result.stderr();
-      } else {
-        stderr = result.stderr || '';
-      }
-    } catch (e) {
-      stderr = '';
-    }
-    
-    // Restart Vite if configured and successful
-    if (result.exitCode === 0 && process.env.AUTO_RESTART_VITE === 'true') {
-      await this.restartViteServer();
-    }
-    
-    return {
-      stdout: stdout,
-      stderr: stderr,
-      exitCode: result.exitCode || 0,
-      success: result.exitCode === 0
-    };
+    const validated = validatePackages(packages);
+    if (!validated.length) return { stdout: '', stderr: '', exitCode: 0, success: true };
+    const flags = (process.env.NPM_FLAGS || '').split(/\s+/).filter(Boolean);
+    const args = ['npm', 'install', ...flags, '--', ...validated];
+    const result = await this.runCommand(args.map(quoteShellArgument).join(' '));
+    if (result.success && process.env.AUTO_RESTART_VITE === 'true') await this.restartViteServer();
+    return result;
   }
 
   async setupViteApp(): Promise<void> {
@@ -348,7 +153,15 @@ export class VercelProvider extends SandboxProvider {
       },
       dependencies: {
         react: "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "lucide-react": "^0.532.0",
+        "react-icons": "^5.5.0",
+        "framer-motion": "^12.23.12",
+        motion: "^12.23.12",
+        clsx: "^2.1.1",
+        classnames: "^2.5.1",
+        "tailwind-merge": "^3.3.1",
+        "lodash-es": "^4.17.21"
       },
       devDependencies: {
         "@vitejs/plugin-react": "^4.0.0",

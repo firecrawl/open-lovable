@@ -1,0 +1,20 @@
+{
+  "sourcePackage": "postgres-date",
+  "version": "1.0.7",
+  "archiveSha256": "a67a8d90e7b8f64041a6f425b102b27a3e86d5854ace7e9414a890912f3adb59",
+  "integrity": "sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==",
+  "fullLicensePath": "license",
+  "licenseDigest": "f057f36739d53d228a746de4440c1e0c644ecde06d6beab45337d39c9d12a393",
+  "reviewedAt": "2026-09-23",
+  "reviewer": "ChatGPT engineering implementation review",
+  "sourceRepository": "bendrucker/postgres-date",
+  "maintenanceEvidence": "Source repository resolved by the authorized GitHub connector and is not archived; this is not a support SLA or a guarantee of future maintenance.",
+  "lifecycleScripts": {},
+  "decision": "admitted for the scoped PostgreSQL adapter and contract tests, subject to independent PR review before production",
+  "limitations": [
+    "No external database was contacted during package inspection.",
+    "No native pg addon is enabled. Explicit passwords prevent implicit pgpass credential discovery.",
+    "Existing unrelated dependencies were not re-certified.",
+    "Raw archive SRI and all installed package files are pinned; license text retained."
+  ]
+}

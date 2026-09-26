@@ -1,0 +1,8 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {ExtensionRegistry} from '../../lib/extensions/registry';
+const source='export const extension = true;';
+const manifest={id:'safe-format',version:'1.0.0',source,sourceDigest:createHash('sha256').update(source).digest('hex'),license:'MIT',permissions:['project:read'],dependencies:[],tests:['extension.test'],schemaVersion:'1'};
+test('P66 installs an admitted extension into quarantine then activates and disables it',()=>{const registry=new ExtensionRegistry();const quarantined=registry.install('ws',manifest,{source,approved:true,allowedPermissions:['project:read'],testsPassed:true});assert.equal(quarantined.status,'quarantined');assert.equal(registry.activate('ws','safe-format','1.0.0').status,'active');assert.equal(registry.current('ws','safe-format')?.status,'active');assert.equal(registry.disable('ws','safe-format','1.0.0').status,'disabled');assert.equal(registry.current('ws','safe-format'),null);});
+test('P66 rejects tampered source, hidden privileged permission and unreviewed admission',()=>{const registry=new ExtensionRegistry();assert.throws(()=>registry.install('ws',manifest,{source:'tampered',approved:true,allowedPermissions:['project:read'],testsPassed:true}),/checksum/i);assert.throws(()=>registry.install('ws',{...manifest,permissions:['shell']},{source,approved:true,allowedPermissions:['shell'],testsPassed:true}),/privileged/i);assert.throws(()=>registry.install('ws',manifest,{source,approved:false,allowedPermissions:['project:read'],testsPassed:true}),/incomplete/i);});

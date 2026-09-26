@@ -1,0 +1,8 @@
+import {ProjectError} from '../projects/store';
+export interface AppSession {userId:string;tenantId:string;role:'user'|'admin';source:'generated-app';}
+export interface GeneratedAppManifest {version:string;authFlows:string[];schemaVersion:string;roles:string[];policyTests:string[];studioSessionIsolated:boolean;}
+export interface AppRecord {id:string;tenantId:string;ownerId:string;version:number;data:Record<string,unknown>;}
+export const generatedAppManifest:GeneratedAppManifest={version:'1.0.0',authFlows:['signup','login','logout','password-recovery'],schemaVersion:'1',roles:['user','admin'],policyTests:['tenant-isolation','owner-write','optimistic-concurrency'],studioSessionIsolated:true};
+export function assertAppSession(session:AppSession):void{if(session.source!=='generated-app'||!session.userId||!session.tenantId)throw new ProjectError('Generated app session is invalid.',401);}
+export function readRecord(session:AppSession,record:AppRecord):AppRecord{assertAppSession(session);if(record.tenantId!==session.tenantId)throw new ProjectError('Record not found',404);return record;}
+export function updateRecord(session:AppSession,record:AppRecord,expectedVersion:number,data:Record<string,unknown>):AppRecord{readRecord(session,record);if(session.role!=='admin'&&record.ownerId!==session.userId)throw new ProjectError('Record write denied.',403);if(record.version!==expectedVersion)throw new ProjectError('Concurrent record update detected.',409);if(Object.prototype.hasOwnProperty.call(data,'tenantId'))throw new ProjectError('Tenant ownership is server-controlled.',400);return {...record,version:record.version+1,data:{...record.data,...data}};}

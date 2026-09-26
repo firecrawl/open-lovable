@@ -1,6 +1,6 @@
 import { debounce } from "lodash-es";
 
-export default (canvas: HTMLCanvasElement) => {
+const initCanvas = (canvas: HTMLCanvasElement) => {
   const { width, height } = canvas.getBoundingClientRect();
   const ctx = canvas.getContext("2d")!;
 
@@ -28,3 +28,5 @@ export default (canvas: HTMLCanvasElement) => {
 
   return ctx;
 };
+
+export default initCanvas;

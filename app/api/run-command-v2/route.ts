@@ -1,3 +1,5 @@
+import { ClientInputError, readJsonObject, validateCommand, publicErrorMessage } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
 import { SandboxProvider } from '@/lib/sandbox/types';
 import { sandboxManager } from '@/lib/sandbox/sandbox-manager';
@@ -8,8 +10,11 @@ declare global {
 }
 
 export async function POST(request: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
-    const { command } = await request.json();
+    const { command: rawCommand } = await readJsonObject(request);
+    const command = validateCommand(rawCommand);
     
     if (!command) {
       return NextResponse.json({ 
@@ -28,7 +33,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
     
-    console.log(`[run-command-v2] Executing: ${command}`);
+    console.log('[run-command] Executing authorized sandbox command');
     
     const result = await provider.runCommand(command);
     
@@ -44,7 +49,7 @@ export async function POST(request: NextRequest) {
     console.error('[run-command-v2] Error:', error);
     return NextResponse.json({ 
       success: false, 
-      error: (error as Error).message 
-    }, { status: 500 });
+      error: publicErrorMessage(error)
+    }, { status: error instanceof ClientInputError ? 400 : 500 });
   }
 }

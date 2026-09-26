@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createRecoveryPlan,assertRestoreEvidence} from '../../lib/releases/rollback';
+const base={codeRelease:'release-1',dataSnapshot:'snapshot-1',compatibility:'compatible' as const,approval:{approved:true,actor:'operator-1',scope:'both' as const},verification:{backupDigest:'d'.repeat(64),restoreVerified:true,verifiedAt:'2026-09-24T12:00:00Z'}};
+test('P36 accepts a compatible release with independently verified restore evidence',()=>{const plan=createRecoveryPlan(base);assert.equal(plan.verification.restoreVerified,true);assert.doesNotThrow(()=>assertRestoreEvidence(plan,'d'.repeat(64)));});
+test('P36 blocks incompatible or unverified data rollback and mismatched evidence',()=>{assert.throws(()=>createRecoveryPlan({...base,compatibility:'incompatible'}),/compatible schema/i);assert.throws(()=>createRecoveryPlan({...base,verification:{...base.verification,restoreVerified:false}}),/verified/i);assert.throws(()=>createRecoveryPlan({...base,approval:{approved:true,actor:'operator-1',scope:'code'}}),/human approval/i);const plan=createRecoveryPlan(base);assert.throws(()=>assertRestoreEvidence(plan,'e'.repeat(64)),/match/i);});

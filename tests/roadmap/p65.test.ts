@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {renderDeliverable} from '../../lib/artifacts/composition';
+const base={projectId:'p',releaseRevision:'abc1234',kind:'manual' as const,title:'Release guide',content:'The app supports authenticated CRUD.',assets:[{id:'logo',digest:'a'.repeat(64),license:'MIT',source:'workspace-upload'}],claims:['authenticated CRUD'],verifiedCapabilities:['authenticated CRUD'],publicMaterial:true,rendererVersion:'local-text-v1'};
+test('P65 creates a release-bound draft deliverable with licensed asset provenance',()=>{const result=renderDeliverable(base);assert.equal(result.status,'draft');assert.equal(result.published,false);assert.equal(result.assets[0].source,'workspace-upload');assert.match(result.outputDigest,/^[a-f0-9]{64}$/);});
+test('P65 blocks unverified public claims, unlicensed assets, secrets and invalid release binding',()=>{assert.throws(()=>renderDeliverable({...base,claims:['payments live']}),/claim/i);assert.throws(()=>renderDeliverable({...base,assets:[{id:'bad',digest:'a'.repeat(64),license:'',source:'unknown'}]}),/provenance/i);assert.throws(()=>renderDeliverable({...base,content:'Use token sk-123456789012345678901234567890'}),/secret/i);assert.throws(()=>renderDeliverable({...base,releaseRevision:'main'}),/provenance/i);});

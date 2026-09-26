@@ -1,0 +1,5 @@
+import {createHash} from 'node:crypto';
+import {ProjectError} from '../projects/store';
+export interface SecurityFinding {id:string;category:'idor'|'ssrf'|'injection'|'tenant-isolation'|'recovery'|'load';severity:'critical'|'high'|'medium'|'low';status:'open'|'fixed'|'accepted';evidence:string;}
+export interface SecurityReleaseReport {revision:string;findings:SecurityFinding[];p95Ms:number;rpoMinutes:number;rtoMinutes:number;digest:string;releaseAllowed:boolean;}
+export function createSecurityReleaseReport(input:{revision:string;findings:SecurityFinding[];p95Ms:number;rpoMinutes:number;rtoMinutes:number}):SecurityReleaseReport{if(!/^[a-f0-9]{7,64}$/.test(input.revision)||input.p95Ms<0||input.rpoMinutes<0||input.rtoMinutes<0)throw new ProjectError('Security release measurements are invalid.',422);const releaseAllowed=!input.findings.some(item=>(item.severity==='critical'||item.severity==='high')&&item.status!=='fixed');const digest=createHash('sha256').update(JSON.stringify(input)).digest('hex');return {...structuredClone(input),digest,releaseAllowed};}

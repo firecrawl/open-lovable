@@ -1,0 +1,62 @@
+{
+  "startedAt": "2026-09-23T18:19:32.627754+00:00",
+  "environmentKeys": [
+    "APPDATA",
+    "CI",
+    "HOMEDRIVE",
+    "HOMEPATH",
+    "LOCALAPPDATA",
+    "NEXT_TELEMETRY_DISABLED",
+    "OPEN_LOVABLE_DATA_DIR",
+    "OPEN_LOVABLE_DISABLE_SAVED_SETTINGS",
+    "PATH",
+    "PATHEXT",
+    "PROCESSOR_ARCHITECTURE",
+    "PROGRAMFILES",
+    "SYSTEMDRIVE",
+    "SYSTEMROOT",
+    "TEMP",
+    "USERPROFILE",
+    "WINDIR",
+    "npm_config_globalconfig",
+    "npm_config_registry",
+    "npm_config_userconfig"
+  ],
+  "gates": [
+    {
+      "id": "e2e",
+      "command": "npm.cmd run test:e2e",
+      "exitCode": 0
+    },
+    {
+      "id": "verifier",
+      "command": "npm.cmd run test:roadmap",
+      "exitCode": 0
+    }
+  ],
+  "unexpectedCacheRecreated": false,
+  "allPassed": true,
+  "finishedAt": "2026-09-23T18:20:35.473701+00:00",
+  "artifacts": [
+    {
+      "path": ".audit/p00-native-env/e2e.stderr.log",
+      "bytes": 785,
+      "sha256": "70154d53557d05b9324ea787d3cf42b1b488bb2ada096c1bafccd85cdae0fa46"
+    },
+    {
+      "path": ".audit/p00-native-env/e2e.stdout.log",
+      "bytes": 2453,
+      "sha256": "767d30470063c36a467d04b345b650aa393a5c470f79f578236348b18657cdeb"
+    },
+    {
+      "path": ".audit/p00-native-env/verifier.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".audit/p00-native-env/verifier.stdout.log",
+      "bytes": 743,
+      "sha256": "3943f1b44a5abaaff9d33c56b643e02433f18b920f3d284a1548b6a881bb9633"
+    }
+  ]
+}

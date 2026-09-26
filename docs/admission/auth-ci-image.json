@@ -1,0 +1,19 @@
+{
+  "image": "supabase/gotrue:v2.197.0@sha256:1736a63078f5922b198c4cbe50f80ab9a2d3b54fe8b7b6cfb2e9dc5dbbc12c6b",
+  "sourceRevision": "4eee58f296d9698a1c2c0ae14d7a0b379c7622d3",
+  "sourceURL": "https://github.com/supabase/auth",
+  "purpose": "Disposable CI protocol verification only. No user service provisioned.",
+  "manifestDigest": "sha256:1736a63078f5922b198c4cbe50f80ab9a2d3b54fe8b7b6cfb2e9dc5dbbc12c6b",
+  "licenseDigest": "68c80ef00664ea62a2c6f38c0ef044497caacc6648a8bd92eec7fdb81e01f904",
+  "adoption": "CI_ONLY_NOT_PRODUCTION",
+  "checkedAt": "2026-09-23",
+  "permissions": [
+    "disposable-ci-network",
+    "disposable-ci-postgresql"
+  ],
+  "notes": [
+    "No code from the upstream harness is embedded in the product.",
+    "Container index digest verified from anonymous registry response bytes.",
+    "License inspected at the exact release commit; not a legal certification of the entire container base image."
+  ]
+}

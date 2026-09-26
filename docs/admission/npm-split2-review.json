@@ -1,0 +1,23 @@
+{
+  "sourcePackage": "split2",
+  "version": "4.2.0",
+  "archiveSha256": "e0061e7f042fc5ff6dcda8afb66619757d92ab1ff514a28a5904f2ebde27bf54",
+  "integrity": "sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==",
+  "fullLicensePath": "LICENSE",
+  "licenseDigest": "c372ef2fa1dfcb124ed807609751e75e3a009f108c5724916b489288fcb88a0c",
+  "reviewedAt": "2026-09-23",
+  "reviewer": "ChatGPT engineering implementation review",
+  "sourceRepository": {
+    "type": "git",
+    "url": "https://github.com/mcollina/split2.git"
+  },
+  "maintenanceEvidence": "Source repository resolved by the authorized GitHub connector and is not archived; this is not a support SLA or a guarantee of future maintenance.",
+  "lifecycleScripts": {},
+  "decision": "admitted for the scoped PostgreSQL adapter and contract tests, subject to independent PR review before production",
+  "limitations": [
+    "No external database was contacted during package inspection.",
+    "No native pg addon is enabled. Explicit passwords prevent implicit pgpass credential discovery.",
+    "Existing unrelated dependencies were not re-certified.",
+    "Raw archive SRI and all installed package files are pinned; license text retained."
+  ]
+}

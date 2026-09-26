@@ -1,0 +1,8 @@
+import {createHash} from 'node:crypto';
+import {ProjectError} from '../projects/store';
+export interface ReviewedScenario {id:string;workspaceId:string;requirementId:string;revision:string;environment:'test';actions:string[];assertions:string[];maxActions:number;approvedDigest:string;}
+export interface ExecutableScenario extends ReviewedScenario {scenarioDigest:string;}
+const digest=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
+export function compileScenario(scenario:ReviewedScenario):ExecutableScenario{if(!scenario.workspaceId||!scenario.requirementId||scenario.environment!=='test'||!scenario.actions.length||!scenario.assertions.length||scenario.actions.length>scenario.maxActions||scenario.maxActions>100)throw new ProjectError('Scenario is incomplete or exceeds its action limit.',422);const {approvedDigest,...unsigned}=scenario;if(digest(unsigned)!==approvedDigest)throw new ProjectError('Scenario approval digest is stale.',409);return {...scenario,scenarioDigest:digest(unsigned)};}
+export function replayScenario(scenario:ExecutableScenario,run:{workspaceId:string;revision:string;actions:string[];assertions:string[];externalEffects:boolean}){if(run.workspaceId!==scenario.workspaceId||run.revision!==scenario.revision||run.externalEffects)throw new ProjectError('Scenario replay is not authorized for this environment.',403);const assertionChanged=JSON.stringify(run.assertions)!==JSON.stringify(scenario.assertions);if(assertionChanged||run.actions.length>scenario.maxActions)throw new ProjectError('Scenario replay diverged from approved criteria.',409);return {scenarioDigest:scenario.scenarioDigest,steps:[...run.actions],assertions:[...run.assertions],diagnosticOnly:true};}
+export {digest as scenarioDigest};

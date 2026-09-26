@@ -1,3 +1,5 @@
+import { ClientInputError, readJsonObject, validatePackages, publicErrorMessage } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
 
 declare global {
@@ -5,8 +7,10 @@ declare global {
 }
 
 export async function POST(request: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
-    const { files } = await request.json();
+    const { files } = await readJsonObject(request);
     
     if (!files || typeof files !== 'object') {
       return NextResponse.json({ 
@@ -79,8 +83,16 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // Remove duplicates
-    const uniquePackages = [...new Set(packageNames)];
+    // Remove duplicates and anything that is not a plain npm registry name.
+    // Import specifiers come from generated code and must never become npm flags.
+    const uniquePackages = [...new Set(packageNames)].filter(name => {
+      try {
+        validatePackages([name]);
+        return true;
+      } catch {
+        return false;
+      }
+    });
 
     console.log('[detect-and-install-packages] Packages to install:', uniquePackages);
 
@@ -131,7 +143,7 @@ export async function POST(request: NextRequest) {
     
     const installResult = await global.activeSandbox.runCommand({
       cmd: 'npm',
-      args: ['install', '--save', ...missing]
+      args: ['install', '--save', '--', ...missing]
     });
 
     const stdout = await installResult.stdout();
@@ -183,7 +195,7 @@ export async function POST(request: NextRequest) {
     console.error('[detect-and-install-packages] Error:', error);
     return NextResponse.json({
       success: false,
-      error: (error as Error).message
-    }, { status: 500 });
+      error: publicErrorMessage(error)
+    }, { status: error instanceof ClientInputError ? 400 : 500 });
   }
 }

@@ -1,0 +1,71 @@
+{
+  "sourceHead": "5066bdd77aee4dd56d07be03bc5bc57b2a1c3977",
+  "results": [
+    {
+      "finding": "credential-audience",
+      "reproduced": true,
+      "networkCalls": 0,
+      "fixtureOnly": true,
+      "nextPackage": "P01"
+    },
+    {
+      "finding": "text-scanner-on-binary",
+      "reproduced": true,
+      "normalizationSucceeded": true,
+      "uploadHTTPStatus": 400,
+      "normalizedBytes": 94,
+      "fixtureOnly": true,
+      "nextPackage": "P02"
+    }
+  ],
+  "additionalTriage": [
+    {
+      "finding": "old-120s-total-timeout",
+      "status": "CHANGED_BEFORE_P00",
+      "evidence": "Current transport uses idle timeout + independent hard ceiling; existing active-stream regression passed with scaled intervals. No real 120-second provider call made."
+    },
+    {
+      "finding": "macOS-system-path-alias",
+      "status": "ENVIRONMENT_REQUIRED",
+      "evidence": "Windows path/junction tests passed; macOS was not executed; strict ancestor rejection remains under P02."
+    },
+    {
+      "finding": "unbounded-search-screenshot-json",
+      "status": "FIXED_BEFORE_P00",
+      "evidence": "Both routes use readJsonObject; malformed JSON regressions passed."
+    },
+    {
+      "finding": "old-vite-errors-after-restart",
+      "status": "FIXED_BEFORE_P00",
+      "evidence": "Current E2B code opens log with wb on start/restart; SDK-boundary regression passed; no live E2B session."
+    },
+    {
+      "finding": "model-selector-disabled",
+      "status": "PRESENT_IN_CURRENT_CODE",
+      "evidence": "SidebarInput passes disabled to AIModelSelect; no additional targeted UI test claimed."
+    },
+    {
+      "finding": "gateway-outage-as-client-error",
+      "status": "PRESENT_IN_CURRENT_CODE",
+      "evidence": "Provider manager checks unavailable catalog and throws 503; no new direct outage probe in P00."
+    },
+    {
+      "finding": "silently-filter-invalid-package-names",
+      "status": "RECOMMENDATION_NOT_ACCEPTED",
+      "evidence": "Validation remains fail-closed. A malformed dependency must be explained/corrected, not silently dropped to fake a working app."
+    },
+    {
+      "finding": "verbose-legacy-prompt-logs",
+      "status": "OBSERVED_IN_BASELINE_LOGS",
+      "evidence": "Synthetic reference text is logged in full. Review payload logging in P02/P07; no actual user secrets used."
+    }
+  ],
+  "promotionAllowed": false,
+  "nextPackages": [
+    "P01",
+    "P02",
+    "P50",
+    "P03"
+  ],
+  "notAFix": "P00 reproduces and classifies; these local defects were not corrected by this package."
+}

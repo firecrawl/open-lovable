@@ -1,0 +1,118 @@
+{
+  "base": "b7f6a50de5c39d6a5640a1796574773dd91621d4",
+  "scope": "P05 auth test environment and deterministic conversation ordering",
+  "realAuthJob": 107433601308,
+  "local": [
+    {
+      "tag": "p05-message-order-red",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/message-order.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:02:08.767021+00:00",
+      "finishedAt": "2026-09-24T00:02:21.474854+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-message-order-red.stdout.log",
+          "bytes": 5015,
+          "sha256": "5d1909894bf89330b284fb4b1f790329ba494a9594ad682dd55e2ed8c329746a"
+        },
+        {
+          "path": ".audit\\f00\\p05-message-order-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p05-message-order-green",
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/message-order.test.ts",
+        "tests/backup-roundtrip.test.ts",
+        "tests/identity-service.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:03:12.955537+00:00",
+      "finishedAt": "2026-09-24T00:03:20.620646+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-message-order-green.stdout.log",
+          "bytes": 1747,
+          "sha256": "c92a07bb8c74ee4500d98f8e5420a6afdae4fd59e69b190fc1fb3a0ae6715d43"
+        },
+        {
+          "path": ".audit\\f00\\p05-message-order-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p05-resume-check",
+      "command": [
+        "npm.cmd",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:03:20.894139+00:00",
+      "finishedAt": "2026-09-24T00:06:31.298597+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-resume-check.stdout.log",
+          "bytes": 26302,
+          "sha256": "3d0110acc2bb7ecc836ef2d0f457baa0ae5e5665e144862c021eb3924e729af2"
+        },
+        {
+          "path": ".audit\\f00\\p05-resume-check.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "tag": "p05-resume-e2e",
+      "command": [
+        "npm.cmd",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-24T00:06:31.617403+00:00",
+      "finishedAt": "2026-09-24T00:07:58.310193+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-resume-e2e.stdout.log",
+          "bytes": 3198,
+          "sha256": "0f494386466c0f5db9c7786cdefc7d9136b04a36e04321b759711f02d76887b8"
+        },
+        {
+          "path": ".audit\\f00\\p05-resume-e2e.stderr.log",
+          "bytes": 1172,
+          "sha256": "7630a69a92e6d8647b11856a78163c0f5973199d02176576e2f89a38477ab4a9"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Synthetic local identity and AI fixtures; real upstream Auth job checked separately",
+    "SMTP and cloud installation not certified",
+    "Next aborted-request diagnostic is retained, not hidden"
+  ]
+}

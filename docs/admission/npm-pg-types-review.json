@@ -1,0 +1,23 @@
+{
+  "sourcePackage": "pg-types",
+  "version": "2.2.0",
+  "archiveSha256": "c4804fd058140c32f8fda78883ad45dee3eaa4fd9e9127b6eb659fefe51981bd",
+  "integrity": "sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==",
+  "fullLicensePath": "README.md",
+  "licenseDigest": "ecda9bca71d3f0cee4e600d1dd2bef336213f39ef2e8fca6a1a1c1c8723f643a",
+  "reviewedAt": "2026-09-23",
+  "reviewer": "ChatGPT engineering implementation review",
+  "sourceRepository": {
+    "type": "git",
+    "url": "git://github.com/brianc/node-pg-types.git"
+  },
+  "maintenanceEvidence": "Source repository resolved by the authorized GitHub connector and is not archived; this is not a support SLA or a guarantee of future maintenance.",
+  "lifecycleScripts": {},
+  "decision": "admitted for the scoped PostgreSQL adapter and contract tests, subject to independent PR review before production",
+  "limitations": [
+    "No external database was contacted during package inspection.",
+    "No native pg addon is enabled. Explicit passwords prevent implicit pgpass credential discovery.",
+    "Existing unrelated dependencies were not re-certified.",
+    "Raw archive SRI and all installed package files are pinned; license text retained."
+  ]
+}

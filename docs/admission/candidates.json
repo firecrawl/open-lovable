@@ -1,0 +1,624 @@
+{
+  "schemaVersion": 1,
+  "candidates": [
+    {
+      "manifest": {
+        "id": "npm-types-pg",
+        "sourceKind": "npm",
+        "packageName": "@types/pg",
+        "sourceURL": "https://registry.npmjs.org/@types/pg/-/pg-8.23.1.tgz",
+        "revision": "8.23.1",
+        "integrity": "sha512-fKVHpikPdg4GKks3JuLEhvwSyvwzF23hnabPy6DD8ljVbC7+6J5dQzdv4arV6jqq57djnMgs1HKBxX4P8aBI3A==",
+        "licensePath": "LICENSE",
+        "licenseDigest": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+        "paths": [
+          "LICENSE",
+          "README.md",
+          "index.d.mts",
+          "index.d.ts",
+          "lib/connection-parameters.d.ts",
+          "lib/type-overrides.d.ts",
+          "package.json"
+        ],
+        "artifactDigests": {
+          "LICENSE": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+          "README.md": "557076e4a63452599623b64d6f5ec2c1e0c4c597f8e6f35c5de33532ccf8c53f",
+          "index.d.mts": "5aea76ab98173f2c230b1f78dc010da403da622c105c468ace9fe24e3b77883c",
+          "index.d.ts": "67f3d03f61a43f045851624e52ec438803ecf5d2247660f208bd9bcadb6ff298",
+          "lib/connection-parameters.d.ts": "f347b7cc533c54be78d730df75fd6bbaf7af3d837d41b1659fe7d3e46524c08e",
+          "lib/type-overrides.d.ts": "798367363a3274220cbed839b883fe2f52ba7197b25e8cb2ac59c1e1fd8af6b7",
+          "package.json": "d122ef1e1bdb760edd5cff70d39597b9b3ae757c80e829bc297cd34fb7f01bd3"
+        },
+        "dependencyDigests": [
+          "0378ddee074a6f732423c57ca58716c7320b4afdd4170db53e580c225c3d197c",
+          "391f7ac45f9d075ca35465b7435ef6ce100d870c8e5fcb8859ce174ebfd03289",
+          "8e0ed0b68b3fa2c3c99ffab20b6b3926a16623ad285d1c77c1ff7e2623aef465",
+          "eecea520bd3d27f292b3f3349317a940b1d28ee667176e43bb597ec6ed471a72"
+        ],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "build:types"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/@types/pg"
+    },
+    {
+      "manifest": {
+        "id": "npm-pg",
+        "sourceKind": "npm",
+        "packageName": "pg",
+        "sourceURL": "https://registry.npmjs.org/pg/-/pg-8.23.0.tgz",
+        "revision": "8.23.0",
+        "integrity": "sha512-Ip2EQCngowJLGOfCwkFhPXU7/ljlhn6Rxlmy4XYfL2Y+vyRM59+8uR2xqRWKdYmbXmxCFOAmKxBuSUCdF34qLg==",
+        "licensePath": "LICENSE",
+        "licenseDigest": "192b8f5c96900f04a1271dec39688655d7416c1c6ea84a508e18b50d2b6751f3",
+        "paths": [
+          "LICENSE",
+          "README.md",
+          "esm/index.mjs",
+          "lib/client.js",
+          "lib/connection-parameters.js",
+          "lib/connection.js",
+          "lib/crypto/cert-signatures.js",
+          "lib/crypto/sasl.js",
+          "lib/crypto/utils.js",
+          "lib/defaults.js",
+          "lib/index.js",
+          "lib/native/client.js",
+          "lib/native/index.js",
+          "lib/native/query.js",
+          "lib/query.js",
+          "lib/result.js",
+          "lib/stream.js",
+          "lib/type-overrides.js",
+          "lib/utils.js",
+          "package.json"
+        ],
+        "artifactDigests": {
+          "LICENSE": "192b8f5c96900f04a1271dec39688655d7416c1c6ea84a508e18b50d2b6751f3",
+          "README.md": "a02996f80893c4436e600406d5b48cfbc8d5f9500b9f595a6779361ef3a0b4d2",
+          "esm/index.mjs": "5ef4d06556eeb775987759c2c09229dca2139421ee40e819b566612db2b4a8dc",
+          "lib/client.js": "992c12d10cd42ece06b0b224601fa783a02ed08f3ace8bd8089cc441b6308abf",
+          "lib/connection-parameters.js": "6b6548f99acba3502663a17a180582ba8e1f1725aa9d94b5f47cac19dcb6211b",
+          "lib/connection.js": "836b6abbfbc68744769ba499e2a79062dba5fd281af31fc5e83431514bdefd4a",
+          "lib/crypto/cert-signatures.js": "206ec95c51012b73fe15d549b24db2acab969271e971940a0b79cfdcf830755b",
+          "lib/crypto/sasl.js": "99f1a2607fe2a29f1c4dd1aaf43dec0fc2b5de8755de72b39d3aa8c575bd6a71",
+          "lib/crypto/utils.js": "a849cfe22d7590d79ddee76c8d7a058e2b67360a0d76683275d34133e5637117",
+          "lib/defaults.js": "d91c22d082ec974f9f878a71e8d9d56a7e5fa9a711cc63f32522b43f5e9169d4",
+          "lib/index.js": "3fad6e6d3d976edbabe0cbc9e1d39f4340bcb719bbbb186a0d3a24f3dbd4a94c",
+          "lib/native/client.js": "9fe2f45918152531b1e76ff4cf54ff754fcd9651d85cfb997efd450a97d55917",
+          "lib/native/index.js": "99fb61cb78a6d78b7a5fc0b9ac264ad58272af48be4bc50bfdb948b1342e3292",
+          "lib/native/query.js": "4f7849f59591d4ad165196d809228fb192b4fb7b13ffc2dcb6731bd249da56c2",
+          "lib/query.js": "a13377272ad4f842f6f6616d187ef3123cfed90e764cae9a663058ab41a769a0",
+          "lib/result.js": "6d7193da53f8557600a065e4356626026e8c5baf12c477dc19e439d8f204225c",
+          "lib/stream.js": "0bd4001775301604ddf7c94152e05f6f30a9354876717bdae2ab636d00eb12ba",
+          "lib/type-overrides.js": "47cb7f7bc6a6e1b1d4dc7c92bacacb436f12e99242b77da8391fd5b71991d2a5",
+          "lib/utils.js": "97fb5d56e301d00412e85ce91d796a61c79493dc03ae5adc05995ed8a0ed7936",
+          "package.json": "e42dd36cba6e9dd8dbb6f773a2f7be8a8c3c273e18b155e42e75961a4cb8bc28"
+        },
+        "dependencyDigests": [
+          "0378ddee074a6f732423c57ca58716c7320b4afdd4170db53e580c225c3d197c",
+          "105441053c609cbff0dd7b3024090759a56a79705b95a2bcb5abb8bbd761a1e1",
+          "348a0894647ad3a2c87d45a03d668d86664e04c23975c3e829f089eb38ed916d",
+          "7368b54ff34701482f2f2dba12d8bde5c6807f697aeb12e869115002bd1c1f86",
+          "8e0ed0b68b3fa2c3c99ffab20b6b3926a16623ad285d1c77c1ff7e2623aef465"
+        ],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "network:database"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/pg"
+    },
+    {
+      "manifest": {
+        "id": "npm-pg-cloudflare",
+        "sourceKind": "npm",
+        "packageName": "pg-cloudflare",
+        "sourceURL": "https://registry.npmjs.org/pg-cloudflare/-/pg-cloudflare-1.4.0.tgz",
+        "revision": "1.4.0",
+        "integrity": "sha512-Vo7z/6rrQYxpNRylp4Tlob2elzbh+N/MOQbxFVWCxS7oEx6jF53GTJFxK2WWpKuBRkmiin4Mt+xofFDjx09R0A==",
+        "licensePath": "LICENSE",
+        "licenseDigest": "192b8f5c96900f04a1271dec39688655d7416c1c6ea84a508e18b50d2b6751f3",
+        "paths": [
+          "LICENSE",
+          "README.md",
+          "dist/empty.d.ts",
+          "dist/empty.js",
+          "dist/empty.js.map",
+          "dist/index.d.ts",
+          "dist/index.js",
+          "dist/index.js.map",
+          "esm/index.mjs",
+          "package.json",
+          "src/empty.ts",
+          "src/index.ts",
+          "src/types.d.ts"
+        ],
+        "artifactDigests": {
+          "LICENSE": "192b8f5c96900f04a1271dec39688655d7416c1c6ea84a508e18b50d2b6751f3",
+          "README.md": "d76b5e56e088f30e86dba1466ed03adf924344db31278ec966c5a35d219aca26",
+          "dist/empty.d.ts": "d889ca31ecf859432c9e675cf056009a227f839856a8cac58a70875e2d619a8b",
+          "dist/empty.js": "3f83d105df21adbeeffb03450deb422644c30023ece93b2d6191fac3c620a316",
+          "dist/empty.js.map": "d68e0a1a8fc1c84f026b87ff43556987d0fbf0c3cd6c2c3e2715164d4795bb93",
+          "dist/index.d.ts": "2a8bf65f92429a617997c03ea3cef7176176809386217a164175edee7a091567",
+          "dist/index.js": "f55f0e164976d5172e85537b1382c0d2e622c99a1adefa24c3d37e333a1af6b8",
+          "dist/index.js.map": "53b8d02772c1b71a37892b297a20e25565bff9e71ac833310534b5b75c4958f6",
+          "esm/index.mjs": "8a44ad34a1d541c0607579b46ab4eb3d60c614991429aa053763d7bca58cff7e",
+          "package.json": "26a5017fe5fa14bb2eaa90fb87a2c54becc2666516ef79ee591694bcb9533531",
+          "src/empty.ts": "e9bbc49a0780b0f81e9b1906aef57ad9f9371aba33a9f4e9b9eb9191c0dc19c9",
+          "src/index.ts": "7b65a719769199ac76b511f9f687b8b20a32ed3d25b08f2cd102893dd46bc158",
+          "src/types.d.ts": "ba1c222e51377f1d8c47979ec6216e0a566d0828b10de794db31d6a44f5cf491"
+        },
+        "dependencyDigests": [],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/pg-cloudflare"
+    },
+    {
+      "manifest": {
+        "id": "npm-pg-connection-string",
+        "sourceKind": "npm",
+        "packageName": "pg-connection-string",
+        "sourceURL": "https://registry.npmjs.org/pg-connection-string/-/pg-connection-string-2.14.0.tgz",
+        "revision": "2.14.0",
+        "integrity": "sha512-XwWDGcLRGCXAR8F/AM5bG7Q+A3Wm2s6QeEjlOKZLlH3UYcguiqCWKyWXVag5TLTIjR7oOJUY8kcADaZgWPyLeg==",
+        "licensePath": "LICENSE",
+        "licenseDigest": "2244b5486c4427001b6756a87b9a297d427c111dcc3ba64a097492a8979c23d0",
+        "paths": [
+          "LICENSE",
+          "README.md",
+          "esm/index.mjs",
+          "index.d.ts",
+          "index.js",
+          "package.json"
+        ],
+        "artifactDigests": {
+          "LICENSE": "2244b5486c4427001b6756a87b9a297d427c111dcc3ba64a097492a8979c23d0",
+          "README.md": "c2cba494f78d950f91ec21298bbf60a949dc379d4f873ffe3ee319c918a175e0",
+          "esm/index.mjs": "e5af439889cb873c459670b82503c7b0480c7055843c6482242e50282f76b1ee",
+          "index.d.ts": "ec0ec7d7d754b7d65faf256ad01d85b49a9417a7540161aa7a378969ae095c26",
+          "index.js": "6523b5d5ad961775b9befa691edccf8080a79da52b91142834f9e6f6d75eb5e3",
+          "package.json": "5e07e70c64af1e8695a91f9371b713106eeed3b52a1d6b7f7238a33f01dd3f20"
+        },
+        "dependencyDigests": [],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/pg-connection-string"
+    },
+    {
+      "manifest": {
+        "id": "npm-pg-int8",
+        "sourceKind": "npm",
+        "packageName": "pg-int8",
+        "sourceURL": "https://registry.npmjs.org/pg-int8/-/pg-int8-1.0.1.tgz",
+        "revision": "1.0.1",
+        "integrity": "sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==",
+        "licensePath": "LICENSE",
+        "licenseDigest": "4e8e87ccdfc7e4b47fd89015f78468aa53b6bf43ab6e6e12d43e8f55294911de",
+        "paths": [
+          "LICENSE",
+          "README.md",
+          "index.js",
+          "package.json"
+        ],
+        "artifactDigests": {
+          "LICENSE": "4e8e87ccdfc7e4b47fd89015f78468aa53b6bf43ab6e6e12d43e8f55294911de",
+          "README.md": "d77eaaca16d1fe569ee6dc87d340d2fa6d14438652618a8cf20382e16648244a",
+          "index.js": "f991b0a41119bce0efbb471275dbd02de31a79fe6f87f8f5e5678e373a0f1627",
+          "package.json": "147155887a41bb6f69ff98b3dde827b7e6a8214c3a71938da4babf8e12adff2e"
+        },
+        "dependencyDigests": [],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/pg-int8"
+    },
+    {
+      "manifest": {
+        "id": "npm-pg-pool",
+        "sourceKind": "npm",
+        "packageName": "pg-pool",
+        "sourceURL": "https://registry.npmjs.org/pg-pool/-/pg-pool-3.14.0.tgz",
+        "revision": "3.14.0",
+        "integrity": "sha512-gKtPkFdQPU3DksooVLi9LsjZxrsBUZIpa+7aVx+LV5pNh0KzP4Zleud2po+ConrxbuXGBJ6Hfer6hdgpIBpBaw==",
+        "licensePath": "LICENSE",
+        "licenseDigest": "4f15ee7fc2a72082859d7e0d12dfa4bcdd70b1c744ad3850d07780730ac08557",
+        "paths": [
+          "LICENSE",
+          "README.md",
+          "esm/index.mjs",
+          "index.js",
+          "package.json"
+        ],
+        "artifactDigests": {
+          "LICENSE": "4f15ee7fc2a72082859d7e0d12dfa4bcdd70b1c744ad3850d07780730ac08557",
+          "README.md": "9d7028ff70e7cddeb97e7a2fda222e12c0e52fe954baf640d62d29880d9628bb",
+          "esm/index.mjs": "521c8058172944cb9ceaee95073b49950a3906f91263303837e89f9ee346e81e",
+          "index.js": "6f304776edaabde2954cbf8c4366fa6d9512bfba0e408e78cc56b3c46c69d058",
+          "package.json": "0a9924def9e06f791b09a44eaefb227f323a39199887f6ce17b44cb5a9193134"
+        },
+        "dependencyDigests": [],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/pg-pool"
+    },
+    {
+      "manifest": {
+        "id": "npm-pg-protocol",
+        "sourceKind": "npm",
+        "packageName": "pg-protocol",
+        "sourceURL": "https://registry.npmjs.org/pg-protocol/-/pg-protocol-1.16.0.tgz",
+        "revision": "1.16.0",
+        "integrity": "sha512-sILXutLVjCLjcDuOmvhX5e2Z4cS5qG/6Bu3VkpFwdf/633ElGLpEh9bgmuI5I4sqKqkifQiGyiCcx1HdtrK7tg==",
+        "licensePath": "LICENSE",
+        "licenseDigest": "192b8f5c96900f04a1271dec39688655d7416c1c6ea84a508e18b50d2b6751f3",
+        "paths": [
+          "LICENSE",
+          "README.md",
+          "dist/b.d.ts",
+          "dist/b.js",
+          "dist/b.js.map",
+          "dist/buffer-reader.d.ts",
+          "dist/buffer-reader.js",
+          "dist/buffer-reader.js.map",
+          "dist/buffer-writer.d.ts",
+          "dist/buffer-writer.js",
+          "dist/buffer-writer.js.map",
+          "dist/inbound-parser.test.d.ts",
+          "dist/inbound-parser.test.js",
+          "dist/inbound-parser.test.js.map",
+          "dist/index.d.ts",
+          "dist/index.js",
+          "dist/index.js.map",
+          "dist/messages.d.ts",
+          "dist/messages.js",
+          "dist/messages.js.map",
+          "dist/outbound-serializer.test.d.ts",
+          "dist/outbound-serializer.test.js",
+          "dist/outbound-serializer.test.js.map",
+          "dist/parser.d.ts",
+          "dist/parser.js",
+          "dist/parser.js.map",
+          "dist/serializer.d.ts",
+          "dist/serializer.js",
+          "dist/serializer.js.map",
+          "esm/index.js",
+          "package.json",
+          "src/b.ts",
+          "src/buffer-reader.ts",
+          "src/buffer-writer.ts",
+          "src/inbound-parser.test.ts",
+          "src/index.ts",
+          "src/messages.ts",
+          "src/outbound-serializer.test.ts",
+          "src/parser.ts",
+          "src/serializer.ts",
+          "src/testing/buffer-list.ts",
+          "src/testing/test-buffers.ts"
+        ],
+        "artifactDigests": {
+          "LICENSE": "192b8f5c96900f04a1271dec39688655d7416c1c6ea84a508e18b50d2b6751f3",
+          "README.md": "163df61eaa9f5337d5c0fcb3c0f15207f91a208dbd12ed26582bfc1e9bd59180",
+          "dist/b.d.ts": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+          "dist/b.js": "a1024bdec7246a732be4713a3d3326258732971363ac234d4c1709fe54b48be1",
+          "dist/b.js.map": "458d1437306773b76c28391cb340e4c3331e3d85d267fd508eac7773f81cb325",
+          "dist/buffer-reader.d.ts": "0d6484c7d84af67e685cae28bbc96fafdb7d90ae5952747cb6e1f0ca831464e6",
+          "dist/buffer-reader.js": "fdae5fd80c1ad1015f91a92da667467752eabdf531f19558897e205559e6b714",
+          "dist/buffer-reader.js.map": "291ea861a3856e4e13bca046e0e79c0b7d9f84467f13f5498f0a403d17409b27",
+          "dist/buffer-writer.d.ts": "09b34eb3deb79b4726c779613f6c6feab03c2277e21ae9d48701674ddec4037b",
+          "dist/buffer-writer.js": "618b3b9be3ad19e873d19494b34be41ea1ee91ddee66e4b065b5d416981c7859",
+          "dist/buffer-writer.js.map": "b5d96d71603230f01da4b105b4199203520f729f7c73a4a5cfef1cef4e8061f4",
+          "dist/inbound-parser.test.d.ts": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+          "dist/inbound-parser.test.js": "b7bcfce357865e993960da4e85d3095e35b8384d52cc3c17dd04dde7fea8e5ad",
+          "dist/inbound-parser.test.js.map": "126aa1d6837e1e0f09d6f258f0ad741c8bcedd83af5c29f86e770b819a2a54a6",
+          "dist/index.d.ts": "c2c9f431f788b434e6ae327844ef6712bb6a6a88ad08acf20bf6cfeb41d154ba",
+          "dist/index.js": "e7a99ac02633393d8c3ef16cd6385b8246100d28c838b02420844068429a46c9",
+          "dist/index.js.map": "5b68cd072bef63afbc4da7e19f6e30f4d8a2c89d5a113193cf1f15eefacd5ef8",
+          "dist/messages.d.ts": "4a20a0a39aca8738cc5088f9dea2969bf2af3ca1341c56071f513059b122d150",
+          "dist/messages.js": "dfd22ad639f3030b41617ff0ee201ece7cdbce4adb7e1aae7978541b1384cd31",
+          "dist/messages.js.map": "811fb02046104bfd60c5478bab3e491e8f9eb88602a17ca47f5ae69c72580dd9",
+          "dist/outbound-serializer.test.d.ts": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+          "dist/outbound-serializer.test.js": "2f698de794633941a67fc04506d48bc85bc74f0e9927dae08548688a91246112",
+          "dist/outbound-serializer.test.js.map": "3bf6249e69edf1068e613db668872a3bc64a357701d1a2fddef22ba92baab911",
+          "dist/parser.d.ts": "effa1fd4980f6dff4e81ed67009b847d34449087504319f9a0dd081e8cf23a31",
+          "dist/parser.js": "6f841aabda7240df44e1b08bbe8e202502ead969576c1ecc17311af48f57f2ef",
+          "dist/parser.js.map": "fbce35fbc7e1713ab9edcbbc3a98b978f699a26fe30fbc2afe5292b219ac7507",
+          "dist/serializer.d.ts": "a33c98f95c099c2a9a383b156c8f2a16605843d29455a954c1431bcbbc1ce35a",
+          "dist/serializer.js": "342f298021498cbf35ccc8c06fd7ec36d215a3616549f6c87f286844b24f5578",
+          "dist/serializer.js.map": "d65b48a6f7e8858d91d258eb70440190a5be29df0323ead724a3db11e82e6407",
+          "esm/index.js": "0f6c279f5e18cbc73dd3eab808e6eaa9621ddd3511197da2e67106fdd0b2b3b2",
+          "package.json": "4ee6a91e60a002e828e64dfab04c232bba566db233a905a1a15e475a0336c73d",
+          "src/b.ts": "eb585946649fd05e86397b77be4a9d00c225d2222cbc356d725afe11ea8ab265",
+          "src/buffer-reader.ts": "2465afc8aa6d9863357d35e2ccac9f6b2d0d5d6c10fc4b03d8b01dbc640f3b32",
+          "src/buffer-writer.ts": "53e9d1ce6bad939ed6c7a58463e284436dca4a5ea7f3ea8911567438ff45c61d",
+          "src/inbound-parser.test.ts": "3a65f5bf6bfee38c5d8cc85bc9ae993eef7c677ef05d080ee069ca1a5fed6e1e",
+          "src/index.ts": "a7acc3e9fd87b531b93012b3d4d3af0cb1ec88bc4f29ba76b4af9d3d6dde927a",
+          "src/messages.ts": "98ceb278f736325f847a0c8326aae46f2573f2a750b056d5061ae0d00714cd2d",
+          "src/outbound-serializer.test.ts": "42d591bf94e2db92b4ae8848be5b543e3bbca97ff882d7d56b7d607929a5557b",
+          "src/parser.ts": "b991370b2b49c7a701e8b75fa0e18e43757c57ccf83b86d830866fcdd3ba825f",
+          "src/serializer.ts": "bccef3856f9d02da5907cf585f234c21763e02f3cff213beee2270c5ef792089",
+          "src/testing/buffer-list.ts": "01bce658cf7fbb2c03ebb4c3d7e729389d6b3c9edb3cbfc2e1864f2a76647a00",
+          "src/testing/test-buffers.ts": "556522ba2930a51c27b1ad945a6308f3a4d6b4f449a0f9d90e8bc631f9eb8536"
+        },
+        "dependencyDigests": [],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/pg-protocol"
+    },
+    {
+      "manifest": {
+        "id": "npm-pg-types",
+        "sourceKind": "npm",
+        "packageName": "pg-types",
+        "sourceURL": "https://registry.npmjs.org/pg-types/-/pg-types-2.2.0.tgz",
+        "revision": "2.2.0",
+        "integrity": "sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==",
+        "licensePath": "README.md",
+        "licenseDigest": "ecda9bca71d3f0cee4e600d1dd2bef336213f39ef2e8fca6a1a1c1c8723f643a",
+        "paths": [
+          ".travis.yml",
+          "Makefile",
+          "README.md",
+          "index.d.ts",
+          "index.js",
+          "index.test-d.ts",
+          "lib/arrayParser.js",
+          "lib/binaryParsers.js",
+          "lib/builtins.js",
+          "lib/textParsers.js",
+          "package.json",
+          "test/index.js",
+          "test/types.js"
+        ],
+        "artifactDigests": {
+          ".travis.yml": "b09d0d2ec01d004669d7ff94f5fc91f380e88faece76226c7c72b0a99751dc36",
+          "Makefile": "f8ef5d631da574fb89632ac2664fdab6150b122f06b700d95c98b247bce56257",
+          "README.md": "ecda9bca71d3f0cee4e600d1dd2bef336213f39ef2e8fca6a1a1c1c8723f643a",
+          "index.d.ts": "f60e3e3060207ac982da13363181fd7ee4beecc19a7c569f0d6bb034331066c2",
+          "index.js": "ece6d549270ba55d08126b10c9997324d808ee828ef00dad236e84e54d9d556d",
+          "index.test-d.ts": "da9b9d37dce95816b504a3b7577135a6060b1ba8053f0a643786ed672488bbdd",
+          "lib/arrayParser.js": "cad20b20e6312125b45f74480eba3ef46b456997da4f53bbec56356d66edd730",
+          "lib/binaryParsers.js": "4b0105414068ea96450ef0d420db9449c00c565c5894683955af15bf94075fb9",
+          "lib/builtins.js": "09213197e4b44012e4c83669aa80884a189e90c777ddfef1f44c90c412167354",
+          "lib/textParsers.js": "bd811a530000508b6b90c1db462078e122f0404769d73f57ad41fe90aca159bd",
+          "package.json": "3ec0293cb38cc8d9475e3eb32ac5f19d195bf9fccc8b19a0714e6ecd6e7c2cf0",
+          "test/index.js": "903e76e7cd794c5f7918b67847e3790f4c582948eaf75ab9fd43d62278b44bc3",
+          "test/types.js": "b813a6ece808d40094bac1770d4d35cb0e17ae70a4236cc5c93846d72c08c159"
+        },
+        "dependencyDigests": [
+          "3e36953add2a31de1fce0433a5f078562e376ece3355f08274d01d0b96a8ceb0",
+          "56e9a4601aa10c6e6d94a7a9dcf812aedcb7d9ce89ec5a16697e9f5c5a7626db",
+          "800018cdde15aee9105158c2e7252737e1a54be4199997880b54f3e3ffed9a5a",
+          "81d98dcdde122f1d523ff334ef0d5a950adb5445c676804b383954944bd91bcf",
+          "ab157df000b87adf96d0033d3d1a8b5cb2465a5ed2bdb6d3d89c72ef4427d9dd"
+        ],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/pg-types"
+    },
+    {
+      "manifest": {
+        "id": "npm-pgpass",
+        "sourceKind": "npm",
+        "packageName": "pgpass",
+        "sourceURL": "https://registry.npmjs.org/pgpass/-/pgpass-1.0.5.tgz",
+        "revision": "1.0.5",
+        "integrity": "sha512-FdW9r/jQZhSeohs1Z3sI1yxFQNFvMcnmfuj4WBMUTxOrAyLMaTcE1aAMBiTlbMNaXvBCQuVi0R7hd8udDSP7ug==",
+        "licensePath": "README.md",
+        "licenseDigest": "62549909404b5a0dcb2b4b74c9a930baf8095dbcfa1543c4ffc79378acd22b57",
+        "paths": [
+          "README.md",
+          "lib/helper.js",
+          "lib/index.js",
+          "package.json"
+        ],
+        "artifactDigests": {
+          "README.md": "62549909404b5a0dcb2b4b74c9a930baf8095dbcfa1543c4ffc79378acd22b57",
+          "lib/helper.js": "28d823dcde115f31848ba93d9cb55ba20089ac701b6a38b228d185d96df4f1b5",
+          "lib/index.js": "cc95b8ef6c32a9afdc48b85a5e7128d5e29567f8ded02d9bf7acd27c3d870c39",
+          "package.json": "d75240eb4fe759c10db9f903838275348676a8bdc1f329e20a833713cd7c99bd"
+        },
+        "dependencyDigests": [
+          "db6979b00528bfff5f908ef3b3d30e76b19923b0e8e33c765b127274e516e3a3"
+        ],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/pgpass"
+    },
+    {
+      "manifest": {
+        "id": "npm-postgres-array",
+        "sourceKind": "npm",
+        "packageName": "postgres-array",
+        "sourceURL": "https://registry.npmjs.org/postgres-array/-/postgres-array-2.0.0.tgz",
+        "revision": "2.0.0",
+        "integrity": "sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==",
+        "licensePath": "license",
+        "licenseDigest": "f057f36739d53d228a746de4440c1e0c644ecde06d6beab45337d39c9d12a393",
+        "paths": [
+          "index.d.ts",
+          "index.js",
+          "license",
+          "package.json",
+          "readme.md"
+        ],
+        "artifactDigests": {
+          "index.d.ts": "5e5cd3ad9676e8fa514b66502e5d132c537a9d78a849874c4b2d6f59aaff5acf",
+          "index.js": "807ba580ed423e518672c27b4022a56acb693be04349733ffc1fe6f324fbcee2",
+          "license": "f057f36739d53d228a746de4440c1e0c644ecde06d6beab45337d39c9d12a393",
+          "package.json": "dcd6a505fcbc032b409ee2838ab2c776dea3a9cfe02b736364b6cb82a946665f",
+          "readme.md": "d6b0e269174660704b3d72438334a52d2bcb2f353a3354f3c7cd65771e27c0de"
+        },
+        "dependencyDigests": [],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/postgres-array"
+    },
+    {
+      "manifest": {
+        "id": "npm-postgres-bytea",
+        "sourceKind": "npm",
+        "packageName": "postgres-bytea",
+        "sourceURL": "https://registry.npmjs.org/postgres-bytea/-/postgres-bytea-1.0.1.tgz",
+        "revision": "1.0.1",
+        "integrity": "sha512-5+5HqXnsZPE65IJZSMkZtURARZelel2oXUEO8rH83VS/hxH5vv1uHquPg5wZs8yMAfdv971IU+kcPUczi7NVBQ==",
+        "licensePath": "license",
+        "licenseDigest": "f057f36739d53d228a746de4440c1e0c644ecde06d6beab45337d39c9d12a393",
+        "paths": [
+          "index.js",
+          "license",
+          "package.json",
+          "readme.md"
+        ],
+        "artifactDigests": {
+          "index.js": "c078b99e1009c4bcf6e3ab59d9fe808b12caee3461204ae599cdd9cccd990801",
+          "license": "f057f36739d53d228a746de4440c1e0c644ecde06d6beab45337d39c9d12a393",
+          "package.json": "9125568c5fb51a65b8f11adb0080c2775b99ee82822d73bff8b56b2a9d47d7aa",
+          "readme.md": "24d2c6e5bc32e86c9263af0d8ca2e5217a43565a311942888ba979fd5b0ed550"
+        },
+        "dependencyDigests": [],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/postgres-bytea"
+    },
+    {
+      "manifest": {
+        "id": "npm-postgres-date",
+        "sourceKind": "npm",
+        "packageName": "postgres-date",
+        "sourceURL": "https://registry.npmjs.org/postgres-date/-/postgres-date-1.0.7.tgz",
+        "revision": "1.0.7",
+        "integrity": "sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==",
+        "licensePath": "license",
+        "licenseDigest": "f057f36739d53d228a746de4440c1e0c644ecde06d6beab45337d39c9d12a393",
+        "paths": [
+          "index.js",
+          "license",
+          "package.json",
+          "readme.md"
+        ],
+        "artifactDigests": {
+          "index.js": "9a09e3ec0775237576b1f6ff0fba0ed6171235aeded635a42c174b517e34cb1a",
+          "license": "f057f36739d53d228a746de4440c1e0c644ecde06d6beab45337d39c9d12a393",
+          "package.json": "03f9edefa96697072075e02df045cc61ed4ca2f8dfffb1ff87f4070bc3404151",
+          "readme.md": "ac45d399addd5e87db86d35adf84755bceadb0aee2360daeffd7af2d4ab41472"
+        },
+        "dependencyDigests": [],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/postgres-date"
+    },
+    {
+      "manifest": {
+        "id": "npm-postgres-interval",
+        "sourceKind": "npm",
+        "packageName": "postgres-interval",
+        "sourceURL": "https://registry.npmjs.org/postgres-interval/-/postgres-interval-1.2.0.tgz",
+        "revision": "1.2.0",
+        "integrity": "sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==",
+        "licensePath": "license",
+        "licenseDigest": "f057f36739d53d228a746de4440c1e0c644ecde06d6beab45337d39c9d12a393",
+        "paths": [
+          "index.d.ts",
+          "index.js",
+          "license",
+          "package.json",
+          "readme.md"
+        ],
+        "artifactDigests": {
+          "index.d.ts": "71f9db35d9032bee846bafdf29caf0229ce594495f6c6457e65276afe962dc8a",
+          "index.js": "836fe0a39e52f051d62583d8375d3b270b4cb93dd026b125438a89e5a0258c41",
+          "license": "f057f36739d53d228a746de4440c1e0c644ecde06d6beab45337d39c9d12a393",
+          "package.json": "cc3056db105e66c9128cb8a387cda782d5f1ae9281be90de0b8d26a90af89c57",
+          "readme.md": "f5399e5250a2cc93245d874dbfe3527e5845119a65b80ea13cbb66ccf913818e"
+        },
+        "dependencyDigests": [
+          "791117423c7fba2bf3280fd99cd8a892814262a18034f1403e574e8c14c5a8bf"
+        ],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/postgres-interval"
+    },
+    {
+      "manifest": {
+        "id": "npm-split2",
+        "sourceKind": "npm",
+        "packageName": "split2",
+        "sourceURL": "https://registry.npmjs.org/split2/-/split2-4.2.0.tgz",
+        "revision": "4.2.0",
+        "integrity": "sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==",
+        "licensePath": "LICENSE",
+        "licenseDigest": "c372ef2fa1dfcb124ed807609751e75e3a009f108c5724916b489288fcb88a0c",
+        "paths": [
+          "LICENSE",
+          "README.md",
+          "bench.js",
+          "index.js",
+          "package.json",
+          "test.js"
+        ],
+        "artifactDigests": {
+          "LICENSE": "c372ef2fa1dfcb124ed807609751e75e3a009f108c5724916b489288fcb88a0c",
+          "README.md": "7369c93bb01adc348ccdd1ac052880cc7d06e39a4a037c6a3f15175c3a6f0a64",
+          "bench.js": "de9eadc4133f88e9991f504899c47ef841ee923576dba2a8e50dc34a1d48692e",
+          "index.js": "842471719e0e901e01ae1a1d3a6a4d1ff3e36747a7f50d5644f09d1d595c1857",
+          "package.json": "87b734c3087c8d9ed5d76d1bff00db30f960831ba8705dd18d73b180d08d2140",
+          "test.js": "de9619b9670887b6d1ed959287b96b46334cd9a6be21487c8a715afad90eade8"
+        },
+        "dependencyDigests": [],
+        "purpose": "PostgreSQL runtime adapter and database contract validation",
+        "requiredPermissions": [
+          "module:runtime"
+        ],
+        "maintenanceStatus": "active"
+      },
+      "sourceDirectory": "node_modules/split2"
+    }
+  ]
+}

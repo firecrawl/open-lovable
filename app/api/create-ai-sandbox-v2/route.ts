@@ -1,3 +1,4 @@
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextResponse } from 'next/server';
 import { SandboxFactory } from '@/lib/sandbox/factory';
 // SandboxProvider type is used through SandboxFactory
@@ -12,40 +13,27 @@ declare global {
   var sandboxState: SandboxState;
 }
 
-export async function POST() {
+export async function POST(request: Request) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
+  let createdSandboxId: string | undefined;
+  let provider: ReturnType<typeof SandboxFactory.create> | undefined;
   try {
     console.log('[create-ai-sandbox-v2] Creating sandbox...');
     
-    // Clean up all existing sandboxes
-    console.log('[create-ai-sandbox-v2] Cleaning up existing sandboxes...');
-    await sandboxManager.terminateAll();
-    
-    // Also clean up legacy global state
-    if (global.activeSandboxProvider) {
-      try {
-        await global.activeSandboxProvider.terminate();
-      } catch (e) {
-        console.error('Failed to terminate legacy global sandbox:', e);
-      }
-      global.activeSandboxProvider = null;
-    }
-    
-    // Clear existing files tracking
-    if (global.existingFiles) {
-      global.existingFiles.clear();
-    } else {
-      global.existingFiles = new Set<string>();
-    }
+    // A new project/tab is additive. Existing sandboxes remain addressable by ID.
+    // The manager, rather than process-global state, is the source of truth.
 
     // Create new sandbox using factory
-    const provider = SandboxFactory.create();
+    provider = SandboxFactory.create();
     const sandboxInfo = await provider.createSandbox();
+    createdSandboxId = sandboxInfo.sandboxId;
     
     console.log('[create-ai-sandbox-v2] Setting up Vite React app...');
     await provider.setupViteApp();
     
     // Register with sandbox manager
-    sandboxManager.registerSandbox(sandboxInfo.sandboxId, provider);
+    await sandboxManager.registerSandbox(sandboxInfo.sandboxId, provider);
     
     // Also store in legacy global state for backward compatibility
     global.activeSandboxProvider = provider;
@@ -81,22 +69,20 @@ export async function POST() {
   } catch (error) {
     console.error('[create-ai-sandbox-v2] Error:', error);
     
-    // Clean up on error
-    await sandboxManager.terminateAll();
-    if (global.activeSandboxProvider) {
+    // Clean up only the sandbox this request created. The previously active
+    // sandbox is still healthy and must not be torn down by a failed create.
+    const registered = provider !== undefined && sandboxManager.tracks(provider);
+    if (createdSandboxId) await sandboxManager.terminateSandbox(createdSandboxId);
+    if (provider && !registered && provider !== global.activeSandboxProvider) {
       try {
-        await global.activeSandboxProvider.terminate();
+        await provider.terminate();
       } catch (e) {
         console.error('Failed to terminate sandbox on error:', e);
       }
-      global.activeSandboxProvider = null;
     }
     
     return NextResponse.json(
-      { 
-        error: error instanceof Error ? error.message : 'Failed to create sandbox',
-        details: error instanceof Error ? error.stack : undefined
-      },
+      { error: 'Failed to create sandbox' },
       { status: 500 }
     );
   }

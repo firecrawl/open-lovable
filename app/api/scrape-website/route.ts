@@ -1,17 +1,32 @@
+import { ClientInputError, publicErrorMessage, readJsonObject, requireHttpUrl } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from "next/server";
 import FirecrawlApp from '@mendable/firecrawl-js';
 
 export async function POST(request: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
-    const { url, formats = ['markdown', 'html'], options = {} } = await request.json();
+    const body = await readJsonObject(request);
     
-    if (!url) {
+    if (!body.url) {
       return NextResponse.json(
         { error: "URL is required" },
         { status: 400 }
       );
     }
     
+    const url = requireHttpUrl(body.url);
+    // Only cheap, read-only scrape options are client controlled; actions,
+    // proxies, extraction and timeouts stay server defined.
+    const allowedFormats = new Set(['markdown', 'html', 'screenshot', 'links']);
+    const formats: Array<'markdown' | 'html' | 'screenshot' | 'links'> = Array.isArray(body.formats)
+      ? body.formats.filter((format: unknown): format is 'markdown' | 'html' | 'screenshot' | 'links' => typeof format === 'string' && allowedFormats.has(format))
+      : ['markdown', 'html'];
+    if (formats.length === 0) throw new ClientInputError('At least one supported format is required');
+    const options = body.options && typeof body.options === 'object' && !Array.isArray(body.options) ? body.options : {};
+    const waitFor = Number.isInteger(options.waitFor) && options.waitFor >= 0 && options.waitFor <= 10_000 ? options.waitFor : 2000;
+
     // Initialize Firecrawl with API key from environment
     const apiKey = process.env.FIRECRAWL_API_KEY;
     
@@ -41,11 +56,10 @@ export async function POST(request: NextRequest) {
     // Scrape the website using the latest SDK patterns
     // Include screenshot if requested in formats
     const scrapeResult = await app.scrape(url, {
-      formats: formats,
+      formats,
       onlyMainContent: options.onlyMainContent !== false, // Default to true for cleaner content
-      waitFor: options.waitFor || 2000, // Wait for dynamic content
-      timeout: options.timeout || 30000,
-      ...options // Pass through any additional options
+      waitFor, // Wait for dynamic content
+      timeout: 30000
     });
     
     // Handle the response according to the latest SDK structure
@@ -67,9 +81,7 @@ export async function POST(request: NextRequest) {
         html: data?.html || "",
         metadata: data?.metadata || {},
         screenshot: data?.screenshot || null,
-        links: data?.links || [],
-        // Include raw data for flexibility
-        raw: data
+        links: data?.links || []
       }
     });
     
@@ -79,32 +91,31 @@ export async function POST(request: NextRequest) {
     // Return a more detailed error response
     return NextResponse.json({
       success: false,
-      error: error instanceof Error ? error.message : "Failed to scrape website",
+      error: publicErrorMessage(error, "Failed to scrape website"),
       // Provide mock data as fallback for development
       data: {
         title: "Example Website",
         content: "This is fallback content due to an error. Please check your configuration.",
         description: "Error occurred while scraping",
-        markdown: `# Error\n\n${error instanceof Error ? error.message : 'Unknown error occurred'}`,
-        html: `<h1>Error</h1><p>${error instanceof Error ? error.message : 'Unknown error occurred'}</p>`,
+        markdown: "# Error\n\nFailed to scrape website",
+        html: `<h1>Error</h1><p>Failed to scrape website</p>`,
         metadata: {
           title: "Error",
           description: "Failed to scrape website",
           statusCode: 500
         }
       }
-    }, { status: 500 });
+    }, { status: error instanceof ClientInputError ? 400 : 500 });
   }
 }
 
 // Optional: Add OPTIONS handler for CORS if needed
-export async function OPTIONS() {
+export async function OPTIONS(request: Request) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
     },
   });
 }

@@ -1,70 +1,31 @@
-import { NextResponse } from 'next/server';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
+import { quoteShellArgument } from '@/lib/security/input-validation';
+import { sandboxManager } from '@/lib/sandbox/sandbox-manager';
+import { createExportScript, zipExportManifest } from '@/lib/sandbox/project-export';
+import { readCommandResult } from '@/lib/sandbox/command-result';
 
-declare global {
-  var activeSandbox: any;
-}
-
-export async function POST() {
+export async function POST(request: Request) {
+  const denied = await authorizeOperatorRequest(request);
+  if (denied) return denied;
+  const provider = sandboxManager.getActiveProvider() || global.activeSandboxProvider;
+  if (!provider && !global.activeSandbox) return Response.json({success:false,error:'No active sandbox'},{status:409});
   try {
-    if (!global.activeSandbox) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'No active sandbox' 
-      }, { status: 400 });
+    const root = provider?.getSandboxInfo()?.provider === 'e2b' ? '/home/user/app' : '/vercel/sandbox';
+    const script = createExportScript(root);
+    const result = provider
+      ? await provider.runCommand(`node --input-type=module -e ${quoteShellArgument(script)}`)
+      : await readCommandResult(await global.activeSandbox.runCommand({cmd:'node',args:['--input-type=module','-e',script],cwd:root}));
+    if (!result.success || result.exitCode !== 0) throw new Error('Export command failed; check project limits and sandbox availability');
+    const archive = zipExportManifest(result.stdout);
+    const fileName = 'open-lovable-project.zip';
+    if (request.headers.get('accept')?.includes('application/zip')) {
+      return new Response(new Uint8Array(archive.bytes),{headers:{'Content-Type':'application/zip','Content-Disposition':`attachment; filename="${fileName}"`,'Cache-Control':'no-store'}});
     }
-    
-    console.log('[create-zip] Creating project zip...');
-    
-    // Create zip file in sandbox using standard commands
-    const zipResult = await global.activeSandbox.runCommand({
-      cmd: 'bash',
-      args: ['-c', `zip -r /tmp/project.zip . -x "node_modules/*" ".git/*" ".next/*" "dist/*" "build/*" "*.log"`]
-    });
-    
-    if (zipResult.exitCode !== 0) {
-      const error = await zipResult.stderr();
-      throw new Error(`Failed to create zip: ${error}`);
-    }
-    
-    const sizeResult = await global.activeSandbox.runCommand({
-      cmd: 'bash',
-      args: ['-c', `ls -la /tmp/project.zip | awk '{print $5}'`]
-    });
-    
-    const fileSize = await sizeResult.stdout();
-    console.log(`[create-zip] Created project.zip (${fileSize.trim()} bytes)`);
-    
-    // Read the zip file and convert to base64
-    const readResult = await global.activeSandbox.runCommand({
-      cmd: 'base64',
-      args: ['/tmp/project.zip']
-    });
-    
-    if (readResult.exitCode !== 0) {
-      const error = await readResult.stderr();
-      throw new Error(`Failed to read zip file: ${error}`);
-    }
-    
-    const base64Content = (await readResult.stdout()).trim();
-    
-    // Create a data URL for download
-    const dataUrl = `data:application/zip;base64,${base64Content}`;
-    
-    return NextResponse.json({
-      success: true,
-      dataUrl,
-      fileName: 'vercel-sandbox-project.zip',
-      message: 'Zip file created successfully'
-    });
-    
+    // Preserve the existing UI contract while limiting memory and export size.
+    return Response.json({success:true,dataUrl:`data:application/zip;base64,${Buffer.from(archive.bytes).toString('base64')}`,fileName,excludedCount:archive.excludedCount,
+      message:'Project exported. Environment/credential files and symbolic links were excluded.'},{headers:{'Cache-Control':'no-store'}});
   } catch (error) {
-    console.error('[create-zip] Error:', error);
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: (error as Error).message 
-      }, 
-      { status: 500 }
-    );
+    console.error('[create-zip] Export failed:',error instanceof Error ? error.message : 'Unknown error');
+    return Response.json({success:false,error:'Could not export this project. Check sandbox availability and export limits (500 files, 2 MiB per file, 8 MiB total).'}, {status:502,headers:{'Cache-Control':'no-store'}});
   }
 }

@@ -1,3 +1,5 @@
+import { publicErrorMessage } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextResponse } from 'next/server';
 
 declare global {
@@ -9,7 +11,9 @@ declare global {
 
 const RESTART_COOLDOWN_MS = 5000; // 5 second cooldown between restarts
 
-export async function POST() {
+export async function POST(request: Request) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
     // Check both v1 and v2 global references
     const provider = global.activeSandbox || global.activeSandboxProvider;
@@ -97,7 +101,7 @@ export async function POST() {
     
     return NextResponse.json({ 
       success: false, 
-      error: (error as Error).message 
+      error: publicErrorMessage(error)
     }, { status: 500 });
   }
 }

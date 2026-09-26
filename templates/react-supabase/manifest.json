@@ -1,0 +1,10 @@
+{
+  "version":"1.0.0",
+  "name":"react-supabase",
+  "authFlows":["signup","login","logout","password-recovery"],
+  "schemaVersion":"1",
+  "roles":["user","admin"],
+  "policyTests":["tenant-isolation","owner-write","optimistic-concurrency"],
+  "studioSessionIsolated":true,
+  "backendCapabilities":{"auth":true,"database":true,"storage":false,"functions":false}
+}

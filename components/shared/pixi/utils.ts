@@ -1,16 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck -- TODO: fix this
-
 import { Application, Assets, Sprite, Texture } from "pixi.js";
 
 export const isDestroyed = (app: Application) => {
-  if (!app.ticker || !app.renderer || !app.stage || !app.renderer.gl)
+  if (!app.ticker || !app.renderer || !app.stage)
     return true;
 
+  if (!('gl' in app.renderer) || !app.renderer.gl) return false;
   return app.renderer.gl.isContextLost();
 };
 
-export const generateTexture = (app: Application, graphic: any) => {
+export const generateTexture = (app: Application, graphic: Parameters<Application["renderer"]["generateTexture"]>[0]) => {
   const renderer = app.renderer;
 
   if (!isDestroyed(app)) {
@@ -25,7 +23,7 @@ export const degreesToRadians = (degrees: number) => {
 };
 
 export const imageToSprite = async (app: Application, path: string) => {
-  let texture;
+  let texture: Texture;
 
   if (Assets.cache.has(path)) {
     texture = Assets.cache.get(path);

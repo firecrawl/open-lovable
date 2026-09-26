@@ -1,57 +1,20 @@
-import { NextResponse } from 'next/server';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { sandboxManager } from '@/lib/sandbox/sandbox-manager';
+import { inspectSandbox } from '@/lib/sandbox/diagnostics';
 
-declare global {
-  var activeSandboxProvider: any;
-  var sandboxData: any;
-  var existingFiles: Set<string>;
-}
-
-export async function GET() {
+export async function GET(request: Request) {
+  const denied = await authorizeOperatorRequest(request);
+  if (denied) return denied;
+  const provider = sandboxManager.getActiveProvider() || global.activeSandboxProvider;
+  if (!provider) return Response.json({success:true,active:false,healthy:false,sandboxData:null,message:'No active sandbox'}, {headers:{'Cache-Control':'no-store'}});
   try {
-    // Check sandbox manager first, then fall back to global state
-    const provider = sandboxManager.getActiveProvider() || global.activeSandboxProvider;
-    const sandboxExists = !!provider;
-
-    let sandboxHealthy = false;
-    let sandboxInfo = null;
-
-    if (sandboxExists && provider) {
-      try {
-        // Check if sandbox is healthy by getting its info
-        const providerInfo = provider.getSandboxInfo();
-        sandboxHealthy = !!providerInfo;
-        
-        sandboxInfo = {
-          sandboxId: providerInfo?.sandboxId || global.sandboxData?.sandboxId,
-          url: providerInfo?.url || global.sandboxData?.url,
-          filesTracked: global.existingFiles ? Array.from(global.existingFiles) : [],
-          lastHealthCheck: new Date().toISOString()
-        };
-      } catch (error) {
-        console.error('[sandbox-status] Health check failed:', error);
-        sandboxHealthy = false;
-      }
-    }
-    
-    return NextResponse.json({
-      success: true,
-      active: sandboxExists,
-      healthy: sandboxHealthy,
-      sandboxData: sandboxInfo,
-      message: sandboxHealthy 
-        ? 'Sandbox is active and healthy' 
-        : sandboxExists 
-          ? 'Sandbox exists but is not responding' 
-          : 'No active sandbox'
-    });
-    
-  } catch (error) {
-    console.error('[sandbox-status] Error:', error);
-    return NextResponse.json({ 
-      success: false,
-      active: false,
-      error: (error as Error).message 
-    }, { status: 500 });
+    const diagnostics = await inspectSandbox(provider);
+    const info = provider.getSandboxInfo();
+    return Response.json({success:diagnostics.status !== 'unavailable',active:true,healthy:diagnostics.success,
+      sandboxData:{sandboxId:info?.sandboxId,url:info?.url,filesTracked:Array.from(global.existingFiles || []),lastHealthCheck:diagnostics.checkedAt},
+      diagnostics, message:diagnostics.success ? 'Sandbox HTTP endpoint is responding; browser rendering is not verified' : 'Sandbox requires attention',
+    }, {headers:{'Cache-Control':'no-store'}});
+  } catch {
+    return Response.json({success:false,active:true,healthy:false,message:'Sandbox health could not be verified'}, {status:503,headers:{'Cache-Control':'no-store'}});
   }
 }

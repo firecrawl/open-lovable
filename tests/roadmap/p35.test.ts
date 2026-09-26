@@ -1,0 +1,5 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createDomainBinding,verifyDomain,activateDomain} from '../../lib/domains/service';
+test('P35 verifies ownership before TLS activation',()=>{const registry=new Map();const pending=createDomainBinding('preview.example.com','project-1','staging');assert.equal(pending.state,'DNS_PENDING');const verified=verifyDomain(pending,pending.challenge,registry);assert.equal(verified.state,'TLS_PENDING');const active=activateDomain(verified,'cert-ref-1');assert.equal(active.state,'ACTIVE');});
+test('P35 blocks wrong challenge, hostname takeover and credential-like certificate refs',()=>{const registry=new Map();const first=createDomainBinding('app.example.com','project-1','production');assert.throws(()=>verifyDomain(first,'wrong',registry),/challenge/i);const verified=verifyDomain(first,first.challenge,registry);const other=createDomainBinding('app.example.com','project-2','production');assert.throws(()=>verifyDomain(other,other.challenge,registry),/claimed/i);assert.throws(()=>activateDomain(verified,'secret-token'),/opaque/i);});

@@ -1,0 +1,343 @@
+{
+  "scope": "P05 account/workspace implementation; not completion of the 68-package roadmap",
+  "baseCommit": "ec98549b7c6be14c59c9f383de8bba5acbb9829c",
+  "environment": {
+    "platform": "Windows",
+    "node": "v24.16.0"
+  },
+  "gates": [
+    {
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/identity-schema-compat.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:01:06.714938+00:00",
+      "finishedAt": "2026-09-23T23:01:10.125028+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-resume-schema.stdout.log",
+          "bytes": 2762,
+          "sha256": "9043d2a399d090fdfdbed6080a5ee3f6f6a870b30df54e81d8f9702abb6a2f28"
+        },
+        {
+          "path": ".audit\\f00\\p05-resume-schema.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "tag": "p05-resume-schema"
+    },
+    {
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/identity-schema-compat.test.ts",
+        "tests/import-columns.test.ts",
+        "tests/identity-recovery.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:02:24.944414+00:00",
+      "finishedAt": "2026-09-23T23:02:30.194553+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-schema-resume-green.stdout.log",
+          "bytes": 825,
+          "sha256": "066cfffcea8a17f4f04bf91d949f537694bffaf647b11c3084d44dd00d60f70a"
+        },
+        {
+          "path": ".audit\\f00\\p05-schema-resume-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "tag": "p05-schema-resume-green"
+    },
+    {
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/account-preauth.test.ts",
+        "tests/identity-recovery.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:04:05.653270+00:00",
+      "finishedAt": "2026-09-23T23:04:10.794724+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-additional-boundaries-red.stdout.log",
+          "bytes": 2151,
+          "sha256": "43b4764e6d55ae6503bab82c16f466f2b3ef4a38c5942c8c5581ac544b6114b1"
+        },
+        {
+          "path": ".audit\\f00\\p05-additional-boundaries-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "tag": "p05-additional-boundaries-red"
+    },
+    {
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/account-preauth.test.ts",
+        "tests/identity-recovery.test.ts",
+        "tests/identity-http.test.ts",
+        "tests/workspace-http.test.ts",
+        "tests/project-flow.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:04:48.223320+00:00",
+      "finishedAt": "2026-09-23T23:04:54.777997+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-additional-boundaries-green.stdout.log",
+          "bytes": 756,
+          "sha256": "49dc5394d192b4afcfbb30743fbc3fb5731886e1151ae5ee9d0cab26527570fd"
+        },
+        {
+          "path": ".audit\\f00\\p05-additional-boundaries-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "tag": "p05-additional-boundaries-green"
+    },
+    {
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "playwright",
+        "test",
+        "--config=.audit/p05-resume/probe.config.ts",
+        "tests/e2e/accounts.spec.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:13:14.610727+00:00",
+      "finishedAt": "2026-09-23T23:13:44.629809+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-layout-red.stdout.log",
+          "bytes": 10944,
+          "sha256": "1f76ef50edbceb86772e94f4138e1e45f04ccc2d51f1cc356164df98bb4a0c46"
+        },
+        {
+          "path": ".audit\\f00\\p05-layout-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "tag": "p05-layout-red"
+    },
+    {
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "playwright",
+        "test",
+        "--config=.audit/p05-resume/probe.config.ts",
+        "tests/e2e/accounts.spec.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:16:22.484967+00:00",
+      "finishedAt": "2026-09-23T23:16:49.269720+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-layout-green.stdout.log",
+          "bytes": 357,
+          "sha256": "47da8918ed1754af14f2e7012d0868c4ee0d214e80c9f268d55e01270dd1377f"
+        },
+        {
+          "path": ".audit\\f00\\p05-layout-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "tag": "p05-layout-green"
+    },
+    {
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/identity-store.test.ts"
+      ],
+      "exitCode": 1,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:18:16.911179+00:00",
+      "finishedAt": "2026-09-23T23:18:20.301109+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-refresh-lease-red.stdout.log",
+          "bytes": 1543,
+          "sha256": "b1f668e8a778bef278d92672a25c06807f4604384c81012c5438975bb075ca26"
+        },
+        {
+          "path": ".audit\\f00\\p05-refresh-lease-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "tag": "p05-refresh-lease-red"
+    },
+    {
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "tsx",
+        "--import",
+        "./tests/setup.mjs",
+        "--test",
+        "tests/identity-store.test.ts",
+        "tests/identity-service.test.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:22:22.776730+00:00",
+      "finishedAt": "2026-09-23T23:22:26.076939+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-refresh-lease-green.stdout.log",
+          "bytes": 1273,
+          "sha256": "bffd686528fda749d306dea522e5ee57055217f8486a20a998130e9c9784f6d9"
+        },
+        {
+          "path": ".audit\\f00\\p05-refresh-lease-green.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "tag": "p05-refresh-lease-green"
+    },
+    {
+      "command": [
+        "npx.cmd",
+        "--no-install",
+        "playwright",
+        "test",
+        "--config=.audit/p05-resume/dev.config.ts",
+        "tests/e2e/account-links.spec.ts"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:18:20.557661+00:00",
+      "finishedAt": "2026-09-23T23:18:58.027304+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-invite-dev-red.stdout.log",
+          "bytes": 200,
+          "sha256": "a0d13f0a9b691232fe49185537aa58a29ad8783187fb2058fca77ae7f9328529"
+        },
+        {
+          "path": ".audit\\f00\\p05-invite-dev-red.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "tag": "p05-invite-dev-red"
+    },
+    {
+      "command": [
+        "npm.cmd",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:23:26.782860+00:00",
+      "finishedAt": "2026-09-23T23:25:24.042942+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-final-local-check.stdout.log",
+          "bytes": 26172,
+          "sha256": "fd28938dde758ff57b2bc0f51d7e76deacd93cee4b17908a280980ad0eb3b288"
+        },
+        {
+          "path": ".audit\\f00\\p05-final-local-check.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "tag": "p05-final-local-check"
+    },
+    {
+      "command": [
+        "npm.cmd",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:25:24.309204+00:00",
+      "finishedAt": "2026-09-23T23:26:42.800445+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-final-local-browser.stdout.log",
+          "bytes": 3197,
+          "sha256": "e026a39bda38fccf3b0071ff539b542ee2ca3d180e9e4c8f2403628fa5d5b1e5"
+        },
+        {
+          "path": ".audit\\f00\\p05-final-local-browser.stderr.log",
+          "bytes": 1172,
+          "sha256": "7630a69a92e6d8647b11856a78163c0f5973199d02176576e2f89a38477ab4a9"
+        }
+      ],
+      "tag": "p05-final-local-browser"
+    },
+    {
+      "command": [
+        "npm.cmd",
+        "run",
+        "security:audit"
+      ],
+      "exitCode": 0,
+      "termination": "exited",
+      "startedAt": "2026-09-23T23:26:43.191119+00:00",
+      "finishedAt": "2026-09-23T23:26:47.836764+00:00",
+      "artifacts": [
+        {
+          "path": ".audit\\f00\\p05-final-local-audit.stdout.log",
+          "bytes": 92,
+          "sha256": "21628eb917c20fadd3ebe3cca58a7b7bd29fdebe0db23a52c11221447ec0943d"
+        },
+        {
+          "path": ".audit\\f00\\p05-final-local-audit.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "tag": "p05-final-local-audit"
+    }
+  ],
+  "providerEvidence": "Local HTTP contract fixture; real PostgreSQL/upstream Auth CI gates pending at commit preparation",
+  "smtpEvidence": "NOT_EXECUTED",
+  "productionChanges": false,
+  "knownWarning": "Next framework cancelled IncomingMessage can report ECONNRESET; observation-only diagnosis retained in private logs"
+}

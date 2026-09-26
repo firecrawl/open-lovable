@@ -1,0 +1,11 @@
+{
+  "outerPowerShellExitCode": 0,
+  "actualChildExitCode": 7,
+  "verifierExitCode": 1,
+  "verifier": {
+    "passed": false,
+    "issues": [
+      "install: unsuccessful exit or termination"
+    ]
+  }
+}

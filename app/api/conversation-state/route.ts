@@ -1,3 +1,5 @@
+import { ClientInputError, readJsonObject, publicErrorMessage } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
 import type { ConversationState } from '@/types/conversation';
 
@@ -6,7 +8,9 @@ declare global {
 }
 
 // GET: Retrieve current conversation state
-export async function GET() {
+export async function GET(request: Request) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
     if (!global.conversationState) {
       return NextResponse.json({
@@ -24,15 +28,17 @@ export async function GET() {
     console.error('[conversation-state] Error getting state:', error);
     return NextResponse.json({
       success: false,
-      error: (error as Error).message
-    }, { status: 500 });
+      error: publicErrorMessage(error)
+    }, { status: error instanceof ClientInputError ? 400 : 500 });
   }
 }
 
 // POST: Reset or update conversation state
 export async function POST(request: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
-    const { action, data } = await request.json();
+    const { action, data } = await readJsonObject(request);
     
     switch (action) {
       case 'reset':
@@ -105,14 +111,20 @@ export async function POST(request: NextRequest) {
         
         // Update specific fields if provided
         if (data) {
-          if (data.currentTopic) {
-            global.conversationState.context.currentTopic = data.currentTopic;
+          if (typeof data.currentTopic === 'string') {
+            global.conversationState.context.currentTopic = data.currentTopic.slice(0, 500);
           }
-          if (data.userPreferences) {
-            global.conversationState.context.userPreferences = {
+          if (data.userPreferences && typeof data.userPreferences === 'object' && !Array.isArray(data.userPreferences)) {
+            const merged = {
               ...global.conversationState.context.userPreferences,
               ...data.userPreferences
             };
+            // Preferences live in process memory for the lifetime of the server;
+            // refuse growth past a small fixed budget instead of accumulating.
+            if (Object.keys(merged).length > 50 || JSON.stringify(merged).length > 16_384) {
+              throw new ClientInputError('User preferences exceed the allowed size');
+            }
+            global.conversationState.context.userPreferences = merged;
           }
           
           global.conversationState.lastUpdated = Date.now();
@@ -134,13 +146,15 @@ export async function POST(request: NextRequest) {
     console.error('[conversation-state] Error:', error);
     return NextResponse.json({
       success: false,
-      error: (error as Error).message
-    }, { status: 500 });
+      error: publicErrorMessage(error)
+    }, { status: error instanceof ClientInputError ? 400 : 500 });
   }
 }
 
 // DELETE: Clear conversation state
-export async function DELETE() {
+export async function DELETE(request: Request) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
     global.conversationState = null;
     
@@ -154,7 +168,7 @@ export async function DELETE() {
     console.error('[conversation-state] Error clearing state:', error);
     return NextResponse.json({
       success: false,
-      error: (error as Error).message
-    }, { status: 500 });
+      error: publicErrorMessage(error)
+    }, { status: error instanceof ClientInputError ? 400 : 500 });
   }
 }

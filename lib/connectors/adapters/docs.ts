@@ -1,0 +1,5 @@
+import {assertContext,type AdapterContext,type AdapterManifest,type AdapterResult} from './contracts';
+export const docsManifest:AdapterManifest={id:'docs',version:'1.0.0',capabilities:['read_page'],requiredScopes:['docs:read'],inputSchema:'DocumentPageRef',outputSchema:'DocumentationPage'};
+export interface DocumentPageRef{documentId:string;pageId:string;accountId:string;projectId:string;}
+export interface DocumentationPage{documentId:string;pageId:string;title:string;content:string;}
+export async function readDocumentPage(context:AdapterContext,ref:DocumentPageRef,fetcher:(ref:DocumentPageRef)=>Promise<DocumentationPage>):Promise<AdapterResult<DocumentationPage>>{assertContext(context,docsManifest);if(ref.projectId!==context.projectId)throw new Error('Document belongs to another project.');const data=await fetcher(ref);return {data,manifest:docsManifest,provenance:{source:'docs',location:`document:${ref.documentId}/page:${ref.pageId}`,observedAt:new Date().toISOString(),projectId:context.projectId}};}

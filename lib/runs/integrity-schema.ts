@@ -1,0 +1,8 @@
+/** Append-only admission and journal boundaries. Retention requires an explicit future migration/policy. */
+export const runIntegritySchema=`
+CREATE TRIGGER run_controls_identity_immutable BEFORE UPDATE ON run_controls WHEN NEW.run_id IS NOT OLD.run_id OR NEW.workspace_id IS NOT OLD.workspace_id OR NEW.actor_id IS NOT OLD.actor_id OR NEW.authority IS NOT OLD.authority OR NEW.frozen_input IS NOT OLD.frozen_input OR NEW.input_digest IS NOT OLD.input_digest OR NEW.request_digest IS NOT OLD.request_digest OR NEW.request_id IS NOT OLD.request_id OR NEW.trace_id IS NOT OLD.trace_id OR NEW.deadline_at IS NOT OLD.deadline_at OR NEW.created_at IS NOT OLD.created_at BEGIN SELECT RAISE(ABORT,'Run control identity is immutable'); END;
+CREATE TRIGGER run_output_immutable BEFORE UPDATE OF output ON run_controls WHEN OLD.output IS NOT NULL AND NEW.output IS NOT OLD.output BEGIN SELECT RAISE(ABORT,'Recorded model output is immutable'); END;
+CREATE TRIGGER managed_run_identity_immutable BEFORE UPDATE ON runs WHEN EXISTS(SELECT 1 FROM run_controls WHERE run_id=OLD.id) AND (NEW.id IS NOT OLD.id OR NEW.project_id IS NOT OLD.project_id OR NEW.request_key IS NOT OLD.request_key OR NEW.prompt IS NOT OLD.prompt OR NEW.model IS NOT OLD.model OR NEW.base_version IS NOT OLD.base_version OR NEW.inputs IS NOT OLD.inputs OR NEW.created_at IS NOT OLD.created_at) BEGIN SELECT RAISE(ABORT,'Run input is immutable'); END;
+CREATE TRIGGER run_journal_update_immutable BEFORE UPDATE ON run_journal BEGIN SELECT RAISE(ABORT,'Run journal is immutable'); END;
+CREATE TRIGGER run_journal_delete_immutable BEFORE DELETE ON run_journal BEGIN SELECT RAISE(ABORT,'Run journal is immutable'); END;
+`;

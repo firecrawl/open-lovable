@@ -1,3 +1,7 @@
+import { recordMajorChange } from '@/lib/conversation/history';
+import { fetchApplication } from '@/lib/security/internal-fetch';
+import { ClientInputError, readJsonObject, assertCompleteFileBlocks, validateGeneratedFiles, validatePackages, normalizeProjectPath } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
 import { parseMorphEdits, applyMorphEditToFile } from '@/lib/morph-fast-apply';
 import type { SandboxState } from '@/types/sandbox';
@@ -135,8 +139,11 @@ declare global {
 }
 
 export async function POST(request: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
-    const { response, isEdit = false, packages = [] } = await request.json();
+    const { response, isEdit = false, packages = [] } = await readJsonObject(request);
+    assertCompleteFileBlocks(response);
     
     if (!response) {
       return NextResponse.json({
@@ -146,8 +153,13 @@ export async function POST(request: NextRequest) {
     
     // Parse the AI response
     const parsed = parseAIResponse(response);
+    validateGeneratedFiles(parsed.files);
+    validatePackages(packages);
+    validatePackages(parsed.packages);
+    parsed.commands.forEach(command => { if (typeof command !== "string" || command.length > 16384) throw new ClientInputError("Invalid generated command"); });
     const morphEnabled = Boolean(isEdit && process.env.MORPH_API_KEY);
     const morphEdits = morphEnabled ? parseMorphEdits(response) : [];
+    for (const edit of morphEdits) edit.targetFile = normalizeProjectPath(edit.targetFile);
     console.log('[apply-ai-code] Morph Fast Apply mode:', morphEnabled);
     if (morphEnabled) {
       console.log('[apply-ai-code] Morph edits found:', morphEdits.length);
@@ -234,7 +246,7 @@ export async function POST(request: NextRequest) {
       console.log('[apply-ai-code] Installing packages from XML tags and tool calls:', uniquePackages);
       
       try {
-        const installResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/install-packages`, {
+        const installResponse = await fetchApplication(request, '/api/install-packages', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ packages: uniquePackages })
@@ -278,7 +290,7 @@ export async function POST(request: NextRequest) {
       
       try {
         console.log('[apply-ai-code] Calling detect-and-install-packages...');
-        const packageResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/detect-and-install-packages`, {
+        const packageResponse = await fetchApplication(request, '/api/detect-and-install-packages', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ files: filesForPackageDetection })
@@ -312,7 +324,7 @@ export async function POST(request: NextRequest) {
           
           try {
             // Call the restart-vite endpoint
-            const restartResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/restart-vite`, {
+            const restartResponse = await fetchApplication(request, '/api/restart-vite', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' }
             });
@@ -726,8 +738,8 @@ body {
       try {
         console.log('[apply-ai-code] Auto-generating missing components...');
         
-        const autoCompleteResponse = await fetch(
-          `${request.nextUrl.origin}/api/auto-complete-components`,
+        const autoCompleteResponse = await fetchApplication(request,
+          '/api/auto-complete-components',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -775,7 +787,7 @@ body {
       
       // Track applied code in project evolution
       if (global.conversationState.context.projectEvolution) {
-        global.conversationState.context.projectEvolution.majorChanges.push({
+        recordMajorChange(global.conversationState.context.projectEvolution, {
           timestamp: Date.now(),
           description: parsed.explanation || 'Code applied',
           filesAffected: results.filesCreated
@@ -794,7 +806,7 @@ body {
     console.error('Apply AI code error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to parse AI code' },
-      { status: 500 }
+      { status: error instanceof ClientInputError ? 400 : 500 }
     );
   }
 }

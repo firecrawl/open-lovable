@@ -1,0 +1,7 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {authorizeUpload,authorizeRealtime,IdempotentJobRunner} from '../../lib/backend/runtime';
+import type {AppSession} from '../../lib/backend/policy-tests';
+const session:AppSession={userId:'u1',tenantId:'tenant-a',role:'user',source:'generated-app'},bucket={private:true as const,maxBytes:100,mediaTypes:['text/plain'],quarantine:true};
+test('P29 private storage survives runtime restart through tenant-bound object metadata and jobs are idempotent',async()=>{const object=authorizeUpload(session,bucket,{key:'notes.txt',bytes:5,mediaType:'text/plain',content:new TextEncoder().encode('hello')});assert.equal(object.key,'tenant-a/notes.txt');assert.equal(object.quarantined,true);const runner=new IdempotentJobRunner();let calls=0;const first=await runner.run('job-1',async()=>{calls++;return object.sha256});const second=await runner.run('job-1',async()=>{calls++;return 'wrong'});assert.equal(first,second);assert.equal(calls,1);});
+test('P29 blocks malicious files, service keys and cross-tenant realtime channels',()=>{assert.throws(()=>authorizeUpload(session,bucket,{key:'../secret',bytes:1,mediaType:'text/plain',content:new Uint8Array([1])}),/key/i);assert.throws(()=>authorizeUpload(session,bucket,{key:'key.txt',bytes:3,mediaType:'application/json',content:new Uint8Array([1,2,3])}),/policy/i);assert.throws(()=>authorizeRealtime(session,'tenant-b:orders',['orders']),/denied/i);assert.equal(authorizeRealtime(session,'orders',['orders']),'tenant-a:orders');});

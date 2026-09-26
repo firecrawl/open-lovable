@@ -1,3 +1,5 @@
+import { ClientInputError, readJsonObject, publicErrorMessage, requireHttpUrl } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Function to sanitize smart quotes and other problematic characters
@@ -17,15 +19,18 @@ function sanitizeQuotes(text: string): string {
 }
 
 export async function POST(request: NextRequest) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
-    const { url } = await request.json();
+    const { url: rawUrl } = await readJsonObject(request);
     
-    if (!url) {
+    if (!rawUrl) {
       return NextResponse.json({
         success: false,
         error: 'URL is required'
       }, { status: 400 });
     }
+    const url = requireHttpUrl(rawUrl);
     
     console.log('[scrape-url-enhanced] Scraping with Firecrawl:', url);
     
@@ -62,8 +67,9 @@ export async function POST(request: NextRequest) {
     });
     
     if (!firecrawlResponse.ok) {
-      const error = await firecrawlResponse.text();
-      throw new Error(`Firecrawl API error: ${error}`);
+      // The upstream body can echo request details; keep it in server logs only.
+      console.error('[scrape-url-enhanced] Firecrawl API error body:', (await firecrawlResponse.text()).slice(0, 2_000));
+      throw new Error(`Firecrawl API error: HTTP ${firecrawlResponse.status}`);
     }
     
     const data = await firecrawlResponse.json();
@@ -121,7 +127,7 @@ ${sanitizedMarkdown}
     console.error('[scrape-url-enhanced] Error:', error);
     return NextResponse.json({
       success: false,
-      error: (error as Error).message
-    }, { status: 500 });
+      error: publicErrorMessage(error)
+    }, { status: error instanceof ClientInputError ? 400 : 500 });
   }
 }

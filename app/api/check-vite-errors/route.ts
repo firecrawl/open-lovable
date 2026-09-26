@@ -1,12 +1,16 @@
-import { NextResponse } from 'next/server';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
+import { sandboxManager } from '@/lib/sandbox/sandbox-manager';
+import { inspectSandbox, unavailableDiagnostics } from '@/lib/sandbox/diagnostics';
 
-// Stub endpoint to prevent 404 errors
-// This endpoint is being called but the source is unknown
-// Returns empty errors array to satisfy any calling code
-export async function GET() {
-  return NextResponse.json({
-    success: true,
-    errors: [],
-    message: 'No Vite errors detected'
-  });
+export async function GET(request: Request) {
+  const denied = await authorizeOperatorRequest(request);
+  if (denied) return denied;
+  const provider = sandboxManager.getActiveProvider() || global.activeSandboxProvider;
+  if (!provider) return Response.json(unavailableDiagnostics('No active sandbox'), {status:409, headers:{'Cache-Control':'no-store'}});
+  try {
+    const diagnostics = await inspectSandbox(provider);
+    return Response.json(diagnostics, {status:diagnostics.status === 'unavailable' ? 503 : 200, headers:{'Cache-Control':'no-store'}});
+  } catch {
+    return Response.json(unavailableDiagnostics('Sandbox diagnostic connection failed'), {status:503, headers:{'Cache-Control':'no-store'}});
+  }
 }

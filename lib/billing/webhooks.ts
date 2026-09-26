@@ -1,0 +1,5 @@
+import {createHmac,timingSafeEqual} from 'node:crypto';
+import {ProjectError} from '../projects/store';
+export interface BillingWebhook {deliveryId:string;workspaceId:string;plan:'free'|'pro'|'enterprise';mode:'test';}
+export function verifyBillingWebhook(raw:Uint8Array,signature:string,secret:string):boolean{if(!secret||!signature)return false;const expected=createHmac('sha256',secret).update(raw).digest('hex');const left=Buffer.from(expected);const right=Buffer.from(signature);return left.length===right.length&&timingSafeEqual(left,right);}
+export class BillingWebhookLedger {private deliveries=new Set<string>();apply(raw:Uint8Array,signature:string,event:BillingWebhook,secret:string):{applied:boolean;mode:'test'}{if(event.mode!=='test')throw new ProjectError('Real billing activation requires separate approval.',403);if(!verifyBillingWebhook(raw,signature,secret))throw new ProjectError('Invalid billing webhook signature.',401);if(this.deliveries.has(event.deliveryId))return {applied:false,mode:'test'};this.deliveries.add(event.deliveryId);return {applied:true,mode:'test'};}}

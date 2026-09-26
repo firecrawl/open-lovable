@@ -1,3 +1,5 @@
+import { publicErrorMessage } from '@/lib/security/input-validation';
+import { authorizeOperatorRequest } from '@/lib/security/operator-access';
 import { NextResponse } from 'next/server';
 import { parseJavaScriptFile, buildComponentTree } from '@/lib/file-parser';
 import { FileManifest, FileInfo, RouteInfo } from '@/types/file-manifest';
@@ -7,7 +9,9 @@ declare global {
   var activeSandbox: any;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const accessDenied = await authorizeOperatorRequest(request);
+  if (accessDenied) return accessDenied;
   try {
     if (!global.activeSandbox) {
       return NextResponse.json({
@@ -55,7 +59,7 @@ export async function GET() {
         // Check file size first
         const statResult = await global.activeSandbox.runCommand({
           cmd: 'stat',
-          args: ['-f', '%z', filePath]
+          args: ['-c', '%s', filePath]
         });
         
         if (statResult.exitCode === 0) {
@@ -166,7 +170,7 @@ export async function GET() {
     console.error('[get-sandbox-files] Error:', error);
     return NextResponse.json({
       success: false,
-      error: (error as Error).message
+      error: publicErrorMessage(error)
     }, { status: 500 });
   }
 }

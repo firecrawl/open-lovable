@@ -1,3 +1,5 @@
+import { readCommandResult } from '../command-result';
+import { validateCommand, validatePackages, quoteShellArgument, normalizeProjectPath } from '@/lib/security/input-validation';
 import { Sandbox } from '@e2b/code-interpreter';
 import { SandboxProvider, SandboxInfo, CommandResult } from '../types';
 // SandboxProviderConfig available through parent class
@@ -71,85 +73,32 @@ export class E2BProvider extends SandboxProvider {
   }
 
   async runCommand(command: string): Promise<CommandResult> {
-    if (!this.sandbox) {
-      throw new Error('No active sandbox');
+    const input = validateCommand(command);
+    if (!this.sandbox) throw new Error('No active sandbox');
+    try {
+      const result = await this.sandbox.commands.run(input, { cwd: '/home/user/app', timeoutMs: 60_000 });
+      return await readCommandResult(result);
+    } catch (error) {
+      // E2B throws CommandExitError for a completed process with a nonzero exit code.
+      if (error && typeof error === 'object' && 'exitCode' in error && 'stdout' in error && 'stderr' in error &&
+          Number.isInteger(error.exitCode) && error.exitCode !== 0 && typeof error.stdout === 'string' && typeof error.stderr === 'string') {
+        return readCommandResult({ exitCode: error.exitCode as number, stdout: error.stdout, stderr: error.stderr });
+      }
+      throw error;
     }
-
-    
-    const result = await this.sandbox.runCode(`
-      import subprocess
-      import os
-
-      os.chdir('/home/user/app')
-      result = subprocess.run(${JSON.stringify(command.split(' '))}, 
-                            capture_output=True, 
-                            text=True, 
-                            shell=False)
-
-      print("STDOUT:")
-      print(result.stdout)
-      if result.stderr:
-          print("\\nSTDERR:")
-          print(result.stderr)
-      print(f"\\nReturn code: {result.returncode}")
-    `);
-    
-    const output = result.logs.stdout.join('\n');
-    const stderr = result.logs.stderr.join('\n');
-    
-    return {
-      stdout: output,
-      stderr,
-      exitCode: result.error ? 1 : 0,
-      success: !result.error
-    };
   }
 
   async writeFile(path: string, content: string): Promise<void> {
-    if (!this.sandbox) {
-      throw new Error('No active sandbox');
-    }
-
-    const fullPath = path.startsWith('/') ? path : `/home/user/app/${path}`;
-    
-    // Use the E2B filesystem API to write the file
-    // Note: E2B SDK uses files.write() method
-    if ((this.sandbox as any).files && typeof (this.sandbox as any).files.write === 'function') {
-      // Use the files.write API if available
-      await (this.sandbox as any).files.write(fullPath, Buffer.from(content));
-    } else {
-      // Fallback to Python code execution
-      await this.sandbox.runCode(`
-        import os
-
-        # Ensure directory exists
-        dir_path = os.path.dirname("${fullPath}")
-        os.makedirs(dir_path, exist_ok=True)
-
-        # Write file
-        with open("${fullPath}", 'w') as f:
-            f.write(${JSON.stringify(content)})
-        print(f"✓ Written: ${fullPath}")
-      `);
-    }
-    
-    this.existingFiles.add(path);
+    const relative = normalizeProjectPath(path);
+    if (!this.sandbox) throw new Error('No active sandbox');
+    await this.sandbox.files.write(`/home/user/app/${relative}`, content);
+    this.existingFiles.add(relative);
   }
 
   async readFile(path: string): Promise<string> {
-    if (!this.sandbox) {
-      throw new Error('No active sandbox');
-    }
-
-    const fullPath = path.startsWith('/') ? path : `/home/user/app/${path}`;
-    
-    const result = await this.sandbox.runCode(`
-      with open("${fullPath}", 'r') as f:
-          content = f.read()
-      print(content)
-    `);
-    
-    return result.logs.stdout.join('\n');
+    const relative = normalizeProjectPath(path);
+    if (!this.sandbox) throw new Error('No active sandbox');
+    return this.sandbox.files.read(`/home/user/app/${relative}`, { format: 'text' });
   }
 
   async listFiles(directory: string = '/home/user/app'): Promise<string[]> {
@@ -183,49 +132,13 @@ export class E2BProvider extends SandboxProvider {
   }
 
   async installPackages(packages: string[]): Promise<CommandResult> {
-    if (!this.sandbox) {
-      throw new Error('No active sandbox');
-    }
-
-    const packageList = packages.join(' ');
-    const flags = appConfig.packages.useLegacyPeerDeps ? '--legacy-peer-deps' : '';
-    
-    
-    const result = await this.sandbox.runCode(`
-      import subprocess
-      import os
-
-      os.chdir('/home/user/app')
-
-      # Install packages
-      result = subprocess.run(
-          ['npm', 'install', ${flags ? `'${flags}',` : ''} ${packages.map(p => `'${p}'`).join(', ')}],
-          capture_output=True,
-          text=True
-      )
-
-      print("STDOUT:")
-      print(result.stdout)
-      if result.stderr:
-          print("\\nSTDERR:")
-          print(result.stderr)
-      print(f"\\nReturn code: {result.returncode}")
-    `);
-    
-    const output = result.logs.stdout.join('\n');
-    const stderr = result.logs.stderr.join('\n');
-    
-    // Restart Vite if configured
-    if (appConfig.packages.autoRestartVite && !result.error) {
-      await this.restartViteServer();
-    }
-    
-    return {
-      stdout: output,
-      stderr,
-      exitCode: result.error ? 1 : 0,
-      success: !result.error
-    };
+    const validated = validatePackages(packages);
+    if (!validated.length) return { stdout: '', stderr: '', exitCode: 0, success: true };
+    const flags = appConfig.packages.useLegacyPeerDeps ? ['--legacy-peer-deps'] : [];
+    const args = ['npm', 'install', ...flags, '--', ...validated];
+    const result = await this.runCommand(args.map(quoteShellArgument).join(' '));
+    if (result.success && appConfig.packages.autoRestartVite) await this.restartViteServer();
+    return result;
   }
 
   async setupViteApp(): Promise<void> {
@@ -256,7 +169,15 @@ package_json = {
     },
     "dependencies": {
         "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "lucide-react": "^0.532.0",
+        "react-icons": "^5.5.0",
+        "framer-motion": "^12.23.12",
+        "motion": "^12.23.12",
+        "clsx": "^2.1.1",
+        "classnames": "^2.5.1",
+        "tailwind-merge": "^3.3.1",
+        "lodash-es": "^4.17.21"
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^4.0.0",
@@ -428,8 +349,8 @@ env['FORCE_COLOR'] = '0'
 
 process = subprocess.Popen(
     ['npm', 'run', 'dev'],
-    stdout=subprocess.PIPE,
-    stderr=subprocess.PIPE,
+    stdout=open('/tmp/vite.log', 'wb', buffering=0),
+    stderr=subprocess.STDOUT,
     env=env
 )
 
@@ -474,8 +395,8 @@ env['FORCE_COLOR'] = '0'
 
 process = subprocess.Popen(
     ['npm', 'run', 'dev'],
-    stdout=subprocess.PIPE,
-    stderr=subprocess.PIPE,
+    stdout=open('/tmp/vite.log', 'wb', buffering=0),
+    stderr=subprocess.STDOUT,
     env=env
 )
 

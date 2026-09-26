@@ -1,3 +1,4 @@
+import { createProviderFetch } from '@/lib/ai/provider-transport';
 // Using direct fetch to Morph's OpenAI-compatible API to avoid SDK type issues
 
 export interface MorphEditBlock {
@@ -41,7 +42,7 @@ export function normalizeProjectPath(inputPath: string): { normalizedPath: strin
 
 async function morphChatCompletionsCreate(payload: any) {
   if (!process.env.MORPH_API_KEY) throw new Error('MORPH_API_KEY is not set');
-  const res = await fetch('https://api.morphllm.com/v1/chat/completions', {
+  const res = await createProviderFetch('https://api.morphllm.com/v1')('https://api.morphllm.com/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
