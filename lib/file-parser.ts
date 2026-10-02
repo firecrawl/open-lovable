@@ -103,7 +103,7 @@ function extractExports(content: string): string[] {
  */
 function extractComponentInfo(content: string, filePath: string): ComponentInfo | undefined {
   // Check if this is likely a React component
-  const hasJSX = /<[A-Z]\w*|<[a-z]+\s+[^>]*\/?>/.test(content);
+  const hasJSX = /<[A-Z]\w*|<[a-z][a-z0-9]*(?:\s+[^>]*)?\/?>/.test(content);
   if (!hasJSX && !content.includes('React')) return undefined;
   
   // Try to find component name
