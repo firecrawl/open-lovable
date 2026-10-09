@@ -1,17 +1,17 @@
 {
-  "name": "create-open-lovable",
+  "name": "create-mian-ai",
   "version": "1.0.0",
-  "description": "CLI to bootstrap Open Lovable with your choice of sandbox provider",
+  "description": "CLI to bootstrap Mian AI with your choice of sandbox provider",
   "type": "module",
   "main": "index.js",
   "bin": {
-    "create-open-lovable": "./index.js"
+    "create-mian-ai": "./index.js"
   },
   "scripts": {
     "test": "node index.js --dry-run"
   },
   "keywords": [
-    "lovable",
+    "mian-ai",
     "sandbox",
     "e2b",
     "vercel",

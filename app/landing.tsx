@@ -49,7 +49,7 @@ export default function LandingPage() {
 
               <div className="flex gap-8">
                 <Link
-                  href="https://github.com/mendableai/open-lovable"
+                  href="https://github.com/mendableai/mian-ai"
                   target="_blank"
                   className="contents"
                 >

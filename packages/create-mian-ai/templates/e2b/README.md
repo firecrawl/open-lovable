@@ -1,4 +1,4 @@
-# Open Lovable - E2B Sandbox
+# Mian AI - E2B Sandbox
 
 This project is configured to use E2B sandboxes for code execution.
 

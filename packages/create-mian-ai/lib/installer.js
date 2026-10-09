@@ -136,7 +136,7 @@ async function copyMainProject(mainProjectPath, projectPath, sandbox) {
 }
 
 async function createEnvFile(projectPath, sandbox, answers) {
-  let envContent = '# Open Lovable Configuration\n\n';
+  let envContent = '# Mian AI Configuration\n\n';
   
   // Sandbox provider
   envContent += `# Sandbox Provider\n`;
@@ -193,7 +193,7 @@ async function createEnvFile(projectPath, sandbox, answers) {
 }
 
 async function createEnvExample(projectPath, sandbox) {
-  let envContent = '# Open Lovable Configuration\n\n';
+  let envContent = '# Mian AI Configuration\n\n';
   
   envContent += `# Sandbox Provider\n`;
   envContent += `SANDBOX_PROVIDER=${sandbox}\n\n`;

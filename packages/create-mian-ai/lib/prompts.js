@@ -6,7 +6,7 @@ export function getPrompts(config) {
       type: 'input',
       name: 'name',
       message: 'Project name:',
-      default: 'my-open-lovable',
+      default: 'my-mian-ai',
       validate: (input) => {
         if (!input || input.trim() === '') {
           return 'Project name is required';
