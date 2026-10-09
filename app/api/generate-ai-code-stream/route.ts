@@ -1565,7 +1565,7 @@ It's better to have 3 complete files than 10 incomplete files.`
         }
         
         // Parse files and send progress for each
-        const fileRegex = /<file path="([^"]+)">([\s\S]*?)<\/file>/g;
+        const fileRegex = /<file path="([^"]+)">([\s\S]*?)(?:<\/file>|(?=<file path="))/g;
         const files = [];
         let match;
         
