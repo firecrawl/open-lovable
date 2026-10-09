@@ -4,6 +4,7 @@ import { execSync } from 'child_process';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 import { getEnvPrompts } from './prompts.js';
+import { MAIN_PROJECT_ITEMS, resolveMainProjectRoot } from './project-layout.js';
 
 export async function installer(config) {
   const { name, sandbox, path: installPath, skipInstall, dryRun, templatesDir } = config;
@@ -45,7 +46,7 @@ export async function installer(config) {
     await copyTemplate(baseTemplatePath, projectPath);
   } else {
     // If no base template exists yet, copy from the main project
-    await copyMainProject(path.dirname(templatesDir), projectPath, sandbox);
+    await copyMainProject(resolveMainProjectRoot(templatesDir), projectPath);
   }
 
   // Copy provider-specific template
@@ -99,25 +100,10 @@ async function copyTemplate(src, dest) {
 
 async function copyMainProject(mainProjectPath, projectPath, sandbox) {
   // Copy essential directories and files from the main project
-  const itemsToCopy = [
-    'app',
-    'components',
-    'config',
-    'lib',
-    'types',
-    'public',
-    'styles',
-    '.eslintrc.json',
-    '.gitignore',
-    'next.config.js',
-    'package.json',
-    'tailwind.config.ts',
-    'tsconfig.json',
-    'postcss.config.mjs'
-  ];
+  const itemsToCopy = MAIN_PROJECT_ITEMS;
 
   for (const item of itemsToCopy) {
-    const srcPath = path.join(mainProjectPath, '..', item);
+    const srcPath = path.join(mainProjectPath, item);
     const destPath = path.join(projectPath, item);
     
     if (await fs.pathExists(srcPath)) {
@@ -189,7 +175,7 @@ async function createEnvFile(projectPath, sandbox, answers) {
   }
   
   await fs.writeFile(path.join(projectPath, '.env'), envContent);
-  await fs.writeFile(path.join(projectPath, '.env.example'), envContent.replace(/=.+/g, '=your_key_here'));
+  await createEnvExample(projectPath, sandbox);
 }
 
 async function createEnvExample(projectPath, sandbox) {
