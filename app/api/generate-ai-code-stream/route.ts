@@ -1357,9 +1357,15 @@ It's better to have 3 complete files than 10 incomplete files.`
               
               // If Groq fails, try switching to a fallback model
               if (isGroqServiceError && retryCount === maxRetries) {
-                console.log('[generate-ai-code-stream] Groq service unavailable, falling back to GPT-4');
-                streamOptions.model = openai('gpt-4-turbo');
-                actualModel = 'gpt-4-turbo';
+                console.log('[generate-ai-code-stream] Groq service unavailable, falling back to GPT-5.5');
+                streamOptions.model = openai('gpt-5.5');
+                streamOptions.temperature = undefined;
+                streamOptions.experimental_providerMetadata = {
+                  openai: {
+                    reasoningEffort: 'high'
+                  }
+                };
+                actualModel = 'gpt-5.5';
               }
             } else {
               // Final error, send to user
