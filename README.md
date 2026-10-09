@@ -28,6 +28,8 @@ GEMINI_API_KEY=your_gemini_api_key        # https://aistudio.google.com/app/apik
 ANTHROPIC_API_KEY=your_anthropic_api_key  # https://console.anthropic.com
 OPENAI_API_KEY=your_openai_api_key        # https://platform.openai.com
 GROQ_API_KEY=your_groq_api_key            # https://console.groq.com
+SILICONFLOW_API_KEY=your_siliconflow_api_key  # https://cloud.siliconflow.cn/account/ak
+SILICONFLOW_BASE_URL=https://api.siliconflow.cn/v1
 
 # =================================================================
 # FAST APPLY (Optional - for faster edits)

@@ -4,7 +4,7 @@ import { createAnthropic } from '@ai-sdk/anthropic';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 
-type ProviderName = 'openai' | 'anthropic' | 'groq' | 'google';
+type ProviderName = 'openai' | 'anthropic' | 'groq' | 'google' | 'siliconflow';
 
 // Client function type returned by @ai-sdk providers
 export type ProviderClient =
@@ -40,6 +40,8 @@ function getEnvDefaults(provider: ProviderName): { apiKey?: string; baseURL?: st
       return { apiKey: process.env.GROQ_API_KEY, baseURL: process.env.GROQ_BASE_URL };
     case 'google':
       return { apiKey: process.env.GEMINI_API_KEY, baseURL: process.env.GEMINI_BASE_URL };
+    case 'siliconflow':
+      return { apiKey: process.env.SILICONFLOW_API_KEY, baseURL: process.env.SILICONFLOW_BASE_URL || 'https://api.siliconflow.cn/v1' };
     default:
       return {};
   }
@@ -68,6 +70,9 @@ function getOrCreateClient(provider: ProviderName, apiKey?: string, baseURL?: st
     case 'google':
       client = createGoogleGenerativeAI({ apiKey: effective.apiKey || getEnvDefaults('google').apiKey, baseURL: effective.baseURL ?? getEnvDefaults('google').baseURL });
       break;
+    case 'siliconflow':
+      client = createOpenAI({ apiKey: effective.apiKey || getEnvDefaults('siliconflow').apiKey, baseURL: effective.baseURL ?? getEnvDefaults('siliconflow').baseURL });
+      break;
     default:
       client = createGroq({ apiKey: effective.apiKey || getEnvDefaults('groq').apiKey, baseURL: effective.baseURL ?? getEnvDefaults('groq').baseURL });
   }
@@ -89,6 +94,7 @@ export function getProviderForModel(modelId: string): ProviderResolution {
   const isAnthropic = modelId.startsWith('anthropic/');
   const isOpenAI = modelId.startsWith('openai/');
   const isGoogle = modelId.startsWith('google/');
+  const isSiliconFlow = modelId.startsWith('siliconflow/');
   const isKimiGroq = modelId === 'moonshotai/kimi-k2-instruct-0905';
 
   if (isKimiGroq) {
@@ -111,12 +117,16 @@ export function getProviderForModel(modelId: string): ProviderResolution {
     return { client, actualModel: modelId.replace('google/', '') };
   }
 
+  if (isSiliconFlow) {
+    const client = getOrCreateClient('siliconflow');
+    return { client, actualModel: modelId.replace('siliconflow/', '') };
+  }
+
   // Default: use Groq with modelId as-is
   const client = getOrCreateClient('groq');
   return { client, actualModel: modelId };
 }
 
 export default getProviderForModel;
-
 
 

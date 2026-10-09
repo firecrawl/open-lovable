@@ -58,7 +58,8 @@ export const appConfig = {
       'openai/gpt-5',
       'moonshotai/kimi-k2-instruct-0905',
       'anthropic/claude-sonnet-4-20250514',
-      'google/gemini-3-pro-preview'
+      'google/gemini-3-pro-preview',
+      'siliconflow/Qwen/Qwen3.6-27B'
     ],
     
     // Model display names
@@ -66,7 +67,8 @@ export const appConfig = {
       'openai/gpt-5': 'GPT-5',
       'moonshotai/kimi-k2-instruct-0905': 'Kimi K2 (Groq)',
       'anthropic/claude-sonnet-4-20250514': 'Sonnet 4',
-      'google/gemini-3-pro-preview': 'Gemini 3 Pro (Preview)'
+      'google/gemini-3-pro-preview': 'Gemini 3 Pro (Preview)',
+      'siliconflow/Qwen/Qwen3.6-27B': 'Qwen3.6 27B (SiliconFlow)'
     } as Record<string, string>,
     
     // Model API configuration
@@ -74,6 +76,10 @@ export const appConfig = {
       'moonshotai/kimi-k2-instruct-0905': {
         provider: 'groq',
         model: 'moonshotai/kimi-k2-instruct-0905'
+      },
+      'siliconflow/Qwen/Qwen3.6-27B': {
+        provider: 'siliconflow',
+        model: 'Qwen/Qwen3.6-27B'
       }
     },
     

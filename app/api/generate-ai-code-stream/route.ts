@@ -44,6 +44,11 @@ const openai = createOpenAI({
   baseURL: isUsingAIGateway ? aiGatewayBaseURL : process.env.OPENAI_BASE_URL,
 });
 
+const siliconflow = createOpenAI({
+  apiKey: process.env.SILICONFLOW_API_KEY,
+  baseURL: process.env.SILICONFLOW_BASE_URL || 'https://api.siliconflow.cn/v1',
+});
+
 // Helper function to analyze user preferences from conversation history
 function analyzeUserPreferences(messages: ConversationMessage[]): {
   commonPatterns: string[];
@@ -1216,11 +1221,13 @@ MORPH FAST APPLY MODE (EDIT-ONLY):
         const isAnthropic = model.startsWith('anthropic/');
         const isGoogle = model.startsWith('google/');
         const isOpenAI = model.startsWith('openai/');
+        const isSiliconFlow = model.startsWith('siliconflow/');
         const isKimiGroq = model === 'moonshotai/kimi-k2-instruct-0905';
         const modelProvider = isAnthropic ? anthropic : 
                               (isOpenAI ? openai : 
+                              (isSiliconFlow ? siliconflow :
                               (isGoogle ? googleGenerativeAI : 
-                              (isKimiGroq ? groq : groq)));
+                              (isKimiGroq ? groq : groq))));
         
         // Fix model name transformation for different providers
         let actualModel: string;
@@ -1228,6 +1235,8 @@ MORPH FAST APPLY MODE (EDIT-ONLY):
           actualModel = model.replace('anthropic/', '');
         } else if (isOpenAI) {
           actualModel = model.replace('openai/', '');
+        } else if (isSiliconFlow) {
+          actualModel = model.replace('siliconflow/', '');
         } else if (isKimiGroq) {
           // Kimi on Groq - use full model string
           actualModel = 'moonshotai/kimi-k2-instruct-0905';
@@ -1238,7 +1247,7 @@ MORPH FAST APPLY MODE (EDIT-ONLY):
           actualModel = model;
         }
 
-        console.log(`[generate-ai-code-stream] Using provider: ${isAnthropic ? 'Anthropic' : isGoogle ? 'Google' : isOpenAI ? 'OpenAI' : 'Groq'}, model: ${actualModel}`);
+        console.log(`[generate-ai-code-stream] Using provider: ${isAnthropic ? 'Anthropic' : isGoogle ? 'Google' : isOpenAI ? 'OpenAI' : isSiliconFlow ? 'SiliconFlow' : 'Groq'}, model: ${actualModel}`);
         console.log(`[generate-ai-code-stream] AI Gateway enabled: ${isUsingAIGateway}`);
         console.log(`[generate-ai-code-stream] Model string: ${model}`);
 
@@ -1365,7 +1374,7 @@ It's better to have 3 complete files than 10 incomplete files.`
               // Final error, send to user
               await sendProgress({ 
                 type: 'error', 
-                message: `Failed to initialize ${isGoogle ? 'Gemini' : isAnthropic ? 'Claude' : isOpenAI ? 'GPT-5' : isKimiGroq ? 'Kimi (Groq)' : 'Groq'} streaming: ${streamError.message}` 
+                message: `Failed to initialize ${isGoogle ? 'Gemini' : isAnthropic ? 'Claude' : isOpenAI ? 'GPT-5' : isSiliconFlow ? 'SiliconFlow' : isKimiGroq ? 'Kimi (Groq)' : 'Groq'} streaming: ${streamError.message}` 
               });
               
               // If this is a Google model error, provide helpful info
@@ -1733,6 +1742,8 @@ Provide the complete file content without any truncation. Include all necessary 
                   completionClient = anthropic;
                 } else if (model === 'moonshotai/kimi-k2-instruct-0905') {
                   completionClient = groq;
+                } else if (model.includes('siliconflow')) {
+                  completionClient = siliconflow;
                 } else {
                   completionClient = groq;
                 }
@@ -1747,6 +1758,8 @@ Provide the complete file content without any truncation. Include all necessary 
                   completionModelName = model.replace('anthropic/', '');
                 } else if (model.includes('google')) {
                   completionModelName = model.replace('google/', '');
+                } else if (model.includes('siliconflow')) {
+                  completionModelName = model.replace('siliconflow/', '');
                 } else {
                   completionModelName = model;
                 }
