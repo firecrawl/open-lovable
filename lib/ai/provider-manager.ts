@@ -89,6 +89,7 @@ export function getProviderForModel(modelId: string): ProviderResolution {
   const isAnthropic = modelId.startsWith('anthropic/');
   const isOpenAI = modelId.startsWith('openai/');
   const isGoogle = modelId.startsWith('google/');
+  const isMiniMax = modelId.startsWith('minimax/');
   const isKimiGroq = modelId === 'moonshotai/kimi-k2-instruct-0905';
 
   if (isKimiGroq) {
@@ -109,6 +110,11 @@ export function getProviderForModel(modelId: string): ProviderResolution {
   if (isGoogle) {
     const client = getOrCreateClient('google');
     return { client, actualModel: modelId.replace('google/', '') };
+  }
+
+  if (isMiniMax) {
+    const client = getOrCreateClient('openai', process.env.MINIMAX_API_KEY, 'https://api.minimax.io/v1');
+    return { client, actualModel: modelId.replace('minimax/', '') };
   }
 
   // Default: use Groq with modelId as-is

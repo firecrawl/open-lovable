@@ -44,6 +44,11 @@ const openai = createOpenAI({
   baseURL: isUsingAIGateway ? aiGatewayBaseURL : process.env.OPENAI_BASE_URL,
 });
 
+const minimax = createOpenAI({
+  apiKey: process.env.MINIMAX_API_KEY,
+  baseURL: 'https://api.minimax.io/v1',
+});
+
 // Helper function to analyze user preferences from conversation history
 function analyzeUserPreferences(messages: ConversationMessage[]): {
   commonPatterns: string[];
@@ -1216,12 +1221,14 @@ MORPH FAST APPLY MODE (EDIT-ONLY):
         const isAnthropic = model.startsWith('anthropic/');
         const isGoogle = model.startsWith('google/');
         const isOpenAI = model.startsWith('openai/');
+        const isMiniMax = model.startsWith('minimax/');
         const isKimiGroq = model === 'moonshotai/kimi-k2-instruct-0905';
-        const modelProvider = isAnthropic ? anthropic : 
-                              (isOpenAI ? openai : 
-                              (isGoogle ? googleGenerativeAI : 
-                              (isKimiGroq ? groq : groq)));
-        
+        const modelProvider = isAnthropic ? anthropic :
+                              (isOpenAI ? openai :
+                              (isGoogle ? googleGenerativeAI :
+                              (isKimiGroq ? groq :
+                              (isMiniMax ? minimax : groq))));
+
         // Fix model name transformation for different providers
         let actualModel: string;
         if (isAnthropic) {
@@ -1232,13 +1239,15 @@ MORPH FAST APPLY MODE (EDIT-ONLY):
           // Kimi on Groq - use full model string
           actualModel = 'moonshotai/kimi-k2-instruct-0905';
         } else if (isGoogle) {
-          // Google uses specific model names - convert our naming to theirs  
+          // Google uses specific model names - convert our naming to theirs
           actualModel = model.replace('google/', '');
+        } else if (isMiniMax) {
+          actualModel = model.replace('minimax/', '');
         } else {
           actualModel = model;
         }
 
-        console.log(`[generate-ai-code-stream] Using provider: ${isAnthropic ? 'Anthropic' : isGoogle ? 'Google' : isOpenAI ? 'OpenAI' : 'Groq'}, model: ${actualModel}`);
+        console.log(`[generate-ai-code-stream] Using provider: ${isAnthropic ? 'Anthropic' : isGoogle ? 'Google' : isOpenAI ? 'OpenAI' : isMiniMax ? 'MiniMax' : 'Groq'}, model: ${actualModel}`);
         console.log(`[generate-ai-code-stream] AI Gateway enabled: ${isUsingAIGateway}`);
         console.log(`[generate-ai-code-stream] Model string: ${model}`);
 
@@ -1313,7 +1322,7 @@ It's better to have 3 complete files than 10 incomplete files.`
         
         // Add temperature for non-reasoning models
         if (!model.startsWith('openai/gpt-5')) {
-          streamOptions.temperature = 0.7;
+          streamOptions.temperature = isMiniMax ? 1.0 : 0.7;
         }
         
         // Add reasoning effort for GPT-5 models
@@ -1365,7 +1374,7 @@ It's better to have 3 complete files than 10 incomplete files.`
               // Final error, send to user
               await sendProgress({ 
                 type: 'error', 
-                message: `Failed to initialize ${isGoogle ? 'Gemini' : isAnthropic ? 'Claude' : isOpenAI ? 'GPT-5' : isKimiGroq ? 'Kimi (Groq)' : 'Groq'} streaming: ${streamError.message}` 
+                message: `Failed to initialize ${isGoogle ? 'Gemini' : isAnthropic ? 'Claude' : isOpenAI ? 'GPT-5' : isKimiGroq ? 'Kimi (Groq)' : isMiniMax ? 'MiniMax' : 'Groq'} streaming: ${streamError.message}`
               });
               
               // If this is a Google model error, provide helpful info
