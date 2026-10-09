@@ -58,7 +58,13 @@ export const appConfig = {
       'openai/gpt-5',
       'moonshotai/kimi-k2-instruct-0905',
       'anthropic/claude-sonnet-4-20250514',
-      'google/gemini-3-pro-preview'
+      'google/gemini-2.0-flash-exp',
+      'aistupidlevel/auto',
+      'aistupidlevel/auto-coding',
+      'aistupidlevel/auto-reasoning',
+      'aistupidlevel/auto-creative',
+      'aistupidlevel/auto-fastest',
+      'aistupidlevel/auto-cheapest'
     ],
     
     // Model display names
@@ -66,7 +72,13 @@ export const appConfig = {
       'openai/gpt-5': 'GPT-5',
       'moonshotai/kimi-k2-instruct-0905': 'Kimi K2 (Groq)',
       'anthropic/claude-sonnet-4-20250514': 'Sonnet 4',
-      'google/gemini-3-pro-preview': 'Gemini 3 Pro (Preview)'
+      'google/gemini-2.0-flash-exp': 'Gemini 2.0 Flash (Experimental)',
+      'aistupidlevel/auto': 'AI Stupid Level (Auto)',
+      'aistupidlevel/auto-coding': 'AI Stupid Level (Coding)',
+      'aistupidlevel/auto-reasoning': 'AI Stupid Level (Reasoning)',
+      'aistupidlevel/auto-creative': 'AI Stupid Level (Creative)',
+      'aistupidlevel/auto-fastest': 'AI Stupid Level (Fastest)',
+      'aistupidlevel/auto-cheapest': 'AI Stupid Level (Cheapest)'
     } as Record<string, string>,
     
     // Model API configuration
