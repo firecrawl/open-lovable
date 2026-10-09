@@ -23,5 +23,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "examples", "tests", "lib/e2b-backends/archive", "styles"]
+  "exclude": ["node_modules", "examples", "tests", "lib/e2b-backends/archive", "styles", "**/*.test.ts", "**/*.test.tsx"]
 }
