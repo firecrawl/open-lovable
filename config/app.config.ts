@@ -58,7 +58,10 @@ export const appConfig = {
       'openai/gpt-5',
       'moonshotai/kimi-k2-instruct-0905',
       'anthropic/claude-sonnet-4-20250514',
-      'google/gemini-3-pro-preview'
+      'google/gemini-3-pro-preview',
+      'openrouter/minimax/minimax-m2.1',
+      'openrouter/anthropic/claude-3.5-sonnet',
+      'openrouter/openai/gpt-4o'
     ],
     
     // Model display names
@@ -66,7 +69,10 @@ export const appConfig = {
       'openai/gpt-5': 'GPT-5',
       'moonshotai/kimi-k2-instruct-0905': 'Kimi K2 (Groq)',
       'anthropic/claude-sonnet-4-20250514': 'Sonnet 4',
-      'google/gemini-3-pro-preview': 'Gemini 3 Pro (Preview)'
+      'google/gemini-3-pro-preview': 'Gemini 3 Pro (Preview)',
+      'openrouter/minimax/minimax-m2.1': 'MiniMax M2.1 (OpenRouter)',
+      'openrouter/anthropic/claude-3.5-sonnet': 'Claude 3.5 Sonnet (OpenRouter)',
+      'openrouter/openai/gpt-4o': 'GPT-4o (OpenRouter)'
     } as Record<string, string>,
     
     // Model API configuration
@@ -74,6 +80,18 @@ export const appConfig = {
       'moonshotai/kimi-k2-instruct-0905': {
         provider: 'groq',
         model: 'moonshotai/kimi-k2-instruct-0905'
+      },
+      'openrouter/minimax/minimax-m2.1': {
+        provider: 'openrouter',
+        model: 'minimax/minimax-m2.1'
+      },
+      'openrouter/anthropic/claude-3.5-sonnet': {
+        provider: 'openrouter',
+        model: 'anthropic/claude-3.5-sonnet'
+      },
+      'openrouter/openai/gpt-4o': {
+        provider: 'openrouter',
+        model: 'openai/gpt-4o'
       }
     },
     
