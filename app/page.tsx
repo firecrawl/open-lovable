@@ -238,7 +238,7 @@ export default function HomePage() {
               <div className="flex gap-8">
                 <a
                   className="contents"
-                  href="https://github.com/mendableai/open-lovable"
+                  href="https://github.com/firecrawl/open-lovable"
                   target="_blank"
                 >
                   <ButtonUI variant="tertiary">
