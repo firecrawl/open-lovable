@@ -58,6 +58,7 @@ VERCEL_OIDC_TOKEN=auto_generated_by_vercel_env_pull
 # BOXD_API_KEY=your_boxd_api_key    # https://boxd.sh?ref=open-lovable (`boxd auth keys create open-lovable`)
 # BOXD_ORG=your_boxd_org            # Optional: create machines in this org
 # BOXD_REGION=fra                   # Optional: fra or nyc
+# BOXD_NAME_PREFIX=open-lovable-    # Optional: prefix for machine names
 ```
 
 3. **Run**

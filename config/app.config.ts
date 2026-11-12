@@ -53,6 +53,9 @@ export const appConfig = {
     // Machine lifetime in minutes; the machine is deleted after this (0 keeps it)
     timeoutMinutes: 60,
 
+    // While a sandbox is in use, its lifetime is renewed at most this often (in minutes)
+    lifetimeRefreshMinutes: 5,
+
     // Development server port (Vite)
     vitePort: 5173,
 

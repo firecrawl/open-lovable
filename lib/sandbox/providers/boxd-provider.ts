@@ -14,6 +14,7 @@ export class BoxdProvider extends SandboxProvider {
   private existingFiles: Set<string> = new Set();
   private client: Boxd | null = null;
   private machineId: string | null = null;
+  private lifetimeSetAt = 0;
 
   private getClient(): Boxd {
     if (!this.client) {
@@ -56,6 +57,26 @@ export class BoxdProvider extends SandboxProvider {
     };
   }
 
+  // Give a machine in use a fresh lifetime, at most once per refresh interval.
+  // A failed refresh never fails the call that triggered it.
+  private async refreshLifetime(): Promise<void> {
+    const { timeoutMinutes, lifetimeRefreshMinutes } = appConfig.boxd;
+    if (!this.machineId || timeoutMinutes <= 0) {
+      return;
+    }
+    if (Date.now() - this.lifetimeSetAt < lifetimeRefreshMinutes * 60 * 1000) {
+      return;
+    }
+
+    // Set first, so calls that arrive together refresh once
+    this.lifetimeSetAt = Date.now();
+    try {
+      await this.getClient().machines.setDeleteAfter(this.machineId, timeoutMinutes * 60);
+    } catch (error) {
+      console.warn('[BoxdProvider] Could not refresh the sandbox lifetime:', error);
+    }
+  }
+
   /**
    * Attempt to reconnect to an existing boxd machine.
    * Machines persist until terminate() deletes them, so a sandbox ID from an
@@ -84,6 +105,7 @@ export class BoxdProvider extends SandboxProvider {
       if (appConfig.boxd.timeoutMinutes > 0) {
         await client.machines.setDeleteAfter(sandboxId, appConfig.boxd.timeoutMinutes * 60);
       }
+      this.lifetimeSetAt = Date.now();
 
       this.machineId = machine.id;
       this.sandbox = machine;
@@ -138,6 +160,7 @@ export class BoxdProvider extends SandboxProvider {
       });
       this.machineId = machine.id;
       this.sandbox = machine;
+      this.lifetimeSetAt = Date.now();
 
       await client.machines.waitUntilReady(machine.id);
 
@@ -164,6 +187,7 @@ export class BoxdProvider extends SandboxProvider {
   }
 
   async runCommand(command: string): Promise<CommandResult> {
+    await this.refreshLifetime();
     return this.execOrFail(command);
   }
 
@@ -189,6 +213,8 @@ export class BoxdProvider extends SandboxProvider {
     if (!this.machineId) {
       throw new Error('No active sandbox');
     }
+
+    await this.refreshLifetime();
 
     // Missing parent directories are created
     await this.getClient().machines.fs.write(this.machineId, this.fullPath(path), content);
