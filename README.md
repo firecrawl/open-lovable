@@ -35,9 +35,9 @@ GROQ_API_KEY=your_groq_api_key            # https://console.groq.com
 MORPH_API_KEY=your_morphllm_api_key    # https://morphllm.com/dashboard
 
 # =================================================================
-# SANDBOX PROVIDER - Choose ONE: Vercel (default) or E2B
+# SANDBOX PROVIDER - Choose ONE: Vercel (default), E2B or boxd
 # =================================================================
-SANDBOX_PROVIDER=vercel  # or 'e2b'
+SANDBOX_PROVIDER=vercel  # or 'e2b' or 'boxd'
 
 # Option 1: Vercel Sandbox (default)
 # Choose one authentication method:
@@ -53,6 +53,12 @@ VERCEL_OIDC_TOKEN=auto_generated_by_vercel_env_pull
 
 # Option 2: E2B Sandbox
 # E2B_API_KEY=your_e2b_api_key      # https://e2b.dev
+
+# Option 3: boxd Sandbox
+# BOXD_API_KEY=your_boxd_api_key    # https://boxd.sh?ref=open-lovable (`boxd auth keys create open-lovable`)
+# BOXD_ORG=your_boxd_org            # Optional: create machines in this org
+# BOXD_REGION=fra                   # Optional: fra or nyc
+# BOXD_NAME_PREFIX=open-lovable-    # Optional: prefix for machine names
 ```
 
 3. **Run**

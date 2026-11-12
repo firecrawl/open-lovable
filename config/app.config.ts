@@ -48,6 +48,30 @@ export const appConfig = {
     workingDirectory: '/home/user/app',
   },
   
+  // boxd Sandbox Configuration
+  boxd: {
+    // Machine lifetime in minutes; the machine is deleted after this (0 keeps it)
+    timeoutMinutes: 60,
+
+    // While a sandbox is in use, its lifetime is renewed at most this often (in minutes)
+    lifetimeRefreshMinutes: 5,
+
+    // Development server port (Vite)
+    vitePort: 5173,
+
+    // Longest time to wait for the Vite dev server to answer (in milliseconds)
+    viteStartupTimeout: 30000,
+
+    // Longest time a single command may run (in milliseconds)
+    commandTimeoutMs: 5 * 60 * 1000,
+
+    // Working directory in the machine
+    workingDirectory: '/home/boxd/app',
+
+    // Machine names are this prefix plus a random suffix
+    namePrefix: 'open-lovable-',
+  },
+
   // AI Model Configuration
   ai: {
     // Default AI model
